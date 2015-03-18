@@ -632,7 +632,7 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			            $insertions .= "-- -----------------------------\n";
 			            $insertions .= "INSERT INTO {PREFIXE}cpt_compte (`cpt_id`, `cpt_label`, `cpt_solde`) VALUES
 										(-1, 'ZEYBU', '0'),
-										(-2, 'EAU', '0'),
+										(-2, 'Solidaire', '0'),
 										(-3, 'Invité', '0'),
 										(-4, 'Zeybu Association', '0');\n\n";
 			            break;

@@ -55,6 +55,7 @@
 			
 			var lTemplate = lGestionCommandeTemplate.listeCommandeArchivePage;
 			var lHtml = $(lTemplate.template(lListeCommande));
+			lHtml = that.affect(lHtml);
 			
 			// Ne pas afficher la pagination si il y a moins de 15 éléments
 			if(lResponse.listeCommande.length < 16) {
@@ -63,7 +64,7 @@
 				lHtml = this.paginnation(lHtml);
 			}
 			
-			$('#contenu').replaceWith(that.affect(lHtml));
+			$('#contenu').replaceWith(lHtml);
 			
 		} else {
 			$('#contenu').replaceWith(that.affect($(lGestionCommandeTemplate.listeCommandeArchiveVide)));

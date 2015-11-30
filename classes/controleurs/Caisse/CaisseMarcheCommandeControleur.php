@@ -147,7 +147,7 @@ class CaisseMarcheCommandeControleur
 			// Fusion des stocks
 			$lLotsProduits = array();
 			foreach($lStockProduitsDisponible as $lProduitStock) {
-				if(!is_null($lProduitStock->getId())) {
+				if(!is_null($lProduitStock->getIdNom())) {
 					$lAjout = true;
 					foreach($lProduitsMarche as $lProduitMarche) {
 						if($lProduitStock->getIdNom() == $lProduitMarche->getIdNom() && $lProduitStock->getUnite() == $lProduitMarche->getUnite()) {

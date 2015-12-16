@@ -54,6 +54,12 @@
 					lData.credit = this.opeMontant.nombreFormate(2,',',' ');
 					this.credit = lCompteSolidaireTemplate.montantCredit.template(lData);
 				}
+				if( this.adhNom != null) {
+					this.cptLabel += " " + this.adhNom;
+				}
+				if( this.adhPrenom != null) {
+					this.cptLabel += " " + this.adhPrenom;
+				}				
 			}
 		});
 

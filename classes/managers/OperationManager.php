@@ -1105,7 +1105,9 @@ class OperationManager
 			", ope1." . OperationManager::CHAMP_OPERATION_DATE . 
 			"," . CompteManager::CHAMP_COMPTE_LABEL . 
 			", ope1." . OperationManager::CHAMP_OPERATION_MONTANT . 
-			", ope1." . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . "
+			", ope1." . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT .
+			", " . AdherentManager::CHAMP_ADHERENT_NOM . 
+			", " . AdherentManager::CHAMP_ADHERENT_PRENOM . "
 		FROM " . OperationManager::TABLE_OPERATION . " ope1 
 		JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
 			ON ope1." . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
@@ -1114,6 +1116,8 @@ class OperationManager
 			ON ope2." . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . "
 		LEFT JOIN " . CompteManager::TABLE_COMPTE . "
 			ON ope2." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " .CompteManager::CHAMP_COMPTE_ID . "
+		LEFT JOIN " . AdherentManager::TABLE_ADHERENT . "
+			ON " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . " = " . AdherentManager::CHAMP_ADHERENT_ID . "
 		WHERE ope1." .  OperationManager::CHAMP_OPERATION_ID_COMPTE . " = '" . StringUtils::securiser($pIdCompte) . "'
 			AND ope1." . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " in (3,4,9,10)
 		ORDER BY ope1." . OperationManager::CHAMP_OPERATION_DATE . " DESC;";
@@ -1130,7 +1134,9 @@ class OperationManager
 				$lLigne[OperationManager::CHAMP_OPERATION_DATE],
 				$lLigne[CompteManager::CHAMP_COMPTE_LABEL],
 				$lLigne[OperationManager::CHAMP_OPERATION_MONTANT],
-				$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT]));
+				$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_NOM],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM]));
 			}
 		} else {
 			$lListeCompteListeVirement[0] = new CompteListeVirementVO();
@@ -1148,13 +1154,15 @@ class OperationManager
 	 * @return CompteZeybuListeVirementVO
 	 * @desc Retourne une CompteZeybuListeVirementVO remplie
 	 */
-	private static function remplirListeVirementCompte($pOpeId, $pOpeDate, $pCptLabel, $pOpeMontant, $pOpeTypePaiement) {
+	private static function remplirListeVirementCompte($pOpeId, $pOpeDate, $pCptLabel, $pOpeMontant, $pOpeTypePaiement, $pAdhNom, $pAdhPrenom) {
 		$lCompteZeybuListeVirement = new CompteListeVirementVO();
 		$lCompteZeybuListeVirement->setOpeId($pOpeId);
 		$lCompteZeybuListeVirement->setOpeDate($pOpeDate);
 		$lCompteZeybuListeVirement->setCptLabel($pCptLabel);
 		$lCompteZeybuListeVirement->setOpeMontant($pOpeMontant);
 		$lCompteZeybuListeVirement->setOpeTypePaiement($pOpeTypePaiement);
+		$lCompteZeybuListeVirement->setAdhNom($pAdhNom);
+		$lCompteZeybuListeVirement->setAdhPrenom($pAdhPrenom);
 		return $lCompteZeybuListeVirement;
 	}
 	

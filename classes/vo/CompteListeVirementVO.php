@@ -47,6 +47,18 @@ class CompteListeVirementVO  extends DataTemplate
 	* @desc OpeTypePaiement de la CompteListeVirementVO
 	*/
 	protected $mOpeTypePaiement;
+	
+	/**
+	* @var varchar(50)
+	* @desc AdhNom de la CompteListeVirementVO
+	*/
+	protected $mAdhNom;
+
+	/**
+	* @var varchar(50)
+	* @desc AdhPrenom de la CompteListeVirementVO
+	*/
+	protected $mAdhPrenom;
 
 	/**
 	* @name getOpeId()
@@ -138,5 +150,40 @@ class CompteListeVirementVO  extends DataTemplate
 		$this->mOpeTypePaiement = $pOpeTypePaiement;
 	}
 
+	/**
+	 * @name getAdhNom()
+	 * @return varchar(50)
+	 * @desc Renvoie le membre AdhNom de la CompteListeVirementVO
+	 */
+	public function getAdhNom() {
+		return $this->mAdhNom;
+	}
+	
+	/**
+	 * @name setAdhNom($pNom)
+	 * @param varchar(50)
+	 * @desc Remplace le membre AdhNom de la CompteListeVirementVO par $pAdhNom
+	 */
+	public function setAdhNom($pAdhNom) {
+		$this->mAdhNom = $pAdhNom;
+	}
+	
+	/**
+	 * @name getAdhPrenom()
+	 * @return varchar(50)
+	 * @desc Renvoie le membre AdhPrenom de la CompteListeVirementVO
+	 */
+	public function getAdhPrenom() {
+		return $this->mAdhPrenom;
+	}
+	
+	/**
+	 * @name setAdhPrenom($pAdhPrenom)
+	 * @param varchar(50)
+	 * @desc Remplace le membre AdhPrenom de la CompteListeVirementVO par $pAdhPrenom
+	 */
+	public function setAdhPrenom($pAdhPrenom) {
+		$this->mAdhPrenom = $pAdhPrenom;
+	}
 }
 ?>

@@ -31,7 +31,7 @@
 			$(lResponse.listeAdherent).each(function() {
 				this.classSolde = '';
 				if(this.cptSolde < 0){this.classSolde = "com-nombre-negatif";}
-				this.cptSolde = this.cptSolde.nombreFormate(2,',',' ');
+				//this.cptSolde = this.cptSolde.nombreFormate(2,',',' ');
 				this.adhIdTri = this.adhNumero.replace("Z","");
 				this.cptIdTri = this.cptLabel.replace("C","");
 			});
@@ -48,12 +48,53 @@
 	};
 	
 	this.affect = function(pData) {
-		pData = this.affectTri(pData);
-		pData = this.affectRecherche(pData);
 		pData = this.affectLienCompte(pData);
 		pData = this.affectAjoutAdherent(pData);
+		pData = this.affectDataTable(pData);
 		return pData;
 	};
+	
+	this.affectDataTable = function(pData) {
+		pData.find('#liste-adherent').dataTable({
+	        "bJQueryUI": true,
+	        "sPaginationType": "full_numbers",
+	        "oLanguage": gDataTablesFr,
+	        "iDisplayLength": 25,
+	        "aaSorting": [[2,'asc'], [3,'asc']],
+	        "aoColumnDefs": [
+                  {	 "sType": "numeric",
+                	 "mRender": function ( data, type, full ) {
+                		  	if (type === 'sort') {
+                	          return data.replace("Z","");
+                	        }
+                	        return data;
+                	      },
+                	"aTargets": [ 0 ]
+                  },
+                  {	 "sType": "numeric",
+                    	 "mRender": function ( data, type, full ) {
+                    		  	if (type === 'sort') {
+                    	          return data.replace("C","");
+                    	        }
+                    	        return data;
+                    	      },
+                    "aTargets": [ 1 ]
+                  },
+
+                  {"sType": "numeric",
+	                "mRender": function ( data, type, full ) {
+         	        	if(type !== 'sort' && data.length > 0) {
+         	        		return data.nombreFormate(2,',',' ') + ' ' + gSigleMonetaire;
+         	        	}
+         	        	return data;
+	             	},
+	                "sClass":"com-text-align-right",
+                	"aTargets": [ 5 ] 
+                  }]
+	    });
+		return pData;		
+	};
+	
 
 	this.affectAjoutAdherent = function(pData) {
 		pData.find('#btn-nv-adherent').click(function() {
@@ -61,22 +102,7 @@
 		});
 		return pData;
 	};
-	
-	this.affectTri = function(pData) {
-		pData.find('.com-table').tablesorter({sortList: [[0,0]],headers: { 5: {sorter: false} }});
-		return pData;
-	};
-	
-	this.affectRecherche = function(pData) {
-		pData.find("#filter").keyup(function() {
-		    $.uiTableFilter( $('.com-table'), this.value );
-		  });
-		
-		pData.find("#filter-form").submit(function () {return false;});
-		
-		return pData;
-	};
-			
+				
 	this.affectLienCompte = function(pData) {
 		pData.find(".compte-ligne").click(function() {
 			CompteAdherentVue({id: $(this).attr("id-adherent")});

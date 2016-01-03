@@ -1,10 +1,10 @@
 <?php
 header("content-type: application/x-javascript; charset=UTF-8");
 $filenameJQuery = "jquery-1.11.0.min.js";
-$filename = "./jquery/" . $filenameJQuery;
+$filename = "./jquery/libs/" . $filenameJQuery;
 echo file_get_contents($filename);
 $filenameJQUI = "jquery-ui-1.10.4.custom.min.js";
-$filename = "./jquery/" . $filenameJQUI;
+$filename = "./jquery/libs/" . $filenameJQUI;
 echo file_get_contents($filename);
 
 function parcourirDossierJquery($pPath, $filenameJQuery, $filenameJQUI) {
@@ -33,6 +33,6 @@ function parcourirDossierJquery($pPath, $filenameJQuery, $filenameJQUI) {
 		echo file_get_contents($pPath);
 	}
 }
-$Path = './jquery';
+$Path = './jquery/plugin';
 parcourirDossierJquery($Path, $filenameJQuery, $filenameJQUI);
 ?>

@@ -232,6 +232,7 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 							&& $entry != 'SOAP.php' 
 				   			&& $entry != 'Titre.php'
 							&& $entry != 'Maintenance' 
+							&& $entry != 'vendor' 
 							&& $entry != 'logs'
 							&& $entry != ".htaccess" ) {
 							if(is_dir($d->path.'/'.$entry)) {
@@ -263,6 +264,7 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 							&& $entry != 'SOAP.php' 
 				   			&& $entry != 'Titre.php'
 							&& $entry != 'Maintenance' 
+							&& $entry != 'vendor' 
 							&& $entry != 'update.sql' 
 							&& $entry != "bdd"
 							&& $entry != "script"

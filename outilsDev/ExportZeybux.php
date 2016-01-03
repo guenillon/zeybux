@@ -134,12 +134,12 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 		//$filename = "../js/jquery/jquery-1.4.2.min.js";
 
 		$filenameJQuery = "jquery-1.11.0.min.js";
-		$filename = $lDossierVersionSource . "/js/jquery/" . $filenameJQuery;
+		$filename = $lDossierVersionSource . "/js/jquery/libs/" . $filenameJQuery;
 		fwrite($fp,file_get_contents($filename));
 		//$filename = "./jquery/jquery-ui-1.8.custom.min.js";
 		//$filename = "../js/jquery/jquery-ui-1.8.15.custom.min.js";
 		$filenameJQUI = "jquery-ui-1.10.4.custom.min.js";
-		$filename = $lDossierVersionSource . "/js/jquery/" . $filenameJQUI;
+		$filename = $lDossierVersionSource . "/js/jquery/libs/" . $filenameJQUI;
 		fwrite($fp,file_get_contents($filename));
 		fclose($fp);
 		
@@ -174,7 +174,7 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			}
 		}
 		
-		$Path = $lDossierVersionSource . '/js/jquery';
+		$Path = $lDossierVersionSource . '/js/jquery/plugin/';
 		parcourirDossierJquery($Path, $filenameJQuery, $filenameJQUI);
 		
 		$fp = fopen("./zeybu/js/zeybux-jquery-min.js", 'w');

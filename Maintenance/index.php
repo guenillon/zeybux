@@ -79,7 +79,10 @@ if($lAffiche) {
 						<a href="./index.php?m=Extract" class="com-cursor-pointer ui-widget-header menu-lien btn-menu <?php if(isset($_GET['m']) && $_GET['m'] == "Extract") echo "ui-state-active";?>"><span>Extract</span></a>
 					</li>
 					<li>
-						<a href="./index.php?m=Mdp" class="com-cursor-pointer ui-widget-header menu-lien btn-menu ui-corner-br <?php if(isset($_GET['m']) && $_GET['m'] == "Mdp") echo "ui-state-active";?>"><span>Identifiants</span></a>
+						<a href="./index.php?m=Mdp" class="com-cursor-pointer ui-widget-header menu-lien btn-menu<?php if(isset($_GET['m']) && $_GET['m'] == "Mdp") echo "ui-state-active";?>"><span>Identifiants</span></a>
+					</li>
+					<li>
+						<a href="./index.php?m=Ovh" class="com-cursor-pointer ui-widget-header menu-lien btn-menu ui-corner-br <?php if(isset($_GET['m']) && $_GET['m'] == "Ovh") echo "ui-state-active";?>"><span>OVH</span></a>
 					</li>
 				</ul>
 			</div>
@@ -121,6 +124,10 @@ if($lAffiche) {
 					
 				case "Mdp":
 					include_once("./Identifiant.php");
+					break;
+					
+				case "Ovh":
+					include_once("./Ovh/index.php");
 					break;
 					
 				default:

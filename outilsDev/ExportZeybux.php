@@ -400,8 +400,10 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 		mkdir($lPath . '/logs');
 		mkdir($lPath . '/vues');
 		mkdir($lPath . '/tmp');
+		
 		$fp = fopen($lPath . '/tmp/.htaccess', 'w');
 		fclose($fp);
+		
 		if($lEnv == 'install') {
 			mkdir($lPath . '/Maintenance');
 			mkdir($lPath . '/Maintenance/ancien');
@@ -568,6 +570,7 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 		copy($lDossierVersionSource . '/index.php' , $lPath.'/index.php'); // Copie de l'index
 		copy($lDossierVersionSource . '/index.html' , $lPath.'/index.html'); // Copie de l'index de maintenance
 		copy($lDossierVersionSource . '/cache.html' , $lPath.'/cache.html'); // Copie du cache
+		copy($lDossierVersionSource . '/composer.json' , $lPath . '/composer.json'); // Copie composer
 		copy($lDossierVersionSource . '/.htaccess' , $lPath.'/.htaccess'); // Copie du cache
 		copy('./zeybu/js/zeybux-core-min.js' , $lPath.'/js/zeybux-core-min-' . $lVersionTechnique . '.js'); // Copie du js
 		copy('./zeybu/js/zeybux-jquery-min.js' , $lPath.'/js/zeybux-jquery-min-' . $lVersionTechnique . '.js'); // Copie du js

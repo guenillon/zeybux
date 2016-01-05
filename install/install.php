@@ -175,6 +175,9 @@ color:#FFFFFF;
 			
 			// Supprime l'archive
 			@unlink("./" . $lNouvelleVersion[CANAL]["phar"]); 
+			
+			// Installation de composer
+			shell_exec("cd " . $p_path . " && php -r \"readfile('https://getcomposer.org/installer');\"| php");			
 		} else if(!isset($_GET['rep'])) { // Retour à la Page 1
 			header('location:./install.php');
 		}
@@ -391,23 +394,7 @@ color:#FFFFFF;
 					<tr>
 						<td>Domaine des mailing liste</td>
 						<td><input type="text" name="mailingListeDomain" id="mailingListeDomain"/></td>						
-					</tr>
-					<tr>
-						<td colspan="2" class="ui-widget-header">Compte OVH : Accès WebServices</td>		
-					</tr>
-					<tr>
-						<td>Adresse du WebService</td>
-						<td><input type="text" name="adresseWSDL" id="adresseWSDL"/></td>						
-					</tr>
-					<tr>
-						<td>Login</td>
-						<td><input type="text" name="soapLogin" id="soapLogin"/></td>						
-					</tr>
-					<tr>
-						<td>Mot de passe</td>
-						<td><input type="text" name="soapPass" id="soapPass"/></td>						
-					</tr>
-					
+					</tr>					
 					<tr>
 						<td colspan="2" class="ui-widget-header">Site Zeybux</td>		
 					</tr>
@@ -480,7 +467,6 @@ color:#FFFFFF;
 		if(	isset($_POST['admin-login']) && isset($_POST['admin-pass']) && isset($_POST['admin-confirm-pass'])
 			&& isset($_POST['maintenance-login']) && isset($_POST['maintenance-pass']) && isset($_POST['maintenance-confirm-pass'])
 			&& isset($_POST['mailSupport']) && isset($_POST['mailingListe']) && isset($_POST['mailingListeDomain'])
-			&& isset($_POST['adresseWSDL']) && isset($_POST['soapLogin']) && isset($_POST['soapPass'])
 			&& isset($_POST['zeybuxTitre']) && isset($_POST["zeybuxAdresse"])
 			&& isset($_POST["propRespMarcheNom"]) && isset( $_POST["propRespMarchePrenom"]) && isset( $_POST["propRespMarchePoste"] ) && isset($_POST["propRespMarcheTel"] ) 
 			&& isset($_POST['propNom']) && isset($_POST['propAdresse']) && isset($_POST['propCP'])
@@ -490,8 +476,7 @@ color:#FFFFFF;
 		
 			if(empty($_POST["zeybuxAdresse"]) || empty($_POST['admin-login']) || empty($_POST['admin-pass']) || empty($_POST['admin-confirm-pass']) 
 				|| empty($_POST['maintenance-login']) || empty($_POST['maintenance-pass']) || empty($_POST['maintenance-confirm-pass'])
-				|| empty($_POST['mailSupport']) || empty($_POST['mailingListe']) || empty($_POST['mailingListeDomain'])		
-				|| empty($_POST['adresseWSDL'])|| empty($_POST['soapLogin'])|| empty($_POST['soapPass'])	
+				|| empty($_POST['mailSupport']) || empty($_POST['mailingListe']) || empty($_POST['mailingListeDomain'])	
 			) {	
 				header('location:./install.php?page=3&rep=' . $_POST['rep'] . '&prefixe=' . $_POST["prefixe"]);
 			} else {
@@ -537,24 +522,6 @@ color:#FFFFFF;
 					fwrite($fp,"define(\"MAIL_SUPPORT\", \"" . $_POST["mailSupport"] . "\");\n");
 					fwrite($fp,"define(\"MAIL_MAILING_LISTE\", \"" . $_POST["mailingListe"] . "\");\n");
 					fwrite($fp,"define(\"MAIL_MAILING_LISTE_DOMAIN\", \"" . $_POST["mailingListeDomain"] . "\");\n");
-					fwrite($fp,"?>\n");
-					fclose($fp);
-					
-					// Ajout du fichier de config des WebServices
-					$fp = fopen($_POST["rep"] . '/configuration/SOAP.php', 'w');
-					fwrite($fp,"<?php\n");
-					fwrite($fp,"//****************************************************************\n");
-					fwrite($fp,"//\n");
-					fwrite($fp,"// Createur : Julien PIERRE\n");
-					fwrite($fp,"// Date de creation : 23/01/2012\n");
-					fwrite($fp,"// Fichier : SOAP.php\n");
-					fwrite($fp,"//\n");
-					fwrite($fp,"// Description : Les constantes de WebServices\n");
-					fwrite($fp,"//\n");
-					fwrite($fp,"//****************************************************************\n");
-					fwrite($fp,"define(\"ADRESSE_WSDL\", \"" . $_POST["adresseWSDL"] . "\");\n");
-					fwrite($fp,"define(\"SOAP_LOGIN\", \"" . $_POST["soapLogin"] . "\");\n");
-					fwrite($fp,"define(\"SOAP_PASS\", \"" . $_POST["soapPass"] . "\");\n");
 					fwrite($fp,"?>\n");
 					fclose($fp);
 					
@@ -650,6 +617,7 @@ color:#FFFFFF;
 		<div id="formulaire" class="ui-widget ui-widget-content ui-corner-all">
 			<div class="ui-widget ui-widget-header ui-corner-all">Installation terminée</div>
 			<div class="center">
+				Vous devez maintenant ajouter les vendors puis autoriser l'accès à votre compte OVH.
 				<a href="<?php echo $_POST["rep"]."/index.php"; ?>">Accéder au zeybux</a>
 			</div>
 		</div>

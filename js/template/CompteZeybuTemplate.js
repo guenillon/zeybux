@@ -347,6 +347,9 @@
 					"</div>" +
 					"{chequeInvite}" +
 					"<br/>Adhérents" +
+					"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"cheque-adherent\">" +
+						"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+					"</button>" +
 					"<table id=\"table-cheque-adherent\">" +
 						"<thead>" +
 							"<tr>" +
@@ -396,6 +399,9 @@
 					"<div>Total : {totalEspeceAdherent} {sigleMonetaire}</div>" +
 					"{especeInvite}" +
 					"<br/>Adhérents" +
+					"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"espece-adherent\">" +
+						"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+					"</button>" +
 					"<table id=\"table-espece-adherent\">" +
 						"<thead>" +
 							"<tr >" +
@@ -438,7 +444,11 @@
 					"</table>" +					
 				"</div>" +
 				"<div id=\"cheque-ferme\" class=\"ui-widget-content-transparent\">" +
-					"<div>Total : {totalChequeFerme} {sigleMonetaire}</div>" +
+					"<div>Total : {totalChequeFerme} {sigleMonetaire}" +
+						"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"cheque-ferme\">" +
+							"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+						"</button>" +
+					"</div>" +
 					"<br/><table id=\"table-cheque-ferme\">" +
 						"<thead>" +
 							"<tr>" +
@@ -475,7 +485,11 @@
 					"</table>" +
 				"</div>" +
 				"<div id=\"espece-ferme\" class=\"ui-widget-content-transparent\">" +
-					"<div>Total : {totalEspeceFerme} {sigleMonetaire}</div>" +
+					"<div>Total : {totalEspeceFerme} {sigleMonetaire}" +
+						"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"espece-ferme\">" +
+							"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+						"</button>" +
+					"</div>" +
 					"<br/><table id=\"table-espece-ferme\">" +
 						"<thead>" +
 							"<tr>" +
@@ -518,6 +532,9 @@
 	
 	this.listeChequeInvite =
 		"<br/>Invité" +
+		"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"cheque-invite\">" +
+			"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+		"</button>" +
 		"<table id=\"table-cheque-invite\">" +
 			"<thead>" +
 				"<tr>" +
@@ -557,6 +574,9 @@
 	
 	this.listeEspeceInvite =
 		"<br/>Invité" +
+		"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"espece-invite\">" +
+			"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+		"</button>" +
 		"<table id=\"table-espece-invite\">" +
 			"<thead>" +
 				"<tr\">" +

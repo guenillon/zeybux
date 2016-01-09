@@ -50,25 +50,7 @@ class ParametreZeybuxVR extends DataTemplate
 	 * @desc MailMailingListeDomaine de la ParametreZeybuxVR
 	 */
 	protected $mMailMailingListeDomaine;
-	
-	/**
-	 * @var VRelement
-	 * @desc AdresseWSDL de la ParametreZeybuxVR
-	 */
-	protected $mAdresseWSDL;
-	
-	/**
-	 * @var VRelement
-	 * @desc SOAPLogin de la ParametreZeybuxVR
-	 */
-	protected $mSOAPLogin;
-	
-	/**
-	 * @var VRelement
-	 * @desc SOAPPass de la ParametreZeybuxVR
-	 */
-	protected $mSOAPPass;
-	
+			
 	/**
 	 * @var VRelement
 	 * @desc ZeybuxTitre de la ParametreZeybuxVR
@@ -152,9 +134,6 @@ class ParametreZeybuxVR extends DataTemplate
 		$this->mMailSupport = new VRelement();
 		$this->mMailMailingListe = new VRelement();
 		$this->mMailMailingListeDomaine = new VRelement();
-		$this->mAdresseWSDL = new VRelement();
-		$this->mSOAPLogin = new VRelement();
-		$this->mSOAPPass = new VRelement();
 		$this->mZeybuxTitre = new VRelement();
 		$this->mZeybuxAdresse = new VRelement();
 		$this->mPropNom = new VRelement();
@@ -258,61 +237,7 @@ class ParametreZeybuxVR extends DataTemplate
 	public function setMailMailingListeDomaine($pMailMailingListeDomaine) {
 		$this->mMailMailingListeDomaine = $pMailMailingListeDomaine;
 	}
-	
-	/**
-	 * @name getAdresseWSDL()
-	 * @return varchar
-	 * @desc Renvoie le membre AdresseWSDL de la ParametreZeybuxVR
-	 */
-	public function getAdresseWSDL() {
-		return $this->mAdresseWSDL;
-	}
-	
-	/**
-	 * @name setAdresseWSDL($pAdresseWSDL)
-	 * @param varchar
-	 * @desc Remplace le membre AdresseWSDL de la ParametreZeybuxVR par $pAdresseWSDL
-	 */
-	public function setAdresseWSDL($pAdresseWSDL) {
-		$this->mAdresseWSDL = $pAdresseWSDL;
-	}
-	
-	/**
-	 * @name getSOAPLogin()
-	 * @return varchar
-	 * @desc Renvoie le membre SOAPLogin de la ParametreZeybuxVR
-	 */
-	public function getSOAPLogin() {
-		return $this->mSOAPLogin;
-	}
-	
-	/**
-	 * @name setSOAPLogin($pSOAPLogin)
-	 * @param varchar
-	 * @desc Remplace le membre SOAPLogin de la ParametreZeybuxVR par $pSOAPLogin
-	 */
-	public function setSOAPLogin($pSOAPLogin) {
-		$this->mSOAPLogin = $pSOAPLogin;
-	}
-	
-	/**
-	 * @name getSOAPPass()
-	 * @return varchar
-	 * @desc Renvoie le membre SOAPPass de la ParametreZeybuxVR
-	 */
-	public function getSOAPPass() {
-		return $this->mSOAPPass;
-	}
-	
-	/**
-	 * @name setSOAPPass($pSOAPPass)
-	 * @param varchar
-	 * @desc Remplace le membre SOAPPass de la ParametreZeybuxVR par $pSOAPPass
-	 */
-	public function setSOAPPass($pSOAPPass) {
-		$this->mSOAPPass = $pSOAPPass;
-	}
-	
+			
 	/**
 	 * @name getZeybuxTitre()
 	 * @return varchar

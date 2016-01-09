@@ -4,9 +4,6 @@
 	this.mailSupport = new VRelement();
 	this.mailMailingListe = new VRelement();
 	this.mailMailingListeDomaine = new VRelement();
-	this.adresseWSDL = new VRelement();
-	this.sOAPLogin = new VRelement();
-	this.sOAPPass = new VRelement();
 	this.zeybuxTitre = new VRelement();
 	this.zeybuxAdresse = new VRelement();
 	this.propNom = new VRelement();

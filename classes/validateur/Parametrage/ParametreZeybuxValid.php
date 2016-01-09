@@ -53,30 +53,6 @@ class ParametreZeybuxValid
 			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
 			$lVr->getMailMailingListeDomaine()->addErreur($lErreur);	
 		}
-		if(!isset($pData['adresseWSDL'])) {
-			$lVr->setValid(false);
-			$lVr->getAdresseWSDL()->setValid(false);
-			$lErreur = new VRerreur();
-			$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
-			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
-			$lVr->getAdresseWSDL()->addErreur($lErreur);	
-		}
-		if(!isset($pData['sOAPLogin'])) {
-			$lVr->setValid(false);
-			$lVr->getSOAPLogin()->setValid(false);
-			$lErreur = new VRerreur();
-			$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
-			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
-			$lVr->getSOAPLogin()->addErreur($lErreur);	
-		}
-		if(!isset($pData['sOAPPass'])) {
-			$lVr->setValid(false);
-			$lVr->getSOAPPass()->setValid(false);
-			$lErreur = new VRerreur();
-			$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
-			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
-			$lVr->getSOAPPass()->addErreur($lErreur);	
-		}
 		if(!isset($pData['zeybuxTitre'])) {
 			$lVr->setValid(false);
 			$lVr->getZeybuxTitre()->setValid(false);
@@ -199,30 +175,6 @@ class ParametreZeybuxValid
 				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
 				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
 				$lVr->getMailMailingListeDomaine()->addErreur($lErreur);	
-			}
-			if(empty($pData['adresseWSDL'])) {
-				$lVr->setValid(false);
-				$lVr->getAdresseWSDL()->setValid(false);
-				$lErreur = new VRerreur();
-				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
-				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
-				$lVr->getAdresseWSDL()->addErreur($lErreur);	
-			}
-			if(empty($pData['sOAPLogin'])) {
-				$lVr->setValid(false);
-				$lVr->getSOAPLogin()->setValid(false);
-				$lErreur = new VRerreur();
-				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
-				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
-				$lVr->getSOAPLogin()->addErreur($lErreur);	
-			}
-			if(empty($pData['sOAPPass'])) {
-				$lVr->setValid(false);
-				$lVr->getSOAPPass()->setValid(false);
-				$lErreur = new VRerreur();
-				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
-				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
-				$lVr->getSOAPPass()->addErreur($lErreur);	
 			}
 			if(empty($pData['zeybuxTitre'])) {
 				$lVr->setValid(false);

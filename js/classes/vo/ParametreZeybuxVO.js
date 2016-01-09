@@ -2,9 +2,6 @@
 	this.mailSupport = '';
 	this.mailMailingListe = '';
 	this.mailMailingListeDomaine = '';
-	this.adresseWSDL = '';
-	this.sOAPLogin = '';
-	this.sOAPPass = '';
 	this.zeybuxTitre = '';
 	this.zeybuxAdresse = '';
 	this.propNom = '';

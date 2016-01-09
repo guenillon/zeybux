@@ -37,15 +37,11 @@
 	
 	
 	this.affectModifier = function(pData) {
-		var that = this;
 		pData.find('form').submit(function() {
 			var lVo = new ParametreZeybuxVO();						
 			lVo.mailSupport = $(this).find(':input[name="mailSupport"]').val();
 			lVo.mailMailingListe = $(this).find(':input[name="mailMailingListe"]').val();
 			lVo.mailMailingListeDomaine = $(this).find(':input[name="mailMailingListeDomaine"]').val();
-			lVo.adresseWSDL = $(this).find(':input[name="adresseWSDL"]').val();
-			lVo.sOAPLogin = $(this).find(':input[name="sOAPLogin"]').val();
-			lVo.sOAPPass = $(this).find(':input[name="sOAPPass"]').val();
 			lVo.zeybuxTitre = $(this).find(':input[name="zeybuxTitre"]').val();
 			lVo.zeybuxAdresse = $(this).find(':input[name="zeybuxAdresse"]').val();
 			lVo.propNom = $(this).find(':input[name="propNom"]').val();

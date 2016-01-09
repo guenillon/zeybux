@@ -124,21 +124,6 @@ function ParametrageTemplate() {
 						"<td><input type=\"text\" class=\"com-input-text ui-widget-content ui-corner-all\" name=\"mailMailingListeDomaine\" id=\"mailMailingListeDomaine\" value=\"{mailMailingListeDomaine}\" /></td>		" +				
 					"</tr>" +
 					"<tr>" +
-						"<td colspan=\"2\" class=\"ui-widget-header\">Compte OVH : Accès WebServices</td>		" +
-					"</tr>" +
-					"<tr>" +
-						"<td>Adresse du WebService</td>" +
-						"<td><input type=\"text\" class=\"com-input-text ui-widget-content ui-corner-all\" name=\"adresseWSDL\" id=\"adresseWSDL\" value=\"{adresseWSDL}\" /></td>			" +			
-					"</tr>" +
-					"<tr>" +
-						"<td>Login</td>" +
-						"<td><input type=\"text\" class=\"com-input-text ui-widget-content ui-corner-all\" name=\"sOAPLogin\" id=\"sOAPLogin\" value=\"{sOAPLogin}\" /></td>	" +					
-					"</tr>" +
-					"<tr>" +
-						"<td>Mot de passe</td>" +
-						"<td><input type=\"text\" class=\"com-input-text ui-widget-content ui-corner-all\" name=\"sOAPPass\" id=\"sOAPPass\" value=\"{sOAPPass}\" /></td>			" +			
-					"</tr>" +			
-					"<tr>" +
 						"<td colspan=\"2\" class=\"ui-widget-header\">Site Zeybux</td>	" +	
 					"</tr>" +
 					"<tr>" +

@@ -14,7 +14,6 @@ include_once(CHEMIN_CLASSES_RESPONSE . MOD_PARAMETRAGE . "/ListeResponse.php" );
 include_once(CHEMIN_CLASSES_RESPONSE . MOD_PARAMETRAGE . "/AjoutResponse.php" );
 include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_PARAMETRAGE . "/ParametreZeybuxValid.php" );
 include_once(CHEMIN_CONFIGURATION . "Mail.php"); // Les Constantes de mail
-include_once(CHEMIN_CONFIGURATION . "SOAP.php");
 
 /**
  * @name ParametreZeybuxControleur
@@ -33,7 +32,6 @@ class ParametreZeybuxControleur
 		$lResponse = new ListeResponse();
 		$lResponse->setListe(new ParametreZeybuxVO(
 				MAIL_SUPPORT, MAIL_MAILING_LISTE, MAIL_MAILING_LISTE_DOMAIN,
-				ADRESSE_WSDL, SOAP_LOGIN, SOAP_PASS,
 				ZEYBUX_TITRE_SITE, ZEYBUX_ADRESSE_SITE,
 				PROP_NOM, PROP_ADRESSE, PROP_CODE_POSTAL, PROP_VILLE, PROP_TEL, PROP_MEL,
 				PROP_RESP_MARCHE_NOM, PROP_RESP_MARCHE_PRENOM, PROP_RESP_MARCHE_POSTE, PROP_RESP_MARCHE_TEL	));
@@ -65,25 +63,7 @@ class ParametreZeybuxControleur
 			fwrite($fp,"define(\"MAIL_MAILING_LISTE_DOMAIN\", \"" . $pParametreZeybux["mailMailingListeDomaine"] . "\");\n");
 			fwrite($fp,"?>\n");
 			fclose($fp);
-			
-			// Ajout du fichier de config des WebServices
-			$fp = fopen('./configuration/SOAP.php', 'w');
-			fwrite($fp,"<?php\n");
-			fwrite($fp,"//****************************************************************\n");
-			fwrite($fp,"//\n");
-			fwrite($fp,"// Createur : Julien PIERRE\n");
-			fwrite($fp,"// Date de creation : 23/01/2012\n");
-			fwrite($fp,"// Fichier : SOAP.php\n");
-			fwrite($fp,"//\n");
-			fwrite($fp,"// Description : Les constantes de WebServices\n");
-			fwrite($fp,"//\n");
-			fwrite($fp,"//****************************************************************\n");
-			fwrite($fp,"define(\"ADRESSE_WSDL\", \"" . $pParametreZeybux["adresseWSDL"] . "\");\n");
-			fwrite($fp,"define(\"SOAP_LOGIN\", \"" . $pParametreZeybux["sOAPLogin"] . "\");\n");
-			fwrite($fp,"define(\"SOAP_PASS\", \"" . $pParametreZeybux["sOAPPass"] . "\");\n");
-			fwrite($fp,"?>\n");
-			fclose($fp);
-								
+											
 			// Ajout du fichier de config du proprietaire
 			$fp = fopen('./configuration/Proprietaire.php', 'w');
 			fwrite($fp,"<?php\n");

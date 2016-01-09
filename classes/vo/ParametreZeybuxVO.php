@@ -38,24 +38,6 @@ class ParametreZeybuxVO  extends DataTemplate
 
 	/**
 	* @var varchar
-	* @desc AdresseWSDL de la ParametreZeybuxVO
-	*/
-	protected $mAdresseWSDL;
-
-	/**
-	* @var varchar
-	* @desc SOAPLogin de la ParametreZeybuxVO
-	*/
-	protected $mSOAPLogin;
-
-	/**
-	* @var varchar
-	* @desc SOAPPass de la ParametreZeybuxVO
-	*/
-	protected $mSOAPPass;
-
-	/**
-	* @var varchar
 	* @desc ZeybuxTitre de la ParametreZeybuxVO
 	*/
 	protected $mZeybuxTitre;
@@ -131,13 +113,10 @@ class ParametreZeybuxVO  extends DataTemplate
 	 * @return bool
 	 * @desc Constructeur
 	 */
-	function ParametreZeybuxVO($pMailSupport = null, $pMailMailingListe = null, $pMailMailingListeDomaine = null, $pAdresseWSDL = null, $pSOAPLogin = null, $pSOAPPass = null, $pZeybuxTitre = null, $pZeybuxAdresse = null, $pPropNom = null, $pPropAdresse = null, $pPropCP = null, $pPropVille = null, $pPropTel = null, $pPropMail = null, $pPropRespMarcheNom = null, $pPropRespMarchePrenom = null, $pPropRespMarchePoste = null, $pPropRespMarcheTel = null) {
+	function ParametreZeybuxVO($pMailSupport = null, $pMailMailingListe = null, $pMailMailingListeDomaine = null, $pZeybuxTitre = null, $pZeybuxAdresse = null, $pPropNom = null, $pPropAdresse = null, $pPropCP = null, $pPropVille = null, $pPropTel = null, $pPropMail = null, $pPropRespMarcheNom = null, $pPropRespMarchePrenom = null, $pPropRespMarchePoste = null, $pPropRespMarcheTel = null) {
 		if(!is_null($pMailSupport)) { $this->mMailSupport = $pMailSupport; }
 		if(!is_null($pMailMailingListe)) { $this->mMailMailingListe = $pMailMailingListe; }
 		if(!is_null($pMailMailingListeDomaine)) { $this->mMailMailingListeDomaine = $pMailMailingListeDomaine; }
-		if(!is_null($pAdresseWSDL)) { $this->mAdresseWSDL = $pAdresseWSDL; }
-		if(!is_null($pSOAPLogin)) { $this->mSOAPLogin = $pSOAPLogin; }
-		if(!is_null($pSOAPPass)) { $this->mSOAPPass = $pSOAPPass; }
 		if(!is_null($pZeybuxTitre)) { $this->mZeybuxTitre = $pZeybuxTitre; }
 		if(!is_null($pZeybuxAdresse)) { $this->mZeybuxAdresse = $pZeybuxAdresse; }
 		if(!is_null($pPropNom)) { $this->mPropNom = $pPropNom; }
@@ -205,60 +184,6 @@ class ParametreZeybuxVO  extends DataTemplate
 		$this->mMailMailingListeDomaine = $pMailMailingListeDomaine;
 	}
 	
-	/**
-	 * @name getAdresseWSDL()
-	 * @return varchar
-	 * @desc Renvoie le membre AdresseWSDL de la ParametreZeybuxVO
-	 */
-	public function getAdresseWSDL() {
-		return $this->mAdresseWSDL;
-	}
-	
-	/**
-	 * @name setAdresseWSDL($pAdresseWSDL)
-	 * @param varchar
-	 * @desc Remplace le membre AdresseWSDL de la ParametreZeybuxVO par $pAdresseWSDL
-	 */
-	public function setAdresseWSDL($pAdresseWSDL) {
-		$this->mAdresseWSDL = $pAdresseWSDL;
-	}
-	
-	/**
-	 * @name getSOAPLogin()
-	 * @return varchar
-	 * @desc Renvoie le membre SOAPLogin de la ParametreZeybuxVO
-	 */
-	public function getSOAPLogin() {
-		return $this->mSOAPLogin;
-	}
-	
-	/**
-	 * @name setSOAPLogin($pSOAPLogin)
-	 * @param varchar
-	 * @desc Remplace le membre SOAPLogin de la ParametreZeybuxVO par $pSOAPLogin
-	 */
-	public function setSOAPLogin($pSOAPLogin) {
-		$this->mSOAPLogin = $pSOAPLogin;
-	}
-	
-	/**
-	 * @name getSOAPPass()
-	 * @return varchar
-	 * @desc Renvoie le membre SOAPPass de la ParametreZeybuxVO
-	 */
-	public function getSOAPPass() {
-		return $this->mSOAPPass;
-	}
-	
-	/**
-	 * @name setSOAPPass($pSOAPPass)
-	 * @param varchar
-	 * @desc Remplace le membre SOAPPass de la ParametreZeybuxVO par $pSOAPPass
-	 */
-	public function setSOAPPass($pSOAPPass) {
-		$this->mSOAPPass = $pSOAPPass;
-	}
-
 	/**
 	 * @name getZeybuxTitre()
 	 * @return varchar

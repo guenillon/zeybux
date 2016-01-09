@@ -2,6 +2,7 @@
     "name": "Example Application",
     "description": "This is an example of OVH APIs wrapper usage",
     "require": {
-        "ovh/ovh": "dev-master"
+        "ovh/ovh": "dev-master",
+        "phpoffice/phpexcel": "^1.8"
     }
 }

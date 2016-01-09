@@ -195,11 +195,20 @@
 		pData = this.affectValiderPaiement(pData);
 		pData = this.affectModifierPaiement(pData);
 		pData = this.affectSupprimerPaiement(pData);
+		pData = this.affectExport(pData);
 		pData = gCommunVue.comHoverBtn(pData);
 		pData = this.affectDataTable(pData);
 		pData = this.affectRemiseCheque(pData);
 		return pData;
 	};
+	
+	this.affectExport = function(pData) {
+		pData.find('.btn-export').click(function() {
+			$.download("./index.php?m=CompteZeybu&v=SuiviPaiement", {fonction:'export',type:$(this).data('type')});
+		});
+		return pData;
+	};
+	
 	
 	this.affectRemiseCheque = function(pData) {
 		var that = this;

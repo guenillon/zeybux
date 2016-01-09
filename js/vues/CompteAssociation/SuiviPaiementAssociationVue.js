@@ -84,6 +84,7 @@
 		pData = this.affectValiderPaiement(pData);
 		pData = this.affectModifierPaiement(pData);
 		pData = this.affectSupprimerPaiement(pData);
+		pData = this.affectExport(pData);
 		pData = gCommunVue.comHoverBtn(pData);
 		pData = this.affectDataTable(pData);
 		pData = this.affectRemiseCheque(pData);
@@ -95,6 +96,13 @@
 		pData.find( "#listePaiement" ).tabs({active:that.mSelectedTabs});
 		pData.find("#li-cheque,#li-espece").click(
 				function() {that.mSelectedTabs = $("#listePaiement").tabs("option","active");});
+		return pData;
+	};
+	
+	this.affectExport = function(pData) {
+		pData.find('.btn-export').click(function() {
+			$.download("./index.php?m=CompteAssociation&v=SuiviPaiement", {fonction:'export',type:$(this).data('type')});
+		});
 		return pData;
 	};
 	

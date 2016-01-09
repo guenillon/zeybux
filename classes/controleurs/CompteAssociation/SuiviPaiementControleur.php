@@ -15,6 +15,8 @@ include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_COMPTE_ASSOCIATION . "/SuiviPaiemen
 include_once(CHEMIN_CLASSES_SERVICE . "BanqueService.php" );
 include_once(CHEMIN_CLASSES_SERVICE . "TypePaiementService.php" );
 include_once(CHEMIN_CLASSES_TOVO . "OperationChampComplementaireToVO.php" );
+include_once(CHEMIN_CLASSES_SERVICE . "JPIExportService.php" );
+include_once(CHEMIN_CLASSES_UTILS . "StringUtils.php" );
 
 /**
  * @name SuiviPaiementControleur
@@ -92,6 +94,83 @@ class SuiviPaiementControleur
 			$lOperationService->set($lOperationInitiale);
 		}
 		return $lVr;	
+	}
+	
+	/**
+	 * @name export($pParam)
+	 * @desc Retourne le suivi de paiement
+	 */
+	public function export($pParam) {
+		$lOperationService = new OperationService();
+		$lExportService = new JPIExportService();
+		
+		$lTitre = 'Suivi Paiement';
+		$lFormat = 'xls';
+		
+		// Création du phpExcel
+		$lphpExcelObject = new PHPExcel();
+			
+		// Le titre de l'onglet
+		$lphpExcelObject->getActiveSheet()->setTitle($lTitre);
+		
+		// Récupération des opérations
+		switch($pParam['type']) {
+			case 'espece':
+				$lOperations = $lOperationService->getListeEspeceAssociationNonEnregistre();
+				$lExportAttributes = array("header" => array("Date", "N°", "Compte", "Nom", "Prénom", "Montant"));
+				
+				// Les données
+				$i = 2;
+				foreach ( $lOperations as $lOperation ) {
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, StringUtils::dateDbToFr($lOperation->getOpeDate()));
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, $lOperation->getAdhNumero());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lOperation->getCptLabel());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lOperation->getAdhNom());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lOperation->getAdhPrenom());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('F'.$i, $lOperation->getOpeMontant());
+					$i++;
+				}
+				break;
+
+			case 'cheque':
+				$lOperations = $lOperationService->getListeChequeAssociationNonEnregistre();
+					$lExportAttributes = array("header" => array("Remise de chèque", "Date", "N°", "Compte", "Nom", "Prénom", "Montant", "N°"));
+				
+				// Les données
+				$i = 2;
+				foreach ( $lOperations as $lOperation ) {
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lOperation->getNumeroRemiseCheque());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, StringUtils::dateDbToFr($lOperation->getOpeDate()));
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lOperation->getAdhNumero());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lOperation->getCptLabel());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lOperation->getAdhNom());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('F'.$i, $lOperation->getAdhPrenom());
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('G'.$i, $lOperation->getOpeMontant());
+					$lOpeChCP = $lOperation->getOpeTypePaiementChampComplementaire();
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('H'.$i, $lOpeChCP[3]->getValeur());
+					$i++;
+				}
+				break;				
+			default:
+				$lOperations = array();
+				$lExportAttributes = array();
+		}
+
+		// Le header
+		$i = 'A';
+		foreach($lExportAttributes["header"] as $nom) {
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue($i.'1', $nom)->getColumnDimension($i)->setAutoSize(true);
+			$i++;
+		}
+		
+		$lconfig = new JPIExportConfig(
+				$lTitre, 
+				$lFormat, 
+				$lExportAttributes, 
+				$lOperations, $lphpExcelObject);
+		
+		// Export
+		$lExportService->export($lconfig);
 	}
 }
 ?>

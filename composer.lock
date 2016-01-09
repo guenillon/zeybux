@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "81807bea162150fbfe3464d60d5fbeff",
-    "content-hash": "6855445bb74b8eeccb339137fb328a8b",
+    "hash": "503316a115e4b473fb11b6bfe78a685b",
+    "content-hash": "0354f63a1bfdde7ef0d7d15c21ce052b",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -172,12 +172,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ovh/php-ovh.git",
-                "reference": "3a8ce8a924d7625a869dfab9c962949d73bdc576"
+                "reference": "efd770390a3fe9b91c31c9f3a205f4023f75d161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ovh/php-ovh/zipball/3a8ce8a924d7625a869dfab9c962949d73bdc576",
-                "reference": "3a8ce8a924d7625a869dfab9c962949d73bdc576",
+                "url": "https://api.github.com/repos/ovh/php-ovh/zipball/efd770390a3fe9b91c31c9f3a205f4023f75d161",
+                "reference": "efd770390a3fe9b91c31c9f3a205f4023f75d161",
                 "shasum": ""
             },
             "require": {
@@ -204,7 +204,64 @@
                 }
             ],
             "description": "Wrapper for OVH APIs",
-            "time": "2015-10-09 20:29:18"
+            "time": "2015-12-16 10:34:19"
+        },
+        {
+            "name": "phpoffice/phpexcel",
+            "version": "1.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PHPExcel.git",
+                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
+                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xml": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "http://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Mark Baker"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "http://blog.rootslabs.net"
+                },
+                {
+                    "name": "Erik Tilt"
+                }
+            ],
+            "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+            "homepage": "http://phpexcel.codeplex.com",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "php",
+                "spreadsheet",
+                "xls",
+                "xlsx"
+            ],
+            "time": "2015-05-01 07:00:55"
         },
         {
             "name": "react/promise",

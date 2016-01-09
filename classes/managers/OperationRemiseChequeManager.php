@@ -171,6 +171,77 @@ class OperationRemiseChequeManager
 		}
 		return $lListeOperationRemiseCheque;
 	}
+	
+	/**
+	 * @name selectOperationAssociationPresentation($pIdRemiseCheque)
+	 * @return array(OperationRemiseChequePresentationVO)
+	 * @desc Récupères toutes les lignes de la table et les renvoie sous forme d'une collection de OperationRemiseChequePresentationVO
+	 */
+	public static function selectOperationAssociationPresentation($pIdRemiseCheque) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+		"SELECT "
+				. OperationManager::CHAMP_OPERATION_ID .
+				"," . OperationManager::CHAMP_OPERATION_DATE .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_NUMERO .
+				"," . CompteManager::CHAMP_COMPTE_LABEL .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_NOM .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_PRENOM .
+				"," . OperationManager::CHAMP_OPERATION_MONTANT .
+				"," . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR ."
+		FROM " . OperationRemiseChequeManager::TABLE_OPERATIONREMISECHEQUE . "
+		JOIN " . OperationManager::TABLE_OPERATION . "
+			ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_OPERATION . "
+		JOIN " .  OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+			ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . " = " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_OPERATION . "
+			AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 3			
+		LEFT JOIN " . AdhesionAdherentManager::TABLE_ADHESIONADHERENT . "
+			ON " . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "	
+
+		LEFT JOIN " . AdherentManager::TABLE_ADHERENT . " adh1
+			ON adh1." . AdherentManager::CHAMP_ADHERENT_ID . " = " . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_ADHERENT . "					
+			
+		LEFT JOIN " . CompteManager::TABLE_COMPTE . "
+			ON " . CompteManager::CHAMP_COMPTE_ID . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . "
+										
+		LEFT JOIN " . AdherentManager::TABLE_ADHERENT . " adh2
+			ON adh2." . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+		WHERE " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ETAT . " = 0
+			AND " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_REMISE_CHEQUE . " = '" . StringUtils::securiser($pIdRemiseCheque) . "'
+		GROUP BY " 			
+			. OperationManager::CHAMP_OPERATION_ID .
+				"," . OperationManager::CHAMP_OPERATION_DATE .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_NUMERO .
+				"," . CompteManager::CHAMP_COMPTE_LABEL .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_NOM .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_PRENOM .
+				"," . OperationManager::CHAMP_OPERATION_MONTANT .
+				"," . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR .";";
+			
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lListeOperationRemiseCheque = array();
+		if( mysql_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysql_fetch_assoc($lSql)) {
+				array_push($lListeOperationRemiseCheque,
+				new OperationRemiseChequePresentationVO(
+				$lLigne[OperationManager::CHAMP_OPERATION_ID ],
+				$lLigne[OperationManager::CHAMP_OPERATION_DATE ],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO ],
+				$lLigne[CompteManager::CHAMP_COMPTE_LABEL ],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_NOM ],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM ],
+				$lLigne[OperationManager::CHAMP_OPERATION_MONTANT ],
+				$lLigne[OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR ]));
+			}
+		} else {
+			$lListeOperationRemiseCheque[0] = new OperationRemiseChequePresentationVO();
+		}
+		return $lListeOperationRemiseCheque;
+	}
 
 	/**
 	 * @name selectOperationExport($pIdRemiseCheque)
@@ -220,6 +291,73 @@ class OperationRemiseChequeManager
 								$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM],
 								$lLigne[OperationManager::CHAMP_OPERATION_MONTANT ],
 								$lLigne["numero"]));
+			}
+		} else {
+			$lListeOperationRemiseCheque[0] = new OperationRemiseChequeExportVO();
+		}
+		return $lListeOperationRemiseCheque;
+	}
+	
+	/**
+	 * @name selectOperationAssociationExport($pIdRemiseCheque)
+	 * @return array(OperationRemiseChequeExportVO)
+	 * @desc Récupères toutes les lignes de la table et les renvoie sous forme d'une collection de OperationRemiseChequeExportVO
+	 */
+	public static function selectOperationAssociationExport($pIdRemiseCheque) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+		"SELECT "
+				. BanqueManager::CHAMP_BANQUE_NOM .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_NOM .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_PRENOM .
+				"," . OperationManager::CHAMP_OPERATION_MONTANT .
+				", numero." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " as numero
+		FROM " . OperationRemiseChequeManager::TABLE_OPERATIONREMISECHEQUE . "
+		JOIN " . OperationManager::TABLE_OPERATION . "
+			ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_OPERATION . "
+		JOIN " .  OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . " banque
+			ON banque." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . " = " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_OPERATION . "
+			AND banque." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 2
+		JOIN " . BanqueManager::TABLE_BANQUE . "
+			ON " . BanqueManager::CHAMP_BANQUE_ID . " = banque." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . "
+		JOIN " .  OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . " numero
+			ON numero." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . " = " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_OPERATION . "
+			AND numero." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 3
+		
+		LEFT JOIN " . AdhesionAdherentManager::TABLE_ADHESIONADHERENT . "
+			ON " . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "	
+
+		LEFT JOIN " . AdherentManager::TABLE_ADHERENT . " adh1
+			ON adh1." . AdherentManager::CHAMP_ADHERENT_ID . " = " . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_ADHERENT . "					
+			
+		LEFT JOIN " . CompteManager::TABLE_COMPTE . "
+			ON " . CompteManager::CHAMP_COMPTE_ID . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . "		
+		LEFT JOIN " . AdherentManager::TABLE_ADHERENT . " adh2
+			ON adh2." . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+		WHERE " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ETAT . " = 0
+			AND " . OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_REMISE_CHEQUE . " = '" . StringUtils::securiser($pIdRemiseCheque) . "'
+		GROUP BY " . BanqueManager::CHAMP_BANQUE_NOM .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_NOM .
+				", adh2." . AdherentManager::CHAMP_ADHERENT_PRENOM .
+				"," . OperationManager::CHAMP_OPERATION_MONTANT .
+				", numero." . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . "
+		ORDER BY " . OperationManager::CHAMP_OPERATION_MONTANT . " ASC, " . BanqueManager::CHAMP_BANQUE_NOM . " ASC;";
+	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lListeOperationRemiseCheque = array();
+		if( mysql_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysql_fetch_assoc($lSql)) {
+				array_push($lListeOperationRemiseCheque,
+				new OperationRemiseChequeExportVO(
+				$lLigne[BanqueManager::CHAMP_BANQUE_NOM],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_NOM],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM],
+				$lLigne[OperationManager::CHAMP_OPERATION_MONTANT ],
+				$lLigne["numero"]));
 			}
 		} else {
 			$lListeOperationRemiseCheque[0] = new OperationRemiseChequeExportVO();

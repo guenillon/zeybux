@@ -96,10 +96,14 @@
 		                      },
 		                      {	 "sType": "numeric",
 		                        	 "mRender": function ( data, type, full ) {
-	                        		  	if (type === 'sort') {
-	                        	          return data.replace("C","");
-	                        	        }
-	                        	        return data;
+		                        		 if(data == 'null') {
+			                    			 return '';
+			                    		 } else {
+		                        		  	if (type === 'sort') {
+		                        	          return data.replace("C","");
+		                        	        }
+		                        	        return data;
+			                    		 }
 	                        	      },
 		                        "aTargets": [ 2 ]
 		                      },

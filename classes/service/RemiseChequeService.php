@@ -130,7 +130,15 @@ class RemiseChequeService
 		$lRemiseChequeDetail->setDateCreation($lRemiseCheque->getDateCreation());
 		$lRemiseChequeDetail->setDateModification($lRemiseCheque->getDateModification());
 		$lRemiseChequeDetail->setEtat($lRemiseCheque->getEtat());
-		$lRemiseChequeDetail->setOperations(OperationRemiseChequeManager::selectOperationPresentation($pIdRemiseCheque));
+		
+		// Le compte association
+		if($lRemiseCheque->getIdCompte() == -4) {
+			$lOperations = OperationRemiseChequeManager::selectOperationAssociationPresentation($pIdRemiseCheque);
+		} else {
+			$lOperations = OperationRemiseChequeManager::selectOperationPresentation($pIdRemiseCheque);
+		}
+		
+		$lRemiseChequeDetail->setOperations($lOperations);
 		
 		return $lRemiseChequeDetail;
 	}
@@ -205,7 +213,12 @@ class RemiseChequeService
 		$lRemise = $this->get($pIdRemiseCheque);
 				
 		// Les operations formatées pour l'export
-		$lOperations = OperationRemiseChequeManager::selectOperationExport($pIdRemiseCheque);
+		// Le compte association
+		if($lRemise->getIdCompte() == -4) {
+			$lOperations = OperationRemiseChequeManager::selectOperationAssociationExport($pIdRemiseCheque);
+		} else {
+			$lOperations = OperationRemiseChequeManager::selectOperationExport($pIdRemiseCheque);
+		}
 		
 		// Les informations bancaire
 		$lInformationBancaireService = new InformationBancaireService();

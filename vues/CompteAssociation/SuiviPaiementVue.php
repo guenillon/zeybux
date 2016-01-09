@@ -48,6 +48,29 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_COMPTE_ASSOCIATION]) || 
 			$lLogger->log("Demande d'accés à SuiviPaiement Association sans identifiant par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 			header('location:./index.php');
 		}
+	}  else if(isset($_POST['fonction'])) {	
+			if(isset($_POST['type'])) {
+				include_once(CHEMIN_CLASSES_CONTROLEURS . MOD_COMPTE_ASSOCIATION . "/SuiviPaiementControleur.php");						
+				$lControleur = new SuiviPaiementControleur();
+				
+				switch($_POST['fonction']) {					
+					case "export":
+							$lParam = array();
+							$lParam['type'] = $_POST['type'];
+										
+							echo $lControleur->export($lParam);
+							$lLogger->log("Export des operations de SuiviPaiement Association par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+						break;
+		
+					default:
+						$lLogger->log("Demande d'accés à SuiviPaiement Association sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+						header('location:./index.php');
+						break;
+				}
+			} else {
+				$lLogger->log("Demande d'accés à SuiviPaiement Association pour export sans identifiant par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+				header('location:./index.php');
+			}
 	}
 } else {
 	$lLogger->log("Demande d'accés sans autorisation à SuiviPaiement Association",PEAR_LOG_INFO);	// Maj des logs

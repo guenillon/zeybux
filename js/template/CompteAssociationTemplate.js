@@ -122,7 +122,11 @@
 					"<li><a href=\"#espece\" id=\"li-espece\">Espèces</a></li>" +
 				"</ul>" +
 				"<div id=\"cheque\" class=\"ui-widget-content-transparent\">" +
-					"<div>Total : {totalCheque} {sigleMonetaire}</div>" +
+					"<div>Total : {totalCheque} {sigleMonetaire}" +
+						"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"cheque\">" +
+							"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+						"</button>" +
+					"</div>" +
 					"<div class=\"com-center\">" +
 						"<div class=\"div-btn-remise-cheque\">" +
 							"<button type=\"button\" id=\"btn-nv-remise-cheque\" class=\"ui-state-default ui-corner-all com-button com-center\">Nouvelle Remise de Chèque</button>" +
@@ -182,7 +186,11 @@
 					"</table>" +
 				"</div>" +
 				"<div id=\"espece\">" +
-					"<div>Total : {totalEspece} {sigleMonetaire}</div>" +
+					"<div>Total : {totalEspece} {sigleMonetaire}" +
+						"<button class=\"btn-menu-med ui-state-default ui-corner-all com-button btn-export\" data-type=\"espece\">" +
+							"<span class=\"com-float-left ui-icon ui-icon-print\"></span>Export" +
+						"</button>" +
+					"</div>" +
 					"<table id=\"table-espece\">" +
 						"<thead>" +
 							"<tr class=\"ui-widget ui-widget-header\">" +

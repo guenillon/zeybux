@@ -17,6 +17,7 @@ include_once(CHEMIN_CLASSES_MANAGERS . "InfoOperationLivraisonManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "TypePaiementChampComplementaireManager.php");
 include_once(CHEMIN_CLASSES_VALIDATEUR . "OperationValid.php");
 include_once(CHEMIN_CLASSES_SERVICE . "CompteService.php" );
+include_once(CHEMIN_CLASSES_SERVICE . "RemiseChequeService.php" );
 include_once(CHEMIN_CLASSES_UTILS . "StringUtils.php");
 include_once(CHEMIN_CLASSES_VO . "CompteZeybuOperationVO.php");
 
@@ -158,8 +159,26 @@ class OperationService
 				$this->set($lOperationZeybu);
 			}
 		}
-				
-		return OperationManager::update($pOperation); // update de l'opération
+
+
+		$lRetour = OperationManager::update($pOperation); // update de l'opération
+		
+		// Maj de la remise de chèque si besoin
+		$lRemiseChequeService = new RemiseChequeService();
+		$lIdRemise = $lRemiseChequeService->getRemiseDeOperation($pOperation->getId());
+		if(!is_null($lIdRemise)) {
+			// De type delete
+			$lTypeDelete = array(15, 16, 18, 20);
+			if(in_array($pOperation->getTypePaiement(), $lTypeDelete)) {
+				$lOperationRemiseCheque = new OperationRemiseChequeVO();
+				$lOperationRemiseCheque->setIdRemiseCheque($lIdRemise);
+				$lOperationRemiseCheque->setIdOperation($pOperation->getId());
+				$lRemiseChequeService->deleteOperation($lOperationRemiseCheque);
+			} else { // de type update
+				$lRemiseChequeService->majTotal($lIdRemise);
+			}
+		}		
+		return $lRetour;
 	}
 	
 	/**

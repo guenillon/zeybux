@@ -339,5 +339,38 @@ class RemiseChequeService
 		
 		return count($lOperationsRemise) > 1 || !empty($lIdOperation);
 	}
+	
+	/**
+	 * @name getRemiseDeOperation($pIdOperation)
+	 * @param int
+	 * @return int
+	 * @desc Retourne la remise de chèque de l'opération si elle existe
+	 */
+	public function getRemiseDeOperation($pIdOperation) {
+		// Récupère le lien
+		$lOperationsRemise = OperationRemiseChequeManager::recherche(
+				array(OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_OPERATION, OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ETAT),
+				array('=', '='),
+				array($pIdOperation, 0),
+				array(''),
+				array(''));
+	
+		return $lOperationsRemise[0]->getIdRemiseCheque();
+	}
+	
+	/**
+	 * @name majTotal($pIdRemise)
+	 * @param int
+	 * @desc Met à jour le total d'une remise de chèque
+	 */
+	public function majTotal($pIdRemise) {
+		// Récupération de la remise de chèque
+		$lRemiseChequeDetail = $this->get($pIdRemise);
+		// Calcul du montant
+		$lRemiseChequeDetail->setMontant(OperationRemiseChequeManager::calculMontantRemiseCheque($pIdRemise));
+		
+		// Enregistrement du montant
+		RemiseChequeManager::update($lRemiseChequeDetail);
+	}
 }
 ?>

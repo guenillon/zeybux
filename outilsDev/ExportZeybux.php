@@ -644,6 +644,9 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			        case "tpp_type_paiement":    
 			        case "vue_vues":
 			        case "pad_perimetre_adhesion":
+			        case "ban_banque":
+			        case "cop_compteur":
+			        case "par_parametre":
 			            $donnees = mysql_query("SELECT * FROM ".$table[0]);
 			            $insertions .= "-- -----------------------------\n";
 			            $insertions .= "-- insertions dans la table ".$table[0]."\n";
@@ -678,6 +681,7 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 		    fwrite($fichierDump, utf8_encode($entete));
 		    fwrite($fichierDump, utf8_encode($creations));
 		    fwrite($fichierDump, utf8_encode($insertions));
+		    fwrite($fichierDump , "update `{PREFIXE}_tpp_type_paiement` SET `tpp_id` = \"0\"   WHERE `tpp_type`= 'Réservation';"); // Pour le type de paiement
 		    fclose($fichierDump);
 		}
 		

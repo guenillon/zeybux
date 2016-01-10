@@ -30,6 +30,7 @@ include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_GESTION_COMMANDE . "/FactureValid.p
 include_once(CHEMIN_CLASSES_TOVO . "FactureToVO.php");
 require_once(CHEMIN_CLASSES_PDF . 'html2pdf.class.php');
 include_once(CHEMIN_CLASSES_UTILS . "CSV.php");
+include_once(CHEMIN_CLASSES_UTILS . "StringUtils.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "ParametreManager.php");
 
 /**
@@ -205,6 +206,9 @@ class FactureControleur
 			$lFermeService = new FermeService();
 			$lFermes = $lFermeService->getByIdCompte($lFacture->getId()->getIdCompte());
 			$lFerme = $lFermes[0];
+			
+			$lFactures = $lFacture->getProduits();
+			$lFactureDate = StringUtils::dateDbToFr($lFactures[0]->getOpeDate());
 							
 			// get the HTML
 			ob_start();

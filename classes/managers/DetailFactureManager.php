@@ -211,8 +211,11 @@ class DetailFactureManager
 				"," . CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_ID .
 				"," . CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_NOM .
 				"," . NomProduitManager::CHAMP_NOMPRODUIT_NUMERO .
-				"," . NomProduitManager::CHAMP_NOMPRODUIT_NOM . "
+				"," . NomProduitManager::CHAMP_NOMPRODUIT_NOM . 
+				"," . OperationManager::CHAMP_OPERATION_DATE . "
 			FROM " . DetailFactureManager::TABLE_DETAILFACTURE . "
+			JOIN " . OperationManager::TABLE_OPERATION . "
+				ON " . DetailFactureManager::CHAMP_DETAILFACTURE_ID_OPERATION .  " = " . OperationManager::CHAMP_OPERATION_ID . "
 			JOIN " . NomProduitManager::TABLE_NOMPRODUIT . "
 				ON " . DetailFactureManager::CHAMP_DETAILFACTURE_ID_NOM_PRODUIT . " = " . NomProduitManager::CHAMP_NOMPRODUIT_ID . "
 			JOIN " . CategorieProduitManager::TABLE_CATEGORIEPRODUIT . "
@@ -247,7 +250,8 @@ class DetailFactureManager
 				$lLigne[CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_ID],
 				$lLigne[CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_NOM],
 				$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_NUMERO],
-				$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_NOM]));
+				$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_NOM],
+				$lLigne[OperationManager::CHAMP_OPERATION_DATE]));
 			}
 		} else {
 			$lListeDetailFacture[0] = new ProduitDetailFactureAfficheVO();

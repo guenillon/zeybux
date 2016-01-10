@@ -43,7 +43,7 @@ td    { vertical-align: top; }
 <table cellspacing="0" style="width: 100%; text-align: left;font-size: 12pt">
 <tr>
 <td style="width:50%;"></td>
-<td style="width:50%; "><?php echo PROP_VILLE;?>, le <?php echo date('d/m/Y'); ?></td>
+<td style="width:50%; "><?php echo PROP_VILLE;?>, le <?php echo $lFactureDate; ?></td>
         </tr>
     </table>
     <br>
@@ -64,7 +64,7 @@ td    { vertical-align: top; }
         </tr>
     </table>
 <?php
-foreach($lFacture->getProduits() as $lLigne) {
+foreach($lFactures as $lLigne) {
 	$lQuantite = '';
 	$lUnite = '';
 	$lMontant = 0;

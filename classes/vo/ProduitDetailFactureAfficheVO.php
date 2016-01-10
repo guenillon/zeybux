@@ -43,10 +43,16 @@ class ProduitDetailFactureAfficheVO  extends ProduitDetailFactureVO
 	protected $mNproNom;
 	
 	/**
+	* @var date
+	* @desc OpeDate de la ProduitDetailFactureAfficheVO
+	*/
+	protected $mOpeDate;
+	
+	/**
 	 * @name ProduitDetailFactureAfficheVO()
 	 * @desc Le constructeur
 	 */
-	public function ProduitDetailFactureAfficheVO($pIdNomProduit = null, $pIdStock = null, $pIdDetailOperation = null, $pIdStockSolidaire = null, $pQuantite = null, $pUnite = null, $pQuantiteSolidaire = null, $pUniteSolidaire = null, $pMontant = null, $pCproId = null, $pCproNom = null, $pNproNumero = null, $pNproNom = null) {
+	public function ProduitDetailFactureAfficheVO($pIdNomProduit = null, $pIdStock = null, $pIdDetailOperation = null, $pIdStockSolidaire = null, $pQuantite = null, $pUnite = null, $pQuantiteSolidaire = null, $pUniteSolidaire = null, $pMontant = null, $pCproId = null, $pCproNom = null, $pNproNumero = null, $pNproNom = null, $pOpeDate = null) {
 		if(!is_null($pIdNomProduit)) { $this->mIdNomProduit = $pIdNomProduit; }
 		if(!is_null($pIdStock)) { $this->mIdStock = $pIdStock; }
 		if(!is_null($pIdDetailOperation)) { $this->mIdDetailOperation = $pIdDetailOperation; }
@@ -60,6 +66,7 @@ class ProduitDetailFactureAfficheVO  extends ProduitDetailFactureVO
 		if(!is_null($pCproNom)) { $this->mCproNom = $pCproNom; }
 		if(!is_null($pNproNumero)) { $this->mNproNumero = $pNproNumero; }
 		if(!is_null($pNproNom)) { $this->mNproNom = $pNproNom; }
+		if(!is_null($pOpeDate)) { $this->mOpeDate = $pOpeDate; }
 	}
 	
 	/**
@@ -132,6 +139,24 @@ class ProduitDetailFactureAfficheVO  extends ProduitDetailFactureVO
 	*/
 	public function setNproNom($pNproNom) {
 		$this->mNproNom = $pNproNom;
+	}
+	
+	/**
+	* @name getOpeDate()
+	* @return date
+	* @desc Renvoie le membre OpeDate de la ProduitDetailFactureAfficheVO
+	*/
+	public function getOpeDate() {
+		return $this->mOpeDate;
+	}
+
+	/**
+	* @name setOpeDate($pOpeDate)
+	* @param date
+	* @desc Remplace le membre OpeDate de la ProduitDetailFactureAfficheVO par $pOpeDate
+	*/
+	public function setOpeDate($pOpeDate) {
+		$this->mOpeDate = $pOpeDate;
 	}
 }
 ?>

@@ -120,15 +120,17 @@ class SuiviPaiementControleur
 				$lExportAttributes = array("header" => array("Date", "N°", "Compte", "Nom", "Prénom", "Montant"));
 				
 				// Les données
-				$i = 2;
-				foreach ( $lOperations as $lOperation ) {
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, StringUtils::dateDbToFr($lOperation->getOpeDate()));
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, $lOperation->getAdhNumero());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lOperation->getCptLabel());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lOperation->getAdhNom());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lOperation->getAdhPrenom());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('F'.$i, $lOperation->getOpeMontant());
-					$i++;
+				if(!is_null(current($lOperations)->getOpeId())) {
+					$i = 2;
+					foreach ( $lOperations as $lOperation ) {
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, StringUtils::dateDbToFr($lOperation->getOpeDate()));
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, $lOperation->getAdhNumero());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lOperation->getCptLabel());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lOperation->getAdhNom());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lOperation->getAdhPrenom());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('F'.$i, $lOperation->getOpeMontant());
+						$i++;
+					}
 				}
 				break;
 
@@ -137,18 +139,20 @@ class SuiviPaiementControleur
 					$lExportAttributes = array("header" => array("Remise de chèque", "Date", "N°", "Compte", "Nom", "Prénom", "Montant", "N°"));
 				
 				// Les données
-				$i = 2;
-				foreach ( $lOperations as $lOperation ) {
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lOperation->getNumeroRemiseCheque());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, StringUtils::dateDbToFr($lOperation->getOpeDate()));
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lOperation->getAdhNumero());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lOperation->getCptLabel());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lOperation->getAdhNom());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('F'.$i, $lOperation->getAdhPrenom());
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('G'.$i, $lOperation->getOpeMontant());
-					$lOpeChCP = $lOperation->getOpeTypePaiementChampComplementaire();
-					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('H'.$i, $lOpeChCP[3]->getValeur());
-					$i++;
+				if(!is_null(current($lOperations)->getOpeId())) {
+					$i = 2;
+					foreach ( $lOperations as $lOperation ) {
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lOperation->getNumeroRemiseCheque());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, StringUtils::dateDbToFr($lOperation->getOpeDate()));
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lOperation->getAdhNumero());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lOperation->getCptLabel());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lOperation->getAdhNom());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('F'.$i, $lOperation->getAdhPrenom());
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('G'.$i, $lOperation->getOpeMontant());
+						$lOpeChCP = $lOperation->getOpeTypePaiementChampComplementaire();
+						$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('H'.$i, $lOpeChCP[3]->getValeur());
+						$i++;
+					}
 				}
 				break;				
 			default:

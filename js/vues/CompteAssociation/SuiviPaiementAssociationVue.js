@@ -44,6 +44,11 @@
 		$.each(lResponse.listeEspece,function() {
 			if(this.opeId) {
 				lTotalEspece = (parseFloat(lTotalEspece) + parseFloat(this.opeMontant)).toFixed(2);
+				
+				if(this.adhNom == null) {
+					this.adhNom = this.opeLibelle;
+				}
+				
 				that.mListeOperation[this.opeId] = this;
 			}
 		});
@@ -56,6 +61,11 @@
 				if(this.opeTypePaiementChampComplementaire[3]) {
 					this.numeroCheque = this.opeTypePaiementChampComplementaire[3].valeur; 
 				}
+				
+				if(this.adhNom == null) {
+					this.adhNom = this.opeLibelle;
+				}				
+				
 				this.btnValider = '';
 				if(parseFloat(this.opeMontant) < 0) {
 					this.btnValider = lCompteAssociationTemplate.btnValider.template({opeId:this.opeId});

@@ -146,7 +146,7 @@
 								"<th>Date</th>" +
 								"<th></span>N°</th>" +
 								"<th>Compte</th>" +
-								"<th>Nom</th>" +
+								"<th>Libellé/Nom</th>" +
 								"<th>Prénom</th>" +
 								"<th>Montant</th>" +
 								"<th>N°</th>" +
@@ -167,7 +167,7 @@
 								"<td>{listeCheque.adhNom}</td>" +
 								"<td>{listeCheque.adhPrenom}</td>" +
 								"<td>{listeCheque.opeMontant}</td>" +
-								"<td>{listeCheque.numeroCheque}</td>" +		
+								"<td>{listeCheque.numeroCheque}</td>" +	
 								"<td>{listeCheque.btnValider}</td>" +				
 								"<td>" +
 									"<span class=\"com-cursor-pointer com-btn-header ui-widget-content ui-corner-all btn-modifier\" type=\"2\" id-operation=\"{listeCheque.opeId}\" title=\"Modifier\">" +
@@ -197,7 +197,7 @@
 								"<th>Date</th>" +
 								"<th>N°</th>" +
 								"<th>Compte</th>" +
-								"<th>Nom</th>" +
+								"<th>Libellé/Nom</th>" +
 								"<th>Prénom</th>" +
 								"<th>Montant</th>" +
 								"<th></th>" +

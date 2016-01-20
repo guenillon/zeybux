@@ -2625,6 +2625,9 @@
 			"<div class=\"com-widget-window ui-widget ui-widget-content ui-widget-content-transparent ui-corner-all\">" +
 				"<div class=\"com-widget-header ui-widget ui-widget-header ui-corner-all\">" +
 					"Les Fermes" +
+					"<span class=\"com-cursor-pointer com-btn-header ui-widget-content ui-corner-all\" id=\"btn-export\" title=\"Exporter\">" +
+						"<span class=\"ui-icon ui-icon-print\"></span>" +
+					"</span>" +
 				"</div>" +
 				"<div id=\"liste-adh-recherche\" class=\"recherche com-widget-header ui-widget ui-widget-header ui-corner-all\">" +
 					"<form id=\"filter-form\">" +
@@ -2663,8 +2666,37 @@
 				"<!-- END listeFerme -->" +
 					"</tbody>" +
 				"</table>" +
-				//"</div>" +
 			"</div>" +
+		"</div>";
+
+	this.dialogExportStock = 
+		"<div id=\"dialog-export-stock\" title=\"Export du stock.\">" +
+			"<form>" +				
+				"<div>Sélectionner les fermes : " +
+					"<input type=\"button\" value=\"Tous\" id=\"button-tp\" class=\"ui-state-default ui-corner-all com-button com-center\"/> " +
+					"<input type=\"button\" value=\"Aucun\" id=\"button-ap\" class=\"ui-state-default ui-corner-all com-button com-center\"/>" +
+				"</div><br/>" +
+				"<table class=\"com-table-100\" id=\"liste-ferme\">" +
+					"<thead>" +
+						"<tr>" +
+							"<th></th>" +
+							"<th>N°</th>" +
+							"<th>Compte</th>" +
+							"<th>Nom</th>" +
+						"</tr>" +
+					"<thead>" +
+					"<tbody>" +
+					"<!-- BEGIN listeFerme -->" +
+					"<tr>" +
+						"<td><input type=\"checkbox\" value=\"{listeFerme.ferIdCompte}\" name=\"id_fermes\"/></td>" +
+						"<td>{listeFerme.ferNumero}</td>" +
+						"<td>{listeFerme.cptLabel}</td>" +
+						"<td>{listeFerme.ferNom}</td>" +	
+					"</tr>" +
+					"<!-- END listeFerme -->" +
+					"</tbody>" +
+				"</table>" +
+			"</form>" +
 		"</div>";
 			
 	this.listeFermeVide =

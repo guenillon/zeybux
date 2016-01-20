@@ -374,10 +374,11 @@ class NomProduitManager
 	
 	/**
 	 * @name selectStockProduitFerme($pIdCompteFerme)
+	 * @param array(integer)
 	 * @return array(StockProduitFermeVO)
 	 * @desc Récupères le stock de produit pour une ferme
 	 */
-	public static function selectStockProduitFerme($pIdCompteFerme) {
+	public static function selectStockProduitFermes($pIdCompteFerme) {
 		// Initialisation du Logger
 		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 		$lLogger->setMask(Log::MAX(LOG_LEVEL));
@@ -396,6 +397,7 @@ class NomProduitManager
 				"," . StockQuantiteManager::CHAMP_STOCKQUANTITE_QUANTITE .
 				"," . StockQuantiteManager::CHAMP_STOCKQUANTITE_QUANTITE_SOLIDAIRE .
 				"," . StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE .
+				", round((" . StockQuantiteManager::CHAMP_STOCKQUANTITE_QUANTITE . "+" . StockQuantiteManager::CHAMP_STOCKQUANTITE_QUANTITE_SOLIDAIRE . ") * round(avg(" . ModeleLotManager::CHAMP_MODELELOT_PRIX . "/" . ModeleLotManager::CHAMP_MODELELOT_QUANTITE . "),3),2) as valorisation" .
 		" FROM " . NomProduitManager::TABLE_NOMPRODUIT .
 		" JOIN " . CategorieProduitManager::TABLE_CATEGORIEPRODUIT . 
 			" ON " . CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_ID . " = " . NomProduitManager::CHAMP_NOMPRODUIT_ID_CATEGORIE .
@@ -403,14 +405,19 @@ class NomProduitManager
 			" ON " . FermeManager::CHAMP_FERME_ID . " = " . NomProduitManager::CHAMP_NOMPRODUIT_ID_FERME .
 		" LEFT JOIN " . StockQuantiteManager::TABLE_STOCKQUANTITE .
 			" ON " . StockQuantiteManager::CHAMP_STOCKQUANTITE_ID_NOM_PRODUIT . " = " . NomProduitManager::CHAMP_NOMPRODUIT_ID .
+		" LEFT JOIN " .  ModeleLotManager::TABLE_MODELELOT .
+			" ON " . NomProduitManager::CHAMP_NOMPRODUIT_ID . " = " . ModeleLotManager::CHAMP_MODELELOT_ID_NOM_PRODUIT .
+			" AND " . ModeleLotManager::CHAMP_MODELELOT_ETAT . " = 0 " .
+			" AND " . ModeleLotManager::CHAMP_MODELELOT_UNITE . " = " . StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE .
 		" WHERE ".
 			" (" . StockQuantiteManager::CHAMP_STOCKQUANTITE_ETAT . " = 0 " .
 			" OR ISNULL(" . StockQuantiteManager::CHAMP_STOCKQUANTITE_ETAT . ") )" .
 		" AND " .  FermeManager::CHAMP_FERME_ETAT . " = 0 " .
 		" AND " . CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_ETAT . " = 0 " .
 		" AND " . NomProduitManager::CHAMP_NOMPRODUIT_ETAT . " = 0 " .
-		" AND " . FermeManager::CHAMP_FERME_ID_COMPTE . " = '" . StringUtils::securiser($pIdCompteFerme) . "'" .
-		" ORDER BY " . CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_NOM . ", " . NomProduitManager::CHAMP_NOMPRODUIT_NOM . ", " . StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE . ";";
+		" AND " . FermeManager::CHAMP_FERME_ID_COMPTE . " IN ( '" .  str_replace(",", "','", StringUtils::securiser( implode(",", $pIdCompteFerme) ) ) . "') " .
+		" GROUP BY " . NomProduitManager::CHAMP_NOMPRODUIT_ID . ", " . StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE .
+		" ORDER BY " . FermeManager::CHAMP_FERME_ID . ", " . CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_NOM . ", " . NomProduitManager::CHAMP_NOMPRODUIT_NOM . ", " . StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE . ";";
 			
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
@@ -432,16 +439,17 @@ class NomProduitManager
 				$lLigne[StockQuantiteManager::CHAMP_STOCKQUANTITE_ID],
 				$lLigne[StockQuantiteManager::CHAMP_STOCKQUANTITE_QUANTITE],
 				$lLigne[StockQuantiteManager::CHAMP_STOCKQUANTITE_QUANTITE_SOLIDAIRE],
-				$lLigne[StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE]));
+				$lLigne[StockQuantiteManager::CHAMP_STOCKQUANTITE_UNITE],
+				$lLigne['valorisation']));
 			}
 		} else {
-			$lListeNomProduit[0] = new NomProduitVO();
+			$lListeNomProduit[0] = new StockProduitFermeVO();
 		}
 		return $lListeNomProduit;
 	}
 	
 	/**
-	 * @name remplirStockFerme($pNproId, $pNproNumero, $pNproNom, $pCproId, $pCproNom, $pFerId, $pFerNumero, $pFerNom, $pFerIdCompte, $pStoQteId, $pStoQteQuantite, $pStoQteQuantiteSolidaire, $pStoQteUnite)
+	 * @name remplirStockFerme($pNproId, $pNproNumero, $pNproNom, $pCproId, $pCproNom, $pFerId, $pFerNumero, $pFerNom, $pFerIdCompte, $pStoQteId, $pStoQteQuantite, $pStoQteQuantiteSolidaire, $pStoQteUnite, $pValorisation)
 	 * @param int(11)
 	 * @param varchar(50)
 	 * @param varchar(50)
@@ -455,10 +463,11 @@ class NomProduitManager
 	 * @param decimal(10,2)
 	 * @param decimal(10,2)
 	 * @param varchar(20)
+	 * @param decimal(10,2)
 	 * @return StockProduitFermeVO
 	 * @desc Retourne une StockProduitFermeVO remplie
 	 */
-	private static function remplirStockFerme($pNproId, $pNproNumero, $pNproNom, $pCproId, $pCproNom, $pFerId, $pFerNumero, $pFerNom, $pFerIdCompte, $pStoQteId, $pStoQteQuantite, $pStoQteQuantiteSolidaire, $pStoQteUnite) {
+	private static function remplirStockFerme($pNproId, $pNproNumero, $pNproNom, $pCproId, $pCproNom, $pFerId, $pFerNumero, $pFerNom, $pFerIdCompte, $pStoQteId, $pStoQteQuantite, $pStoQteQuantiteSolidaire, $pStoQteUnite, $pValorisation) {
 		$lStockProduitFerme = new StockProduitFermeVO();
 		$lStockProduitFerme->setNproId($pNproId);
 		$lStockProduitFerme->setNproNumero($pNproNumero);
@@ -473,6 +482,7 @@ class NomProduitManager
 		$lStockProduitFerme->setStoQteQuantite($pStoQteQuantite);
 		$lStockProduitFerme->setStoQteQuantiteSolidaire($pStoQteQuantiteSolidaire);
 		$lStockProduitFerme->setStoQteUnite($pStoQteUnite);
+		$lStockProduitFerme->setValorisation($pValorisation);
 		return $lStockProduitFerme;
 	}
 }

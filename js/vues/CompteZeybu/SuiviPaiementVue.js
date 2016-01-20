@@ -50,12 +50,6 @@
 				}				
 				lTotalEspeceAdherent += parseFloat(this.opeMontant);
 				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				/*this.opeDateTri = this.opeDate.extractDbDate().replace("-","");
-				this.opeDate = this.opeDate.extractDbDate().dateDbToFr();
-				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				this.opeMontant = this.opeMontant.nombreFormate(2,',','');
-				this.adhIdTri = this.adhNumero.replace("Z","");
-				this.cptIdTri = this.cptLabel.replace("C","");*/
 				that.mListeOperation[this.opeId] = this;
 			}
 		});
@@ -70,11 +64,7 @@
 					lTestNbLigne = true;
 				}
 				lTotalEspeceAdherent += parseFloat(this.opeMontant);	
-				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				//this.opeDateTri = this.opeDate.extractDbDate().replace("-","");
-				//this.opeDate = this.opeDate.extractDbDate().dateDbToFr();
-				//this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				//this.opeMontant = this.opeMontant.nombreFormate(2,',','');		
+				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');	
 				that.mListeOperation[this.opeId] = this;
 			}
 		});
@@ -92,10 +82,6 @@
 				}
 				lTotalChequeAdherent += parseFloat(this.opeMontant);
 				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				/*this.opeDateTri = this.opeDate.extractDbDate().replace("-","");
-				this.opeDate = this.opeDate.extractDbDate().dateDbToFr();
-				this.adhIdTri = this.adhNumero.replace("Z","");
-				this.cptIdTri = this.cptLabel.replace("C","");*/
 				this.numeroCheque ='';
 				if(this.opeTypePaiementChampComplementaire[3]) {
 					this.numeroCheque = this.opeTypePaiementChampComplementaire[3].valeur; 
@@ -115,8 +101,6 @@
 				}
 				lTotalChequeAdherent += parseFloat(this.opeMontant);
 				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				/*this.opeDateTri = this.opeDate.extractDbDate().replace("-","");
-				this.opeDate = this.opeDate.extractDbDate().dateDbToFr();*/
 				this.numeroCheque ='';
 				if(this.opeTypePaiementChampComplementaire[3]) {
 					this.numeroCheque = this.opeTypePaiementChampComplementaire[3].valeur; 
@@ -137,11 +121,6 @@
 				}
 				lTotalEspeceFerme += parseFloat(this.opeMontant);	
 				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				/*this.opeDateTri = this.opeDate.extractDbDate().replace("-","");
-				this.opeDate = this.opeDate.extractDbDate().dateDbToFr();
-				this.opeMontant = this.opeMontant.nombreFormate(2,',','');
-				this.ferIdTri = this.ferNumero.replace("F","");
-				this.cptIdTri = this.cptLabel.replace("C","");	*/
 				that.mListeOperation[this.opeId] = this;
 			}
 		});
@@ -158,11 +137,6 @@
 				}
 				lTotalChequeFerme += parseFloat(this.opeMontant);	
 				this.opeMontantAffichage = this.opeMontant.nombreFormate(2,',',' ');
-				/*this.opeDateTri = this.opeDate.extractDbDate().replace("-","");
-				this.opeDate = this.opeDate.extractDbDate().dateDbToFr();
-				this.opeMontant = this.opeMontant.nombreFormate(2,',','');
-				this.ferIdTri = this.ferNumero.replace("F","");
-				this.cptIdTri = this.cptLabel.replace("C","");*/
 				this.numeroCheque ='';
 				if(this.opeTypePaiementChampComplementaire[3]) {
 					this.numeroCheque = this.opeTypePaiementChampComplementaire[3].valeur; 

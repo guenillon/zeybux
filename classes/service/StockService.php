@@ -22,8 +22,8 @@ include_once(CHEMIN_CLASSES_MANAGERS . "DetailCommandeManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "ProduitManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "StockManager.php");
 include_once(CHEMIN_CLASSES_VIEW_MANAGER . "StockProduitDisponibleViewManager.php");
-//include_once(CHEMIN_CLASSES_MANAGERS . "StockSolidaireManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "HistoriqueStockManager.php");
+include_once(CHEMIN_CLASSES_SERVICE . "JPIExportService.php" );
 
 /**
  * @name StockService
@@ -467,132 +467,7 @@ class StockService
 			array('DESC','ASC'));
 	}
 	
-/** Solidaire **/
-	
-	/**
-	* @name setSolidaire($pStock)
-	* @param StockSolidaireVO
-	* @return integer
-	* @desc Ajoute ou modifie le stock solidaire
-	*/
-	/*public function setSolidaire($pStock) {
-		$lStockValid = new StockValid();
-		if($lStockValid->inputSolidaire($pStock)) {
-			if($lStockValid->insertSolidaire($pStock)) {
-				return $this->insertSolidaire($pStock);			
-			} else if($lStockValid->updateSolidaire($pStock)) {
-				return $this->updateSolidaire($pStock);
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}*/
-	
-	/**
-	* @name insertSolidaire($pStock)
-	* @param StockSolidaireVO
-	* @return integer
-	* @desc Ajoute un stock solidaire
-	*/
-	/*private function insertSolidaire($pStock) {
-		$pStock->setDateCreation(StringUtils::dateTimeAujourdhuiDb());		
-		$lId = StockSolidaireManager::insert($pStock); // Ajout du stock
-		return $lId;
-	}*/
-	
-	/**
-	* @name updateSolidaire($pStock)
-	* @param StockSolidaireVO
-	* @return integer
-	* @desc Met à jour un stock solidaire
-	*/
-	/*private function updateSolidaire($pStock) {
-		$lStockActuel = $this->getSolidaire($pStock->getId());
-		$pStock->setDateCreation($lStockActuel->getDateCreation());
-		$pStock->setDateModification(StringUtils::dateTimeAujourdhuiDb());
-		//$pStock->setEtat($lStockActuel->getEtat());
-		return StockSolidaireManager::update($pStock); // update
-	}*/
-	
-	/**
-	* @name deleteSolidaire($pId)
-	* @param integer
-	* @desc Supprime le stock
-	*/
-	/*public function deleteSolidaire($pId) {
-		$lStockValid = new StockValid();
-		if($lStockValid->deleteSolidaire($pId)){
-			$lStockSolidaire = $this->getSolidaire($pId);
-			$lStockSolidaire->setEtat(1);
-			return $this->updateSolidaire($lStockSolidaire);			
-		} else {
-			return false;
-		}
-	}*/
-	
-	/**
-	* @name getSolidaire($pId)
-	* @param integer
-	* @return array(StockSolidaireVO) ou StockSolidaireVO
-	* @desc Retourne une liste de virement
-	*/
-	/*public function getSolidaire($pId = null) {
-		if($pId != null) {
-			return $this->selectSolidaire($pId);
-		} else {
-			return $this->selectSolidaireAll();
-		}
-	}*/
-	
-	/**
-	* @name selectSolidaire($pId)
-	* @param integer
-	* @return StockSolidaireVO
-	* @desc Retourne une Stock
-	*/
-	/*public function selectSolidaire($pId) {
-		return StockSolidaireManager::select($pId);
-	}*/
-	
-	/**
-	* @name selectSolidaireAll()
-	* @return array(StockSolidaireVO)
-	* @desc Retourne une liste de Stock
-	*/
-	/*public function selectSolidaireAll() {
-		return StockSolidaireManager::selectAll();
-	}*/
-	
-	/**
-	* @name selectSolidaireAllActif()
-	* @return array(StockSolidaireVO)
-	* @desc Retourne une liste de Stock
-	*/
-/*	public function selectSolidaireAllActif() {
-		return StockSolidaireManager::recherche(
-			array(StockSolidaireManager::CHAMP_STOCKSOLIDAIRE_ETAT),
-			array('='),
-			array(0),
-			array(''),
-			array(''));
-	}*/
-	
-	/**
-	* @name selectSolidaireByIdNomProduitUnite()
-	* @return array(StockSolidaireVO)
-	* @desc Retourne une liste de Stock
-	*/
-	/*public function selectSolidaireByIdNomProduitUnite($pIdNomProduit,$pUnite) {
-		return StockSolidaireManager::recherche(
-			array(StockSolidaireManager::CHAMP_STOCKSOLIDAIRE_ETAT,StockSolidaireManager::CHAMP_STOCKSOLIDAIRE_ID_NOM_PRODUIT,StockSolidaireManager::CHAMP_STOCKSOLIDAIRE_UNITE),
-			array('=','=','='),
-			array(0,$pIdNomProduit,$pUnite),
-			array(''),
-			array(''));
-	}*/
-		
+/** Solidaire **/		
 	/**
 	 * @name selectInfoBonCommandeStockProduitReservation($pIdCommande, $pIdCompteProducteur)
 	 * @param integer
@@ -815,13 +690,91 @@ class StockService
 	}
 	
 	/**
-	 * @name getStockProduitFerme($pIdCompteFerme)
-	 * @param integer
+	 * @name getStockProduitFermes($pIdCompteFerme)
+	 * @param array(integer) or integer
 	 * @return array(StockProduitFermeVO)
-	 * @desc Retourne le stock des produits d'une ferme
+	 * @desc Retourne le stock des produits de ferme(s)
 	 */
-	public function getStockProduitFerme($pIdCompteFerme) {	
-		return NomProduitManager::selectStockProduitFerme($pIdCompteFerme);
+	public function getStockProduitFermes($pIdCompteFerme) {	
+		if(!is_array($pIdCompteFerme)) {
+			$pIdCompteFerme = array($pIdCompteFerme);
+		}
+		return NomProduitManager::selectStockProduitFermes($pIdCompteFerme);
+	}
+	
+	/**
+	 * @name exportStock($pIdCompteFerme)
+	 * @param array(integer) or integer
+	 * @return xls
+	 * @desc Export du stock des fermes
+	 */
+	public function exportStock($pIdCompteFerme) {		
+		$lExportService = new JPIExportService();
+				
+		$lTitre = 'Stock';
+		$lFormat = 'xls';
+		
+		// Création du phpExcel
+		$lphpExcelObject = new PHPExcel();
+			
+		// Le titre de l'onglet
+		$lphpExcelObject->getActiveSheet()->setTitle($lTitre);
+		
+		// Récupération des données
+		$lStocks = $this->getStockProduitFermes($pIdCompteFerme);
+		
+		// L'entête de colonne
+		$lExportAttributes = array("header" => array("Produit", "Stock", "Stock Solidaire", "Stock Total", "Valorisation"));
+		
+		// Le header
+		$i = 'A';
+		foreach($lExportAttributes["header"] as $nom) {
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue($i.'1', $nom)->getColumnDimension($i)->setAutoSize(true);
+			$i++;
+		}
+
+		// Les données
+		$lIdFerme = 0;
+		$lIdCategorie = 0;
+		
+		$i = 2;
+		foreach ( $lStocks as $lStock ) {
+			if($lStock->getFerId() != $lIdFerme) {// Nouvelle ferme
+				if($lIdFerme != 0) { // Ce n'est pas la première ferme ajout saut de ligne
+					$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, "");
+					$i++;
+				}
+				// Ajout du nom de la ferme
+				$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lStock->getFerNumero() . " : " . $lStock->getFerNom());
+				$i++;
+				
+				$lIdFerme = $lStock->getFerId();
+				$lIdCategorie = 0;
+			}
+			
+			if($lStock->getCproId() != $lIdCategorie) {// Nouvelle Catégorie
+				// Ajout du nom de la catégorie
+				$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lStock->getCproNom() );
+				$i++;
+				$lIdCategorie = $lStock->getCproId();
+			}
+						
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lStock->getNproNom());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, $lStock->getStoQteQuantite() . " " . $lStock->getStoQteUnite());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lStock->getStoQteQuantiteSolidaire() . " " . $lStock->getStoQteUnite());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lStock->getStoQteQuantite() + $lStock->getStoQteQuantiteSolidaire() . " " . $lStock->getStoQteUnite());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('E'.$i, $lStock->getValorisation());
+			$i++;
+		}
+
+		$lconfig = new JPIExportConfig(
+				$lTitre,
+				$lFormat,
+				$lExportAttributes,
+				array(), $lphpExcelObject);
+		
+		// Export
+		$lExportService->export($lconfig);
 	}
 	
 	/**

@@ -95,6 +95,12 @@ class StockProduitFermeVO  extends DataTemplate
 	* @desc StoQteUnite de la StockProduitFermeVO
 	*/
 	protected $mStoQteUnite;
+
+	/**
+	* @var decimal(10,2)
+	* @desc Valorisation de la StockProduitFermeVO
+	*/
+	protected $mValorisation;
 	
 	/**
 	 * @name getNproId()
@@ -329,6 +335,24 @@ class StockProduitFermeVO  extends DataTemplate
 	*/
 	public function setStoQteUnite($pStoQteUnite) {
 		$this->mStoQteUnite = $pStoQteUnite;
+	}
+
+	/**
+	* @name getValorisation()
+	* @return decimal(10,2)
+	* @desc Renvoie le membre Valorisation de la StockProduitFermeVO
+	*/
+	public function getValorisation() {
+		return $this->mValorisation;
+	}
+
+	/**
+	* @name setValorisation($pValorisation)
+	* @param decimal(10,2)
+	* @desc Remplace le membre Valorisation de la StockProduitFermeVO par $pValorisation
+	*/
+	public function setValorisation($pValorisation) {
+		$this->mValorisation = $pValorisation;
 	}
 }
 ?>

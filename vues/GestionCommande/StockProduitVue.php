@@ -43,6 +43,27 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_COMMANDE]) || is
 			$lLogger->log("Demande d'accés à StockProduit sans identifiant par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 			header('location:./index.php');
 		}
+	} else if(isset($_POST['fonction'])) {
+		include_once(CHEMIN_CLASSES_CONTROLEURS . MOD_GESTION_COMMANDE . "/StockProduitControleur.php");						
+		$lControleur = new StockProduitControleur();
+		
+		switch($_POST['fonction']) {					
+			case "export":
+					if(isset($_POST['id_fermes'])) {
+						$lParam = array();
+						$lParam['id_fermes'] = explode(',',urldecode($_POST['id_fermes']));
+						echo $lControleur->exportStock($lParam);
+					} else {
+						$lLogger->log("Demande d'accés à StockProduit pour export des réservations sans identifiant par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+						header('location:./index.php');
+					}
+				break;
+
+			default:
+				$lLogger->log("Demande d'accés à StockProduit sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+				header('location:./index.php');
+				break;
+		}		
 	} else {
 		$lLogger->log("Demande d'accés à StockProduit sans identifiant par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 		header('location:./index.php');

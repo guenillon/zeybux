@@ -8,11 +8,15 @@
 	this.soldeNv = 0;
 	this.mPremiereReservation = true;
 	this.mEtatReservation = null;
+	this.retour = null;
 	
 	this.construct = function(pParam) {
 		$.history( {'vue':function() {ReservationAdherentVue(pParam);}} );
 		var that = this;
 		pParam.fonction = "afficherReservation";
+		if(pParam.retour) {
+			this.retour = pParam.retour;
+		}
 		$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + $.toJSON(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
@@ -538,7 +542,7 @@
 		var that = this;
 		pData.find('#btn-annuler').click(function() {
 			if(that.mPremiereReservation) {
-				ListeReservationMarcheVue({"id_marche":that.infoCommande.comId});	
+				that.traiterRetour();
 			} else {
 				that.afficherDetailReservation();		
 			}
@@ -557,7 +561,7 @@
 	this.affectAnnulerDetailReservation = function(pData) {
 		var that = this;
 		pData.find('#btn-annuler').click(function() {
-			ListeReservationMarcheVue({"id_marche":that.infoCommande.comId});		
+			that.traiterRetour();
 		});
 		return pData;
 	};	
@@ -884,9 +888,8 @@
 											lVr.log.erreurs.push(erreur);							
 	
 											// Redirection vers la vue edition
-											ListeReservationMarcheVue({id_marche:that.infoCommande.comId,
-																vr:lVr});
-											
+											that.traiterRetour(lVr);
+																						
 											$(lDialog).dialog("close");
 											
 										} else {
@@ -919,6 +922,19 @@
 		});
 		
 		return pData;
+	};
+	
+	this.traiterRetour = function(pVr) {
+		var lParam = {id_marche:this.infoCommande.comId};
+		if(pVr) {
+			lParam.vr = pVr;
+		}
+		
+		if(this.retour == 'noAchat') {
+			ReservationSansAchatVue(lParam);
+		} else {
+			ListeReservationMarcheVue(lParam);
+		}
 	};
 	
 	this.construct(pParam);

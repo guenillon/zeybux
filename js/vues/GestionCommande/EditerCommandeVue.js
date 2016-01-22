@@ -226,6 +226,7 @@
 		lData.infoMarcheSelected = 'ui-state-active';
 		lData.listeReservationSelected = '';
 		lData.listeAchatSelected = '';
+		lData.reservationSansAchatSelected = '';
 		pResponse.resumeMarcheSelected = '';
 		
 		lData.editerMenu = lGestionCommandeTemplate.editerMarcheMenu.template(lData);
@@ -273,6 +274,9 @@
 		});
 		pData.find("#btn-resume-marche").click(function() {
 			ResumeMarcheVue({id_marche:that.mIdMarche});
+		});
+		pData.find("#btn-reservation-noachat").click(function() {
+			ReservationSansAchatVue({id_marche:that.mIdMarche});
 		});
 		return pData;
 	};

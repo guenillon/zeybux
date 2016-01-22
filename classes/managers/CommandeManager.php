@@ -13,6 +13,7 @@ include_once(CHEMIN_CLASSES_UTILS . "DbUtils.php");
 include_once(CHEMIN_CLASSES_UTILS . "StringUtils.php");
 include_once(CHEMIN_CLASSES_VO . "CommandeVO.php");
 include_once(CHEMIN_CLASSES_VO . "ListeReservationVO.php");
+include_once(CHEMIN_CLASSES_VIEW_VO . "AdherentViewVO.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "OperationManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "OperationChampComplementaireManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "ProduitManager.php");
@@ -132,58 +133,6 @@ class CommandeManager
 		}
 		return $lListeCommande;
 	}
-
-	/**
-	 * @name selectAll()
-	 * @return array(CommandeVO)
-	 * @desc Récupères toutes les lignes de la table et les renvoie sous forme d'une collection de CommandeVO
-	 */
-	/*public static function selectAll() {
-		// Initialisation du Logger
-		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
-		$lLogger->setMask(Log::MAX(LOG_LEVEL));
-		$lRequete =
-		"SELECT "
-				. CommandeManager::CHAMP_COMMANDE_ID .
-			"," . ProduitManager::CHAMP_PRODUIT_ID . 
-			"," . StockManager::CHAMP_STOCK_ID .
-			"," . StockManager::CHAMP_STOCK_QUANTITE .
-			"," . ProduitManager::CHAMP_PRODUIT_UNITE_MESURE .
-			"," . StockManager::CHAMP_STOCK_TYPE .
-			"," . StockManager::CHAMP_STOCK_ID_COMPTE .
-			"," . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID .
-			"," . AdherentManager::CHAMP_ADHERENT_ID .
-			"," . AdherentManager::CHAMP_ADHERENT_NOM .
-			"," . AdherentManager::CHAMP_ADHERENT_PRENOM .
-			"," . AdherentManager::CHAMP_ADHERENT_TELEPHONE_PRINCIPAL .
-			"," . CompteManager::CHAMP_COMPTE_LABEL . "
-		FROM " . CommandeManager::TABLE_COMMANDE . "
-		JOIN " . ProduitManager::TABLE_PRODUIT . "
-			ON " . CommandeManager::CHAMP_COMMANDE_ID . " = " . ProduitManager::CHAMP_PRODUIT_ID_COMMANDE . "
-		JOIN " . DetailCommandeManager::TABLE_DETAILCOMMANDE . "
-			ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . ProduitManager::CHAMP_PRODUIT_ID . "
-		JOIN " . StockManager::TABLE_STOCK . "
-			ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . StockManager::CHAMP_STOCK_ID_DETAIL_COMMANDE ."
-			AND " . StockManager::CHAMP_STOCK_TYPE . " = 0
-			AND " . StockManager::CHAMP_STOCK_ID_COMPTE . " <> 0
-		JOIN " . AdherentManager::TABLE_ADHERENT . " 
-			ON " . StockManager::CHAMP_STOCK_ID_COMPTE . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE ."
-			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . " = 1
-		JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . " 
-			ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
-			AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = " . CommandeManager::CHAMP_COMMANDE_ID . "
-		JOIN " . OperationManager::TABLE_OPERATION . "
-			ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . " 
-			AND " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " = 0
-		JOIN " . CompteManager::TABLE_COMPTE . "	
-			ON " . CompteManager::CHAMP_COMPTE_ID . " = " . StockManager::CHAMP_STOCK_ID_COMPTE . "		
-					
-		WHERE   
-			
-					
-			" . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " in (0,1)
-			AND " . CommandeManager::CHAMP_COMMANDE_ID . " = '" . StringUtils::securiser($pId) . "';";
-	}*/
 	
 	/**
 	 * @name rechercheReservation( $pTypeRecherche, $pTypeCritere, $pCritereRecherche, $pTypeTri, $pCritereTri )
@@ -716,6 +665,89 @@ class CommandeManager
 		return $lDetailCommande;
 	}
 
+	/**
+	 * @name selectReservationNonAchete($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre de réservation sur abonnement uniquement
+	 */
+	public static function selectReservationNonAchete($pIdMarche) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+		"SELECT "
+				. AdherentManager::CHAMP_ADHERENT_ID . 
+			"," . AdherentManager::CHAMP_ADHERENT_NUMERO . 
+			"," . CompteManager::CHAMP_COMPTE_LABEL . 
+			"," . AdherentManager::CHAMP_ADHERENT_NOM . 
+			"," . AdherentManager::CHAMP_ADHERENT_PRENOM . "
+		FROM (
+			SELECT " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+			FROM " . OperationManager::TABLE_OPERATION . "
+			JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (0)
+			) a
+		LEFT JOIN (
+			SELECT " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+			FROM " . OperationManager::TABLE_OPERATION . "
+			JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (7, 8)
+			) b
+	
+		ON a." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = b." . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+				
+		JOIN " . CompteManager::TABLE_COMPTE . "
+			ON a." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "		
+		JOIN " . AdherentManager::TABLE_ADHERENT . "
+			ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "			
+		WHERE b." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " IS NULL;";
+	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lListeAdherent = array();
+		if( mysql_num_rows($lSql) > 0 ) {	
+			while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				array_push($lListeAdherent, CommandeManager::remplirAdherent(
+					$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
+					$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO],
+					$lLigne[CompteManager::CHAMP_COMPTE_LABEL],
+					$lLigne[AdherentManager::CHAMP_ADHERENT_NOM],
+					$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM]));	
+			}
+		} else {
+			$lListeAdherent[0] = new AdherentViewVO();
+		}
+		return $lListeAdherent;
+	}
+	
+	/**
+	 * @name remplirAdherent($pId, $pNumero, $pCompte, $pNom, $pPrenom)
+	 * @param int(11)
+	 * @param varchar(5)
+	 * @param varchar(30)
+	 * @param varchar(50)
+	 * @param varchar(50)
+	 * @return AdherentVO
+	 * @desc Retourne une AdherentViewVO remplie
+	 */
+	private static function remplirAdherent($pId, $pNumero, $pCompte, $pNom, $pPrenom) {
+		$lAdherent = new AdherentViewVO();
+		$lAdherent->setAdhId($pId);
+		$lAdherent->setAdhNumero($pNumero);
+		$lAdherent->setCptLabel($pCompte);
+		$lAdherent->setAdhNom($pNom);
+		$lAdherent->setAdhPrenom($pPrenom);	
+		return $lAdherent;
+	}
+	
 	/**
 	* @name recherche( $pTypeRecherche, $pTypeCritere, $pCritereRecherche, $pTypeTri, $pCritereTri )
 	* @param string nom de la table

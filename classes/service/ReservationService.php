@@ -482,5 +482,15 @@ class ReservationService
 			array(AdherentManager::CHAMP_ADHERENT_NOM,AdherentManager::CHAMP_ADHERENT_PRENOM), 
 			array('ASC','ASC'));
 	}
+	
+	/**
+	 * @name getReservationNonAchete($pIdMarche)
+	 * @param integer
+	 * @return array(ReservationDetailViewVO)
+	 * @desc Retourne les réservations non achetées sur un marché
+	 */
+	public function getReservationNonAchete($pIdMarche) {
+		return CommandeManager::selectReservationNonAchete($pIdMarche);
+	}
 }
 ?>

@@ -5,6 +5,7 @@
 		$.history( {'vue':function() {ResumeMarcheVue(pParam);}} );
 		var that = this;
 		pParam.fonction = 'afficher';
+		this.mIdMarche = pParam.id_marche;
 		$.post(	"./index.php?m=GestionCommande&v=ResumeMarche", "pParam=" + $.toJSON(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
@@ -31,6 +32,8 @@
 		pResponse.listeReservationSelected = '';
 		pResponse.listeAchatSelected = '';
 		pResponse.resumeMarcheSelected = 'ui-state-active';
+		pResponse.reservationSansAchatSelected = '';
+
 		
 		pResponse.editerMenu = lGestionCommandeTemplate.editerMarcheMenu.template(pResponse);
 		
@@ -125,6 +128,9 @@
 		});
 		pData.find("#btn-resume-marche").click(function() {
 			ResumeMarcheVue({id_marche:that.mIdMarche});
+		});
+		pData.find("#btn-reservation-noachat").click(function() {
+			ReservationSansAchatVue({id_marche:that.mIdMarche});
 		});
 		return pData;
 	};

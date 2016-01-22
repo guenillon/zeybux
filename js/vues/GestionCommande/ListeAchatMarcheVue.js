@@ -62,6 +62,8 @@
 		pResponse.listeReservationSelected = '';
 		pResponse.listeAchatSelected = 'ui-state-active';
 		pResponse.resumeMarcheSelected = '';
+		pResponse.reservationSansAchatSelected = '';
+
 		
 		pResponse.editerMenu = lGestionCommandeTemplate.editerMarcheMenu.template(pResponse);
 		pResponse.rechercheAchat = '';
@@ -99,6 +101,9 @@
 		pData.find("#btn-resume-marche").click(function() {
 			ResumeMarcheVue({id_marche:that.mIdMarche});
 		});
+		pData.find("#btn-reservation-noachat").click(function() {
+			ReservationSansAchatVue({id_marche:that.mIdMarche});
+		});
 		return pData;
 	};
 	
@@ -114,35 +119,6 @@
 		pData.find("#filter-form").submit(function () {return false;});
 		return pData;
 	};
-
-	/*this.affectExportDataEtReservation = function(pData) {		
-		var that = this;
-		pData.find('#btn-export-achat')
-		.click(function() {			
-			var lGestionCommandeTemplate = new GestionCommandeTemplate();
-			var lTemplate = lGestionCommandeTemplate.dialogExportListeAchatEtReservation;
-			
-			$(lTemplate.template(that.mMarche)).dialog({
-				autoOpen: true,
-				modal: true,
-				draggable: false,
-				resizable: false,
-				width:600,
-				buttons: {
-					'Exporter': function() {
-						lParam = {fonction:"exportAchatEtReservation",id_marche:that.mIdMarche};
-						$.download("./index.php?m=GestionCommande&v=ListeAchatMarche", lParam);
-					},
-					'Annuler': function() {
-						$(this).dialog('close');
-					}
-				},
-				close: function(ev, ui) { $(this).remove(); Infobulle.init(); }	
-			});
-			
-		});
-		return pData;
-	};*/
 	
 	this.affectExportAchatEtReservation = function(pData) {		
 		var lGestionCommandeTemplate = new GestionCommandeTemplate();

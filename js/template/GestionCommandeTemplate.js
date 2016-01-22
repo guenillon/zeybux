@@ -1282,9 +1282,10 @@
 	this.editerMarcheMenu = 
 		"<div id=\"edt-com-nav-resa-achat\">" +
 			"<span class=\"{infoMarcheSelected} com-cursor-pointer ui-widget-header ui-corner-tl com-btn-hover\" id=\"btn-information-marche\">Information</span>" +
-			"<span class=\"{listeReservationSelected} com-cursor-pointer ui-widget-header com-btn-hover\" id=\"btn-liste-resa\">Reservations</span>" +
+			"<span class=\"{listeReservationSelected} com-cursor-pointer ui-widget-header com-btn-hover\" id=\"btn-liste-resa\">Réservations</span>" +
 			"<span class=\"{listeAchatSelected} com-cursor-pointer ui-widget-header com-btn-hover\" id=\"btn-liste-achat-resa\">Achats</span>" +
-			"<span class=\"{resumeMarcheSelected} com-cursor-pointer ui-widget-header ui-corner-tr com-btn-hover\" id=\"btn-resume-marche\">Resumé</span>" +
+			"<span class=\"{resumeMarcheSelected} com-cursor-pointer ui-widget-header com-btn-hover\" id=\"btn-resume-marche\">Resumé</span>" +
+			"<span class=\"{reservationSansAchatSelected} com-cursor-pointer ui-widget-header ui-corner-tr com-btn-hover\" id=\"btn-reservation-noachat\">Réservations sans achat</span>" +
 		"</div>";
 		
 	this.editerCommandePage = 
@@ -3234,4 +3235,36 @@
 	this.listeAchatNumeroMarche = "<span class=\"ui-helper-hidden\">{comNumero}</span>N°{comNumero}";
 	
 	this.listeAchatVide = "<p id=\"texte-liste-vide\">Aucun Achat.</p>";
+
+	this.listeReservationSansAchat = 
+		"<div id=\"contenu\">" +
+			"{editerMenu}" +
+			"<div class=\"com-widget-window ui-widget ui-widget-content ui-corner-all\">" +
+				"<div class=\"com-widget-header ui-widget ui-widget-header ui-corner-all\">" +
+					"Les réservations sans achat" +
+				"</div>" +
+				"<div>" +
+					"<table id=\"liste-adherent\">" +
+						"<thead>" +
+							"<tr>" +
+								"<th>N°</th>" +
+								"<th>Compte</th>" +
+								"<th>Nom</th>" +
+								"<th>Prénom</th>" +
+							"</tr>" +
+						"</thead>" +
+						"<tbody>" +
+					"<!-- BEGIN listeAdherent -->" +
+							"<tr class=\"compte-ligne com-cursor-pointer\" id-adherent=\"{listeAdherent.adhId}\">" +
+								"<td>{listeAdherent.adhNumero}</td>" +
+								"<td>{listeAdherent.cptLabel}</td>" +
+								"<td>{listeAdherent.adhNom}</td>" +
+								"<td>{listeAdherent.adhPrenom}</td>" +
+							"</tr>" +
+					"<!-- END listeAdherent -->" +
+						"</tbody>" +
+					"</table>" +
+				"</div>" +
+			"</div>" +
+		"</div>";
 }

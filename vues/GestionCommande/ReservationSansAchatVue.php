@@ -33,6 +33,27 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_COMMANDE]) || is
 			$lLogger->log("Demande d'accés à ReservationSansAchat sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 			header('location:./index.php');
 		}
+	} else if(isset($_POST['fonction'])) {
+		include_once(CHEMIN_CLASSES_CONTROLEURS . MOD_GESTION_COMMANDE . "/ReservationSansAchatControleur.php");						
+		$lControleur = new ReservationSansAchatControleur();
+		
+		switch($_POST['fonction']) {					
+			case "export":
+					if(isset($_POST['id_marche']) ) {
+						$lParam = array();
+						$lParam['id_marche'] = $_POST['id_marche'];						
+						echo $lControleur->getReservationExport($lParam);
+					} else {
+						$lLogger->log("Demande d'accés à ReservationSansAchat pour export des réservations sans identifiant par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+						header('location:./index.php');
+					}
+				break;
+
+			default:
+				$lLogger->log("Demande d'accés à ReservationSansAchat sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+				header('location:./index.php');
+				break;
+		}		
 	} else {
 		$lLogger->log("Demande d'accés à ReservationSansAchat sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 		header('location:./index.php');

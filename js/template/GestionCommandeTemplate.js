@@ -3242,6 +3242,10 @@
 			"<div class=\"com-widget-window ui-widget ui-widget-content ui-corner-all\">" +
 				"<div class=\"com-widget-header ui-widget ui-widget-header ui-corner-all\">" +
 					"Les réservations sans achat" +
+					"<span class=\"com-cursor-pointer com-btn-header ui-widget-content ui-corner-all\" id=\"btn-export\" title=\"Exporter\">" +
+						"<span class=\"ui-icon ui-icon-print\">" +
+						"</span>" +
+					"</span>" +
 				"</div>" +
 				"<div>" +
 					"<table id=\"liste-adherent\">" +

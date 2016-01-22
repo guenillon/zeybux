@@ -44,6 +44,7 @@
 		pData = this.affectReservation(pData);
 		pData = gCommunVue.comHoverBtn(pData);
 		pData = this.affectDataTable(pData);
+		pData = this.affectExport(pData);
 		return pData;
 	};
 	
@@ -103,6 +104,15 @@
                   }]
 	    });
 		return pData;		
+	};
+	
+	this.affectExport = function(pData) {
+		var that = this;
+		pData.find('#btn-export')
+		.click(function() {
+			$.download("./index.php?m=GestionCommande&v=ReservationSansAchat", {fonction:"export",id_marche:that.mIdMarche});
+		});
+		return pData;	
 	};
 	
 	this.construct(pParam);

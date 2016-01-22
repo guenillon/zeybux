@@ -492,5 +492,52 @@ class ReservationService
 	public function getReservationNonAchete($pIdMarche) {
 		return CommandeManager::selectReservationNonAchete($pIdMarche);
 	}
+	
+	/**
+	 * @name getReservationNonAcheteExport($pIdMarche)
+	 * @param integer
+	 * @return xls
+	 * @desc Exporte les réservations non achetées sur un marché
+	 */
+	public function getReservationNonAcheteExport($pIdMarche) {
+		$lExportService = new JPIExportService();
+		
+		$lTitre = 'Réservations sans achat';
+		$lFormat = 'xls';
+		
+		// Création du phpExcel
+		$lphpExcelObject = new PHPExcel();
+			
+		// Le titre de l'onglet
+		$lphpExcelObject->getActiveSheet()->setTitle($lTitre);
+		
+		// Le header
+		$lExportAttributes = array("header" => array("N°", "Compte", "Nom", "Prénom"));
+		$i = 'A';
+		foreach($lExportAttributes["header"] as $nom) {
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue($i.'1', $nom)->getColumnDimension($i)->setAutoSize(true);
+			$i++;
+		}
+		
+		// Les données : Récupération des réservations
+		$lAdherents = $this->getReservationNonAchete($pIdMarche);
+		$i = 2;
+		foreach ( $lAdherents as $lAdherent ) {
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('A'.$i, $lAdherent->getAdhNumero());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('B'.$i, $lAdherent->getCptLabel());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('C'.$i, $lAdherent->getAdhNom());
+			$lphpExcelObject->setActiveSheetIndex(0)->setCellValue('D'.$i, $lAdherent->getAdhPrenom());
+			$i++;
+		}
+		
+		$lconfig = new JPIExportConfig(
+				$lTitre,
+				$lFormat,
+				array(),
+				array(), $lphpExcelObject);
+		
+		// Export
+		$lExportService->export($lconfig);
+	}
 }
 ?>

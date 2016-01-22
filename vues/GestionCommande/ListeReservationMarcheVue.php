@@ -23,11 +23,6 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_COMMANDE]) || is
 						echo $lControleur->getListeAdherent()->exportToJson();
 						$lLogger->log("Affichage de la vue ListeReservationMarche par le compte de l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 					break;
-								
-				/*case "detailMarche":
-						echo $lControleur->getDetailMarche($lParam)->exportToJson();
-						$lLogger->log("Affichage des infos du marche de la vue ListeReservationMarche par le compte de l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
-					break;*/
 
 				default:
 					$lLogger->log("Demande d'accés à ListeReservationMarche sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs

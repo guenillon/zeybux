@@ -23,7 +23,7 @@ include_once(CHEMIN_CLASSES_RESPONSE . MOD_GESTION_COMMANDE . "/ListeAdherentRes
 class ReservationSansAchatControleur
 {		
 	/**
-	* @name getListeAdherent($pParam)
+	* @name getReservation($pParam)
 	* @return ListeAdherentResponse
 	* @desc Recherche la liste des adherents
 	*/
@@ -37,6 +37,16 @@ class ReservationSansAchatControleur
 			return $lResponse;
 		}
 		return $lVr;
+	}
+	
+	/**
+	 * @name getReservationExport($pParam)
+	 * @return xls
+	 * @desc Exporte la liste des adherents
+	 */
+	public function getReservationExport($pParam) {
+		$lReservationService = new ReservationService();
+		return $lReservationService->getReservationNonAcheteExport($pParam['id_marche']);
 	}
 }
 ?>

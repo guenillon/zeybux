@@ -465,7 +465,257 @@ class CommandeManager
 		}
 		return $lListeCommande;	
 	}
+
+	/**
+	 * @name selectNbReservationEtAchatMarche($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre d'achat et de réservation sur un marché
+	 */
+	public static function selectNbReservationEtAchatMarche($pIdMarche) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+			"SELECT ".
+			 	OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT .
+			 	", count(distinct " . OperationManager::CHAMP_OPERATION_ID_COMPTE . ") as nb
+			  FROM " . OperationManager::TABLE_OPERATION .
+			" JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE .
+					" ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID .
+					" AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1 " .
+					" AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . " 
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "			
+			  WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (0, 22, 7, 8) " .
+			" GROUP BY " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . ";";
 	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+		
+		$lDetailCommande = array();
+		if( mysql_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysql_fetch_assoc($lSql)) {
+				$lDetailCommande[$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT ]] = $lLigne;
+			}
+		}
+		return $lDetailCommande;
+	}
+	
+	/**
+	 * @name selectNbAchatMarche($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre d'achat total sur un marché
+	 */
+	public static function selectNbAchatMarche($pIdMarche) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+		"SELECT count(distinct " . OperationManager::CHAMP_OPERATION_ID_COMPTE . ") as nb
+			  FROM " . OperationManager::TABLE_OPERATION .
+				  " JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE .
+						" ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID .
+						" AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1 " .
+						" AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . "
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			  WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (7, 8);";
+	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lNb = 0;
+		if( mysql_num_rows($lSql) > 0 ) {
+			$lLigne = mysql_fetch_assoc($lSql);
+			$lNb = $lLigne['nb'];
+		}
+		return $lNb;
+	}
+	
+	/**
+	 * @name selectNbAchatAbonnement($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre d'Achat sur abonnement uniquement
+	 */
+	public static function selectNbAchatAbonnement($pIdMarche) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+		"SELECT
+			count( distinct a." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " ) as nb 
+		FROM (
+			SELECT " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+			FROM " . OperationManager::TABLE_OPERATION . "
+			JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1 
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . "
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			JOIN " . DetailOperationManager::TABLE_DETAILOPERATION . "
+				ON " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "
+			JOIN " . DetailCommandeManager::TABLE_DETAILCOMMANDE . " 
+			 	ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_DETAIL_COMMANDE  . "
+			JOIN " . ProduitManager::TABLE_PRODUIT . "
+				ON " . ProduitManager::CHAMP_PRODUIT_ID . " = " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID_PRODUIT . "
+				AND " . ProduitManager::CHAMP_PRODUIT_TYPE . " = 2 
+				AND " . ProduitManager::CHAMP_PRODUIT_ETAT . " = 0		
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (7, 8) 
+			) a
+		LEFT JOIN (
+			SELECT " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+			FROM " . OperationManager::TABLE_OPERATION . "
+			JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1 
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . "
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			JOIN " . DetailOperationManager::TABLE_DETAILOPERATION . "
+				ON " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "
+			JOIN " . DetailCommandeManager::TABLE_DETAILCOMMANDE . " 
+			 	ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_DETAIL_COMMANDE  . "
+			JOIN " . ProduitManager::TABLE_PRODUIT . "
+				ON " . ProduitManager::CHAMP_PRODUIT_ID . " = " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID_PRODUIT . "
+				AND " . ProduitManager::CHAMP_PRODUIT_TYPE . " <> 2 
+				AND " . ProduitManager::CHAMP_PRODUIT_ETAT . " = 0		
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (7, 8) 
+			) b
+			
+		ON a." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = b." . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+		WHERE b." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " IS NULL;";
+	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lNb = 0;
+		if( mysql_num_rows($lSql) > 0 ) {
+			$lLigne = mysql_fetch_assoc($lSql);
+			$lNb = $lLigne['nb'];
+		}
+		return $lNb;
+	}
+	
+	/**
+	 * @name selectNbReservationAbonnement($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre de réservation sur abonnement uniquement
+	 */
+	public static function selectNbReservationAbonnement($pIdMarche) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+		"SELECT
+			count( distinct a." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " ) as nb
+		FROM (
+			SELECT " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+			FROM " . OperationManager::TABLE_OPERATION . "
+			JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . "
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			JOIN " . DetailOperationManager::TABLE_DETAILOPERATION . "
+				ON " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "
+			JOIN " . DetailCommandeManager::TABLE_DETAILCOMMANDE . "
+			 	ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_DETAIL_COMMANDE  . "
+			JOIN " . ProduitManager::TABLE_PRODUIT . "
+				ON " . ProduitManager::CHAMP_PRODUIT_ID . " = " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID_PRODUIT . "
+				AND " . ProduitManager::CHAMP_PRODUIT_TYPE . " = 2
+				AND " . ProduitManager::CHAMP_PRODUIT_ETAT . " = 0
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (0, 22)
+			) a
+		LEFT JOIN (
+			SELECT " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+			FROM " . OperationManager::TABLE_OPERATION . "
+			JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
+				AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . "
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			JOIN " . DetailOperationManager::TABLE_DETAILOPERATION . "
+				ON " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "
+			JOIN " . DetailCommandeManager::TABLE_DETAILCOMMANDE . "
+			 	ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . DetailOperationManager::CHAMP_DETAILOPERATION_ID_DETAIL_COMMANDE  . "
+			JOIN " . ProduitManager::TABLE_PRODUIT . "
+				ON " . ProduitManager::CHAMP_PRODUIT_ID . " = " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID_PRODUIT . "
+				AND " . ProduitManager::CHAMP_PRODUIT_TYPE . " <> 2
+				AND " . ProduitManager::CHAMP_PRODUIT_ETAT . " = 0
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (0, 22)
+			) b
+		
+		ON a." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = b." . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+		WHERE b." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " IS NULL;";
+	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lNb = 0;
+		if( mysql_num_rows($lSql) > 0 ) {
+			$lLigne = mysql_fetch_assoc($lSql);
+			$lNb = $lLigne['nb'];
+		}
+		return $lNb;
+	}
+	
+	/**
+	 * @name selectCaMarche($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le chiffre d'affaire d'un marché
+	 */
+	public static function selectCaMarche($pIdMarche) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		$lRequete =
+			"SELECT ".
+				OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT .
+				", sum(" . OperationManager::CHAMP_OPERATION_MONTANT . ") * -1 as " . OperationManager::CHAMP_OPERATION_MONTANT . "
+			FROM " . OperationManager::TABLE_OPERATION .
+			" JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE .
+						" ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID .
+						" AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1 " .
+						" AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "' 
+			JOIN " . CompteManager::TABLE_COMPTE . "
+				ON " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
+			JOIN " . AdherentManager::TABLE_ADHERENT . " 
+			 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " IN (7, 8)
+			GROUP BY " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . ";";
+	
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+	
+		$lDetailCommande = array();
+		if( mysql_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysql_fetch_assoc($lSql)) {
+				$lDetailCommande[$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT ]] = $lLigne;
+			}
+		}
+		return $lDetailCommande;
+	}
+
 	/**
 	* @name recherche( $pTypeRecherche, $pTypeCritere, $pCritereRecherche, $pTypeTri, $pCritereTri )
 	* @param string nom de la table

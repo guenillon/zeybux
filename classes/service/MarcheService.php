@@ -890,5 +890,55 @@ class MarcheService
 			array(CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_DEBUT),
 			array('DESC'));
 	}
+
+	/**
+	 * @name getNbReservationEtAchatMarche($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Retourne les nombre de réservations et d'achat du marche
+	 */
+	public function getNbReservationEtAchatMarche($pIdMarche) {
+		return CommandeManager::selectNbReservationEtAchatMarche($pIdMarche);
+	}
+
+	/**
+	 * @name getCaMarche($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le chiffre d'affaire d'un marché
+	 */
+	public function getCaMarche($pIdMarche) {
+		return CommandeManager::selectCaMarche($pIdMarche);
+	}
+
+	/**
+	 * @name getNbReservationAbonnement($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre de réservation sur abonnement uniquement
+	 */
+	public function getNbReservationAbonnement($pIdMarche) {
+		return CommandeManager::selectNbReservationAbonnement($pIdMarche);
+	}
+
+	/**
+	 * @name getNbAchatAbonnement($pIdMarche)
+	 * @param integer
+	 * @return array()
+	 * @desc Récupère le nombre d'Achat sur abonnement uniquement
+	 */
+	public function getNbAchatAbonnement($pIdMarche) {
+		return CommandeManager::selectNbAchatAbonnement($pIdMarche);
+	}
+	
+	/**
+	 * @name getNbAchatMarche($pIdMarche)
+	 * @param integer
+	 * @return integer
+	 * @desc Récupère le nombre d'Achat sur abonnement uniquement
+	 */
+	public function getNbAchatMarche($pIdMarche) {
+		return CommandeManager::selectNbAchatMarche($pIdMarche);
+	}
 }
 ?>

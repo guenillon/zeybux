@@ -77,6 +77,32 @@
 		pResponse.totalSolidaire = lTotalSolidaire.nombreFormate(2,',',' ');
 		pResponse.numero = pResponse.detailMarche.numero;
 		
+		var lNbVide = { nb:0 };
+		if(!pResponse.nbResaAchat[0]) {
+			pResponse.nbResaAchat[0] = lNbVide;
+		}
+		if(!pResponse.nbResaAchat[22]) {
+			pResponse.nbResaAchat[22] = lNbVide;
+		}
+		if(!pResponse.nbResaAchat[8]) {
+			pResponse.nbResaAchat[8] = lNbVide;
+		}
+		pResponse.nbReservation = parseInt(pResponse.nbResaAchat[0].nb) + parseInt(pResponse.nbResaAchat[22].nb);
+		pResponse.nbAchatMarche = parseInt(pResponse.nbAchat);
+		pResponse.nbAchatMarcheSolidaire = parseInt(pResponse.nbResaAchat[8].nb);
+		
+		var lCaVide = {ope_montant : 0};
+		if(!pResponse.ca[7]) {
+			pResponse.ca[7] = lCaVide;
+		}
+		if(!pResponse.ca[8]) {
+			pResponse.ca[8] = lCaVide;
+		}
+		pResponse.caMarche = parseFloat(pResponse.ca[7].ope_montant).nombreFormate(2,',',' ');
+		pResponse.caMarcheSolidaire = parseFloat(pResponse.ca[8].ope_montant).nombreFormate(2,',',' ');
+		pResponse.caTotal = (parseFloat(pResponse.ca[7].ope_montant) + parseFloat(pResponse.ca[8].ope_montant)).toFixed(2).nombreFormate(2,',',' ');
+		
+		
 		$('#contenu').replaceWith(that.affect($(lTemplate.template(pResponse))));
 	};
 	

@@ -37,12 +37,44 @@ class InfoCommandeResponse extends DataTemplate
 	protected $mDetailMarche;
 	
 	/**
+	 * @var NbResaAchat
+	 * @desc Les réservations et Achats du marche
+	 */
+	protected $mNbResaAchat;
+	
+	/**
+	 * @var Ca
+	 * @desc Le chiffre d'affaire d'un marché
+	 */
+	protected $mCa;
+	
+	/**
+	 * @var ReservationAbonnement
+	 * @desc Le nombre de réservation sur abonnement uniquement
+	 */
+	protected $mReservationAbonnement;
+	
+	/**
+	 * @var AchatAbonnement
+	 * @desc Le nombre d'Achat sur abonnement uniquement
+	 */
+	protected $mAchatAbonnement;
+	
+	/**
+	 * @var NbAchat
+	 * @desc Le nombre d'Achat total
+	 */
+	protected $mNbAchat;
+	
+	
+	/**
 	* @name InfoCommandeResponse()
 	* @desc Le constructeur
 	*/
 	public function InfoCommandeResponse() {
 		$this->mValid = true;
 		$this->mInfoCommande = array();
+		$this->mNbResaAchat = array();
 	}
 	
 	/**
@@ -106,6 +138,96 @@ class InfoCommandeResponse extends DataTemplate
 	*/
 	public function setDetailMarche($pDetailMarche) {
 		$this->mDetailMarche = $pDetailMarche;
+	}
+	
+	/**
+	* @name getNbResaAchat()
+	* @return bool
+	* @desc Renvoie la NbResaAchat de l'élément
+	*/
+	public function getNbResaAchat() {
+		return $this->mNbResaAchat;
+	}
+
+	/**
+	* @name setNbResaAchat($pNbResaAchat)
+	* @param bool
+	* @desc Remplace la NbResaAchat de l'élément par $pNbResaAchat
+	*/
+	public function setNbResaAchat($pNbResaAchat) {
+		$this->mNbResaAchat = $pNbResaAchat;
+	}
+	
+	/**
+	* @name getCa()
+	* @return bool
+	* @desc Renvoie la Ca de l'élément
+	*/
+	public function getCa() {
+		return $this->mCa;
+	}
+
+	/**
+	* @name setCa($pCa)
+	* @param bool
+	* @desc Remplace la Ca de l'élément par $pCa
+	*/
+	public function setCa($pCa) {
+		$this->mCa = $pCa;
+	}
+	
+	/**
+	* @name getReservationAbonnement()
+	* @return bool
+	* @desc Renvoie la ReservationAbonnement de l'élément
+	*/
+	public function getReservationAbonnement() {
+		return $this->mReservationAbonnement;
+	}
+
+	/**
+	* @name setReservationAbonnement($pReservationAbonnement)
+	* @param bool
+	* @desc Remplace la ReservationAbonnement de l'élément par $pReservationAbonnement
+	*/
+	public function setReservationAbonnement($pReservationAbonnement) {
+		$this->mReservationAbonnement = $pReservationAbonnement;
+	}
+	
+	/**
+	* @name getAchatAbonnement()
+	* @return bool
+	* @desc Renvoie la AchatAbonnement de l'élément
+	*/
+	public function getAchatAbonnement() {
+		return $this->mAchatAbonnement;
+	}
+
+	/**
+	* @name setAchatAbonnement($pAchatAbonnement)
+	* @param bool
+	* @desc Remplace la AchatAbonnement de l'élément par $pAchatAbonnement
+	*/
+	public function setAchatAbonnement($pAchatAbonnement) {
+		$this->mAchatAbonnement = $pAchatAbonnement;
+	}
+	
+	/**
+	* @name getNbAchat()
+	* @return bool
+	* @desc Renvoie la NbAchat de l'élément
+	*/
+	public function getNbAchat() {
+		return $this->mNbAchat;
+	}
+
+	/**
+	* @name setNbAchat($pNbAchat)
+	* @param bool
+	* @desc Remplace la NbAchat de l'élément par $pNbAchat
+	*/
+	public function setNbAchat($pNbAchat) {
+		$this->mNbAchat = $pNbAchat;
 	}
 }
 ?>

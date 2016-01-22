@@ -2252,6 +2252,45 @@
 					"Détail du Marché n°{numero}" +
 				"</div>" +
 				"<div>" +
+				
+					"<div>" +
+						"<table class=\"com-table\">" +
+							"<thead>" +
+								"<tr class=\"com-center\">" +
+									"<th colspan=\"2\" class=\"com-table-th ui-widget ui-widget-header\">Réservations</th>" +
+									"<th colspan=\"2\" class=\"com-table-th ui-widget ui-widget-header\">Achats</th>" +
+									"<th colspan=\"2\" class=\"com-table-th ui-widget ui-widget-header\">Chiffre d'affaire</th>" +
+								"</tr>" +
+							"</thead>" +
+							"<tbody>" +
+								"<tr>" +
+									"<td class=\"com-table-td\">Total</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{nbReservation}</td>" +
+									"<td class=\"com-table-td\">Total marché</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{nbAchatMarche}</td>" +
+									"<td class=\"com-table-td\">Total marché</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{caMarche} {sigleMonetaire}</td>" +
+								"</tr>" +
+								"<tr>" +
+									"<td class=\"com-table-td\">Total sur abonnement seul</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{reservationAbonnement}</td>" +
+									"<td class=\"com-table-td\">Dont marché solidaire</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{nbAchatMarcheSolidaire}</td>" +
+									"<td class=\"com-table-td\">Total marché solidaire</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{caMarcheSolidaire} {sigleMonetaire}</td>" +
+								"</tr>" +
+								"<tr>" +
+									"<td class=\"com-table-td\"></td>" +
+									"<td class=\"com-table-td\"></td>" +
+									"<td class=\"com-table-td\">Total sur abonnement seul</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{achatAbonnement}</td>" +
+									"<td class=\"com-table-td\">Total</td>" +
+									"<td class=\"com-table-td com-text-align-right\">{caTotal} {sigleMonetaire}</td>" +
+								"</tr>" +
+							" </tbody>" +
+						"</table>" +
+					"</div>" +
+					"<br/><br/>" +
 					"<div class=\"com-center\" id=\"resultat-marche-archive\">" +
 						"<span class=\"ui-widget ui-widget-header com-table-th\">Résultat Zeybu Marché : {total} {sigleMonetaire}</span>    " +
 						"<span class=\"ui-widget ui-widget-header com-table-th\">Résultat Zeybu Solidaire : {totalSolidaire} {sigleMonetaire}</span>" +

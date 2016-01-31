@@ -31,7 +31,7 @@
 									"<th class=\"ui-widget-content ui-widget-content-transparent ui-corner-all\">Date d'adhésion *</th>" +
 									"<td class=\"com-table-form-td\"> <input class=\"com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all\" type=\"text\" name=\"date_adhesion\" value=\"{adhDateAdhesion}\" maxlength=\"10\" id=\"dateAdhesion\" /></td>" +
 								"</tr>" +
-								"<tr>" +
+								"<tr id=\"ligne-adherent-compte\">" +
 									"<th class=\"ui-widget-content ui-widget-content-transparent ui-corner-all\" id=\"compte\">Compte</th>" +
 									"<td id=\"btn-radio-compte\" class=\"com-table-form-td\">" +
 										"{formCompte}" +

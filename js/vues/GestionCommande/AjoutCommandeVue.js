@@ -1615,7 +1615,8 @@
 			this.mMarche.dateFinReservation = $(':input[name=date-fin-reservation]').val().dateFrToDb();
 			this.mMarche.timeFinReservation = $(':input[name=heure-fin-reservation]').val() + ':' + $(':input[name=minute-fin-reservation]').val() + ':00';
 			this.mMarche.archive = "0";
-			
+			this.mMarche.droitNonAdherent = $(':input[name=droit-non-adherent]').prop( "checked" ) ? 1 : 0;
+
 			if(this.mEtapeCreationMarche == 0) {
 				
 				var lValid = new MarcheValid();
@@ -1634,6 +1635,9 @@
 					$("#time-fin-marche-span").text($(':input[name=heure-fin]').val() + 'H' + $(':input[name=minute-fin]').val());
 					$("#description-marche-span").text(this.mMarche.description);
 			
+					var lClassDroitNonAdherent = this.mMarche.droitNonAdherent ? "ui-icon-check" :"ui-icon-closethick";
+					$("#droit-non-adherent-marche-span").html("<span class=\"com-float-left ui-icon " + lClassDroitNonAdherent + "\"></span>");
+
 					$("#btn-ajout-produit, .informations-marche, #btn-modifier-creation-commande, .btn-modifier-produit, .btn-supprimer-produit").toggle();
 				} else {
 					// Affiche les erreurs
@@ -1654,6 +1658,7 @@
 				lVo.dateFinReservation = this.mMarche.dateFinReservation;
 				lVo.timeFinReservation = this.mMarche.timeFinReservation;
 				lVo.archive = this.mMarche.archive;
+				lVo.droitNonAdherent = this.mMarche.droitNonAdherent;
 				
 				// Suppression des lignes vides
 				var lProduits = [];

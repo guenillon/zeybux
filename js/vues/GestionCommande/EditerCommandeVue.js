@@ -66,7 +66,9 @@
 		lData.heureMarcheFin = pResponse.marche.dateMarcheFin.extractDbHeure();
 		lData.minuteMarcheFin = pResponse.marche.dateMarcheFin.extractDbMinute();
 		lData.archive = pResponse.marche.archive;
-				
+		lData.droitNonAdherent = pResponse.marche.droitNonAdherent;
+		lData.lClassDroitNonAdherent = lData.droitNonAdherent == "1" ? "ui-icon-check" :"ui-icon-closethick";
+		
 		var lAffichageMarche = [];
 		$.each(pResponse.marche.produits,function() {
 			var lIdFerme = this.ferId;
@@ -1586,39 +1588,55 @@
 	
 	this.dialogModifierInformationMarche = function() {
 		var that = this;
-		var lGestionCommandeTemplate = new GestionCommandeTemplate();		
-		var lHtml = $(lGestionCommandeTemplate.dialogModifierInfoMarche.template(that.mMarche));		
+		var lParam = {fonction:"nbResaNonAdherent",id_marche:this.mIdMarche};
+		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+				function (lResponse) {		
+					if(lResponse) {
+						if(lResponse.valid) {		
+							var lGestionCommandeTemplate = new GestionCommandeTemplate();		
+							var lHtml = $(lGestionCommandeTemplate.dialogModifierInfoMarche.template(that.mMarche));		
+					
+							lHtml.find(":input[name=heure-debut]").selectOptions(that.mMarche.heureMarcheDebut);
+							lHtml.find(":input[name=minute-debut]").selectOptions(that.mMarche.minuteMarcheDebut);
+							lHtml.find(":input[name=heure-fin]").selectOptions(that.mMarche.heureMarcheFin);
+							lHtml.find(":input[name=minute-fin]").selectOptions(that.mMarche.minuteMarcheFin);
+							lHtml.find(":input[name=heure-debut-reservation]").selectOptions(that.mMarche.heureDebutReservation);
+							lHtml.find(":input[name=minute-debut-reservation]").selectOptions(that.mMarche.minuteDebutReservation);
+							lHtml.find(":input[name=heure-fin-reservation]").selectOptions(that.mMarche.heureFinReservation);
+							lHtml.find(":input[name=minute-fin-reservation]").selectOptions(that.mMarche.minuteFinReservation);
+							
+							lHtml = gCommunVue.lienDatepickerMarche('marche-dateDebutReservation','marche-dateFinReservation','marche-dateMarcheDebut',lHtml);
+							lHtml.find('#marche-dateDebutReservation').datepicker("option", "maxDate", that.mMarche.dateFinReservation);
+							lHtml.find('#marche-dateFinReservation').datepicker("option", "minDate", that.mMarche.dateDebutReservation).datepicker("option", "maxDate", that.mMarche.dateMarcheDebut);
+							lHtml.find('#marche-dateMarcheDebut').datepicker("option", "minDate", that.mMarche.dateFinReservation);
+							
+							var lDroitnonAdherent = that.mMarche.droitNonAdherent == "1";		
+							var lDisabled = lResponse.nb > 0;
+							lHtml.find('#droit-non-adherent').prop("checked", lDroitnonAdherent).prop( "disabled", lDisabled );
+							
+							$(lHtml).dialog({
+								autoOpen: true,
+								modal: true,
+								draggable: false,
+								resizable: false,
+								width:800,
+								buttons: {
+									'Modifier': function() {
+										that.modifierInformationMarche($(this));
+									},
+									'Annuler': function() {
+										$(this).dialog('close');
+									}
+								},
+								close: function(ev, ui) { $(this).remove(); Infobulle.init(); }	
+							});	
 
-		lHtml.find(":input[name=heure-debut]").selectOptions(that.mMarche.heureMarcheDebut);
-		lHtml.find(":input[name=minute-debut]").selectOptions(that.mMarche.minuteMarcheDebut);
-		lHtml.find(":input[name=heure-fin]").selectOptions(that.mMarche.heureMarcheFin);
-		lHtml.find(":input[name=minute-fin]").selectOptions(that.mMarche.minuteMarcheFin);
-		lHtml.find(":input[name=heure-debut-reservation]").selectOptions(that.mMarche.heureDebutReservation);
-		lHtml.find(":input[name=minute-debut-reservation]").selectOptions(that.mMarche.minuteDebutReservation);
-		lHtml.find(":input[name=heure-fin-reservation]").selectOptions(that.mMarche.heureFinReservation);
-		lHtml.find(":input[name=minute-fin-reservation]").selectOptions(that.mMarche.minuteFinReservation);
-		
-		lHtml = gCommunVue.lienDatepickerMarche('marche-dateDebutReservation','marche-dateFinReservation','marche-dateMarcheDebut',lHtml);
-		lHtml.find('#marche-dateDebutReservation').datepicker("option", "maxDate", that.mMarche.dateFinReservation);
-		lHtml.find('#marche-dateFinReservation').datepicker("option", "minDate", that.mMarche.dateDebutReservation).datepicker("option", "maxDate", that.mMarche.dateMarcheDebut);
-		lHtml.find('#marche-dateMarcheDebut').datepicker("option", "minDate", that.mMarche.dateFinReservation);
-		
-		$(lHtml).dialog({
-			autoOpen: true,
-			modal: true,
-			draggable: false,
-			resizable: false,
-			width:800,
-			buttons: {
-				'Modifier': function() {
-					that.modifierInformationMarche($(this));
-				},
-				'Annuler': function() {
-					$(this).dialog('close');
-				}
-			},
-			close: function(ev, ui) { $(this).remove(); Infobulle.init(); }	
-		});	
+						} else {
+							Infobulle.generer(lResponse,"marche-");
+						}
+					}
+				},"json"
+		);
 	};
 	
 	this.modifierInformationMarche = function(pDialog) {
@@ -1636,7 +1654,8 @@
 		lVo.timeDebutReservation = pDialog.find(':input[name=heure-debut-reservation]').val() + ':' + pDialog.find(':input[name=minute-debut-reservation]').val() + ':00';
 		lVo.dateFinReservation = pDialog.find(':input[name=date-fin-reservation]').val().dateFrToDb();
 		lVo.timeFinReservation = pDialog.find(':input[name=heure-fin-reservation]').val() + ':' + pDialog.find(':input[name=minute-fin-reservation]').val() + ':00';
-				
+		lVo.droitNonAdherent = pDialog.find(':input[name=droit-non-adherent]').prop( "checked" ) ? 1 : 0;
+		
 		var lValid = new MarcheValid();
 		var lVR = lValid.validUpdateInformation(lVo);
 		
@@ -1664,6 +1683,7 @@
 								lDateTime = lVo.dateMarcheDebut + " " + lVo.timeMarcheFin;								
 								that.mMarche.heureMarcheFin = lDateTime.extractDbHeure();
 								that.mMarche.minuteMarcheFin = lDateTime.extractDbMinute();
+								that.mMarche.droitNonAdherent = lVo.droitNonAdherent;
 								
 								// Maj de l'affichage
 								$("#edt-marche-dateDebutReservation").text(that.mMarche.dateDebutReservation);
@@ -1679,7 +1699,9 @@
 								$("#edt-marche-minuteMarcheDebut").text(that.mMarche.minuteMarcheDebut);
 								$("#edt-marche-heureMarcheFin").text(that.mMarche.heureMarcheFin);
 								$("#edt-marche-minuteMarcheFin").text(that.mMarche.minuteMarcheFin);
-
+								
+								var lClassDroitNonAdherent = that.mMarche.droitNonAdherent ? "ui-icon-check" :"ui-icon-closethick";
+								$("#droit-non-adherent-marche-span").replaceWith("<span id=\"droit-non-adherent-marche-span\" class=\"com-float-left ui-icon " + lClassDroitNonAdherent + "\"></span>");
 
 								pDialog.dialog('close');
 								

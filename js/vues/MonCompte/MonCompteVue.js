@@ -44,10 +44,12 @@
 		lResponse.adherent.adhDateNaissance = lResponse.adherent.adhDateNaissance.extractDbDate().dateDbToFr();
 		lResponse.adherent.adhDateAdhesion = lResponse.adherent.adhDateAdhesion.extractDbDate().dateDbToFr();
 		
-		if(lResponse.nbAdhesionEnCours > 0) {
-			lResponse.adherent.adhesion = lMonCompteTemplate.adhesionOK;
-		} else {
-			lResponse.adherent.adhesion = lMonCompteTemplate.adhesionKO;			
+		if(lResponse.adherent.adhEtat == 1) {
+			if(lResponse.nbAdhesionEnCours > 0) {
+				lResponse.adherent.adhesion = lMonCompteTemplate.adhesionOK;
+			} else {
+				lResponse.adherent.adhesion = lMonCompteTemplate.adhesionKO;			
+			}
 		}
 		
 		this.mInformationAdherent.nom = lResponse.adherent.adhNom;

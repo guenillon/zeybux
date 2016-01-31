@@ -1,0 +1,127 @@
+<div id="formulaire_modifier_adherent_int">
+	<div class="com-widget-header ui-widget ui-widget-header ui-corner-all">
+		Inscription
+	</div>
+	<form action="./index.php?m=IdentificationHTML&v=Inscription" method="post">
+		<div class="com-widget-window ui-widget ui-widget-content ui-widget-content-transparent ui-corner-all" id="div-info-adherent">
+			<div class="com-widget-header ui-widget ui-widget-header ui-corner-all">Information</div>
+			<div class="com-widget-content">
+				<table class="com-table-form">
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Nom *</th>
+						<td class="com-table-form-td">
+							<input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-nom}" type="text" name="nom" value="{nom}" maxlength="50" id="nom"/>
+						</td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-nom} ui-corner-all">{err-nom}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Prénom *</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-prenom}" type="text" name="prenom" value="{prenom}" maxlength="50" id="prenom"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-prenom} ui-corner-all">{err-prenom}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Date de Naissance</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-dateNaissance}" type="text" name="dateNaissance" value="{dateNaissance}" maxlength="10" id="dateNaissance"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-dateNaissance} ui-corner-all">{err-dateNaissance}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Commentaire</th>
+						<td class="com-table-form-td"><textarea class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-commentaire}" name="commentaire" id="commentaire">{commentaire}</textarea></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-commentaire} ui-corner-all">{err-commentaire}</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+					
+		<div class="com-widget-window ui-widget ui-widget-content ui-widget-content-transparent ui-corner-all" id="div-coord-adherent">
+			<div class="com-widget-header ui-widget ui-widget-header ui-corner-all">Coordonnées</div>
+			<div class="com-widget-content">
+				<table class="com-table-form">		
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Courriel 1 *</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-courrielPrincipal}" type="text" name="courrielPrincipal" value="{courrielPrincipal}" maxlength="100" id="courrielPrincipal"/></td>
+					</tr>			
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-courrielPrincipal} ui-corner-all">{err-courrielPrincipal}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Courriel 2</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-courrielSecondaire}" type="text" name="courrielSecondaire" value="{courrielSecondaire}" maxlength="100" id="courrielSecondaire"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-courrielSecondaire} ui-corner-all">{err-courrielSecondaire}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Téléphone 1</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-telephonePrincipal}" type="text" name="telephonePrincipal" value="{telephonePrincipal}" maxlength="20" id="telephonePrincipal"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-telephonePrincipal} ui-corner-all">{err-telephonePrincipal}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Téléphone 2</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-telephoneSecondaire}" type="text" name="telephoneSecondaire" value="{telephoneSecondaire}" maxlength="20" id="telephoneSecondaire"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-telephoneSecondaire} ui-corner-all">{err-telephoneSecondaire}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Adresse</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-adresse}" type="text" name="adresse" value="{adresse}" maxlength="300" id="adresse"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-adresse} ui-corner-all">{err-adresse}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Code Postal</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-codePostal}" type="text" name="codePostal" value="{codePostal}" maxlength="10" id="codePostal"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-codePostal} ui-corner-all">{err-codePostal}</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="ui-widget-content ui-widget-content-transparent ui-corner-all">Ville</th>
+						<td class="com-table-form-td"><input class="com-input-text ui-widget-content ui-widget-content-transparent ui-corner-all {class-err-ville}" type="text" name="ville" value="{ville}" maxlength="100" id="ville"/></td>
+					</tr>					
+					<tr>
+						<td colspan="2">
+							<div class="{class-err-msg-ville} ui-corner-all">{err-ville}</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="com-widget-header ui-widget ui-widget-header ui-corner-all com-center" id="div-submit-ajout-adherent">
+			<a href="./index.php" class="com-btn-edt-multiples ui-state-default ui-corner-all com-button com-center btn-annuler com-btn-a">Retour</a>
+			<input class="ui-state-default ui-corner-all com-button com-center" type="submit" value="Valider" />
+		</div>
+	</form>
+</div>

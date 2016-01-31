@@ -1093,6 +1093,13 @@
 										"<textarea class=\"com-input-text ui-widget-content ui-corner-all informations-marche\" name=\"description\" id=\"marche-description\" ></textarea>" +
 									"</td>" +
 								"</tr>" +
+								"<tr>" +
+									"<th class=\"com-table-form-th\">Périmètre des réservations : </th>" +
+									"<td class=\"com-table-form-td\">" +
+										"<span id=\"droit-non-adherent-marche-span\" class=\"ui-helper-hidden informations-marche\"></span>" +
+										"<input class=\"com-input-text ui-widget-content ui-corner-all informations-marche\" type=\"checkbox\" name=\"droit-non-adherent\" id=\"droit-non-adherent\" />Ouvert aux non adhérents" +
+									"</td>" +
+								"</tr>" +
 							"</table>" +
 						"</form>" +
 					"</div>" +
@@ -1325,7 +1332,8 @@
 					"</div>" +
 					"<div>" +
 						"Réservations : Du <span id=\"edt-marche-dateDebutReservation\">{dateDebutReservation}</span> à <span id=\"edt-marche-heureDebutReservation\">{heureDebutReservation}</span>H<span id=\"edt-marche-minuteDebutReservation\">{minuteDebutReservation}</span> au <span id=\"edt-marche-dateFinReservation\">{dateFinReservation}</span> à <span id=\"edt-marche-heureFinReservation\">{heureFinReservation}</span>H<span id=\"edt-marche-minuteFinReservation\">{minuteFinReservation}</span> <br/>" +
-						"Marché : Le <span id=\"edt-marche-dateMarcheDebut\">{dateMarcheDebut}</span> de <span id=\"edt-marche-heureMarcheDebut\">{heureMarcheDebut}</span>H<span id=\"edt-marche-minuteMarcheDebut\">{minuteMarcheDebut}</span> à <span id=\"edt-marche-heureMarcheFin\">{heureMarcheFin}</span>H<span id=\"edt-marche-minuteMarcheFin\">{minuteMarcheFin}</span>" +
+						"Marché : Le <span id=\"edt-marche-dateMarcheDebut\">{dateMarcheDebut}</span> de <span id=\"edt-marche-heureMarcheDebut\">{heureMarcheDebut}</span>H<span id=\"edt-marche-minuteMarcheDebut\">{minuteMarcheDebut}</span> à <span id=\"edt-marche-heureMarcheFin\">{heureMarcheFin}</span>H<span id=\"edt-marche-minuteMarcheFin\">{minuteMarcheFin}</span><br/>" +
+						"<span id=\"droit-non-adherent-marche-span\" class=\"com-float-left ui-icon {lClassDroitNonAdherent}\"></span> Ouvert aux non adhérent" +
 					"</div>" +
 				"</div>" +
 				"<div id=\"btn-ajout-produit-div\" class=\"com-widget-window ui-widget ui-widget-header ui-corner-all com-center\">" +
@@ -2559,6 +2567,12 @@
 							"<th class=\"com-table-form-th\">Description : </th>" +
 							"<td class=\"com-table-form-td\">" +
 								"<textarea class=\"com-input-text ui-widget-content ui-corner-all informations-marche\" name=\"description\" id=\"marche-description\" >{comDescription}</textarea>" +
+							"</td>" +
+						"</tr>" +
+						"<tr>" +
+							"<th class=\"com-table-form-th\">Périmètre des réservations : </th>" +
+							"<td class=\"com-table-form-td\">" +
+								"<input class=\"com-input-text ui-widget-content ui-corner-all informations-marche\" type=\"checkbox\" name=\"droit-non-adherent\" id=\"droit-non-adherent\" />Ouvert aux non adhérents" +
 							"</td>" +
 						"</tr>" +
 					"</table>" +

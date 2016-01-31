@@ -21,6 +21,7 @@
 		if(!pData.timeFinReservation.checkTime()) {lVR.valid = false;lVR.timeFinReservation.valid = false;var erreur = new VRerreur();erreur.code = ERR_106_CODE;erreur.message = ERR_106_MSG;lVR.timeFinReservation.erreurs.push(erreur);}
 		if(!pData.timeFinReservation.checkTimeExist()) {lVR.valid = false;lVR.timeFinReservation.valid = false;var erreur = new VRerreur();erreur.code = ERR_107_CODE;erreur.message = ERR_107_MSG;lVR.timeFinReservation.erreurs.push(erreur);}
 		if(!pData.archive.checkLength(0,1)) {lVR.valid = false;lVR.archive.valid = false;var erreur = new VRerreur();erreur.code = ERR_101_CODE;erreur.message = ERR_101_MSG;lVR.archive.erreurs.push(erreur);}
+		if(!pData.droitNonAdherent.checkLength(0,1)) {lVR.valid = false;lVR.droitNonAdherent.valid = false;var erreur = new VRerreur();erreur.code = ERR_101_CODE;erreur.message = ERR_101_MSG;lVR.droitNonAdherent.erreurs.push(erreur);}
 
 		//Tests Fonctionnels
 		if(pData.dateMarcheDebut.isEmpty()) {lVR.valid = false;lVR.dateMarcheDebut.valid = false;var erreur = new VRerreur();erreur.code = ERR_201_CODE;erreur.message = ERR_201_MSG;lVR.dateMarcheDebut.erreurs.push(erreur);}
@@ -32,6 +33,7 @@
 		if(pData.dateFinReservation.isEmpty()) {lVR.valid = false;lVR.dateFinReservation.valid = false;var erreur = new VRerreur();erreur.code = ERR_201_CODE;erreur.message = ERR_201_MSG;lVR.dateFinReservation.erreurs.push(erreur);}
 		if(pData.timeFinReservation.isEmpty()) {lVR.valid = false;lVR.timeFinReservation.valid = false;var erreur = new VRerreur();erreur.code = ERR_201_CODE;erreur.message = ERR_201_MSG;lVR.timeFinReservation.erreurs.push(erreur);}
 		if(pData.archive.isEmpty()) {lVR.valid = false;lVR.archive.valid = false;var erreur = new VRerreur();erreur.code = ERR_201_CODE;erreur.message = ERR_201_MSG;lVR.archive.erreurs.push(erreur);}
+		if(pData.droitNonAdherent.isEmpty()) {lVR.valid = false;lVR.droitNonAdherent.valid = false;var erreur = new VRerreur();erreur.code = ERR_201_CODE;erreur.message = ERR_201_MSG;lVR.droitNonAdherent.erreurs.push(erreur);}
 
 		if(!dateTimeEstPLusGrandeEgale(pData.dateFinReservation + ' ' + pData.timeFinReservation,pData.dateDebutReservation + ' ' + pData.timeDebutReservation,'db')) {
 			if(!dateEstPLusGrandeEgale(pData.dateFinReservation,pData.dateDebutReservation,'db')) {lVR.valid = false;lVR.dateFinReservation.valid = false;lVR.dateDebutReservation.valid = false;var erreur = new VRerreur();erreur.code = ERR_247_CODE;erreur.message = ERR_247_MSG;lVR.dateFinReservation.erreurs.push(erreur);lVR.dateDebutReservation.erreurs.push(erreur);}

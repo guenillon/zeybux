@@ -12,6 +12,7 @@
 	this.dateFinReservation = '';
 	this.timeFinReservation = '';
 	this.archive = '';
+	this.droitNonAdherent = '';
 	this.produits = new Array();
 	this.produitsAbonnement = new Array();
 }

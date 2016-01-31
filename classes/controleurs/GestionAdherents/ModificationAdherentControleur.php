@@ -78,39 +78,49 @@ class ModificationAdherentControleur
 		if($lVr->getValid()) {		
 			// Conversion en objet
 			$lAdherent = AdherentToVO::convertFromArray($pParam);
+			$lIdNouveauCompteDemande = $lAdherent->getIdCompte();
 			
 			// Maj de l'adhérent
 			$lAdherentService = new AdherentService();
 			$lAdherentService->set($lAdherent);
 			
-			$lIdNouveauCompte = $lAdherent->getIdcompte();
-			$lData = $lVr->getData();
-			$lIdAncienCompte = $lData['adherent']->getAdhIdCompte();
-			
-			// Gestion du compte
-			$lCompteService = new CompteService();
-			if($lIdAncienCompte != $lIdNouveauCompte) { // Liaison avec un autre compte gestion du précédent compte
-				$lAdherentAncienCompte = $lCompteService->getAdherentCompte($lIdAncienCompte);
+			// Modification de compte uniquement pour les adhérents
+			if($lAdherent->getEtat() == 1) {
+				$lIdNouveauCompte = $lAdherent->getIdcompte();
+				$lData = $lVr->getData();
+				$lIdAncienCompte = $lData['adherent']->getAdhIdCompte();
 				
-				// RAZ de l'adhérent principal
-				$lIdAdherentPrincipalAncienCompte = 0;
-				// Ou positionnement du nouvel
-				if(!is_null($lAdherentAncienCompte[0]->getId()) && $pParam['idAncienAdherentPrincipal'] != -1) {
-					$lIdAdherentPrincipalAncienCompte = $pParam['idAncienAdherentPrincipal'];
+				// Gestion du compte
+				$lCompteService = new CompteService();
+				// Positionnement sur un nouveau compte uniquement s'il s'agit d'un compte adhérent
+				$lAdherentNouveauCompte = $lCompteService->getAdherentCompte($lIdNouveauCompteDemande);
+				if($lAdherentNouveauCompte[0]->getEtat() == 1 || is_null($lAdherentNouveauCompte[0]->getEtat())) {
+					
+					
+					if($lIdAncienCompte != $lIdNouveauCompte) { // Liaison avec un autre compte gestion du précédent compte
+						$lAdherentAncienCompte = $lCompteService->getAdherentCompte($lIdAncienCompte);
+						
+						// RAZ de l'adhérent principal
+						$lIdAdherentPrincipalAncienCompte = 0;
+						// Ou positionnement du nouvel
+						if(!is_null($lAdherentAncienCompte[0]->getId()) && $pParam['idAncienAdherentPrincipal'] != -1) {
+							$lIdAdherentPrincipalAncienCompte = $pParam['idAncienAdherentPrincipal'];
+						}
+						// Maj de l'ancien compte
+						$lAncienCompte = $lCompteService->get($lIdAncienCompte);
+						$lAncienCompte->setIdAdherentPrincipal($lIdAdherentPrincipalAncienCompte);
+						
+						$lCompteService->set($lAncienCompte);
+					}
+					
+					// Mise à jour du compte
+					$lNouveauCompte = $lCompteService->get($lIdNouveauCompte);
+					if($pParam['idAdherentPrincipal'] > 0) { // Uniquement si il y a un adhérent pincipal
+						$lNouveauCompte->setIdAdherentPrincipal($pParam['idAdherentPrincipal']);
+					}
+					$lCompteService->set($lNouveauCompte);
 				}
-				// Maj de l'ancien compte
-				$lAncienCompte = $lCompteService->get($lIdAncienCompte);
-				$lAncienCompte->setIdAdherentPrincipal($lIdAdherentPrincipalAncienCompte);
-				
-				$lCompteService->set($lAncienCompte);
 			}
-			
-			// Mise à jour du compte
-			$lNouveauCompte = $lCompteService->get($lIdNouveauCompte);
-			if($pParam['idAdherentPrincipal'] > 0) { // Uniquement si il y a un adhérent pincipal
-				$lNouveauCompte->setIdAdherentPrincipal($pParam['idAdherentPrincipal']);
-			}
-			$lCompteService->set($lNouveauCompte);
 			
 			$lResponse = new AjoutAdherentResponse();
 			$lResponse->setId($lAdherent->getId());

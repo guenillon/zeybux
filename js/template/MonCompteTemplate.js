@@ -13,18 +13,6 @@
 			
 				"<div class=\"com-widget-header ui-widget ui-widget-header ui-corner-all\">" +
 					"Informations" +
-				/*	"<span class=\"com-cursor-pointer com-btn-header-multiples ui-widget-content ui-widget-content-transparent ui-corner-all edt-info-compte\" id=\"btn-edt-compte\" title=\"Modifier les informations\">" +
-						"<span class=\"ui-icon ui-icon-pencil\"></span>" +
-					"</span>" +
-					"<span class=\"com-cursor-pointer com-btn-header-multiples ui-widget-content ui-widget-content-transparent ui-corner-all edt-info-compte\" id=\"btn-edt-pass\" title=\"Changer le mot de passe\">" +
-						"<span class=\"ui-icon ui-icon-key\"></span>" +
-					"</span>" +
-					"<span class=\"com-cursor-pointer com-btn-header-multiples ui-widget-content ui-widget-content-transparent ui-corner-all ui-helper-hidden edt-info-compte\" id=\"btn-edt-annuler\" title=\"Annuler\">" +
-						"<span class=\"ui-icon ui-icon-closethick\"></span>" +
-					"</span>" +
-					"<span class=\"com-cursor-pointer com-btn-header-multiples ui-widget-content ui-widget-content-transparent ui-corner-all ui-helper-hidden edt-info-compte\" id=\"btn-edt-valider\" title=\"Valider\">" +
-						"<span class=\"ui-icon ui-icon-check\"></span>" +
-					"</span>" +*/
 				"</div>" +
 				"<div class=\"com-widget-content edt-info-compte\">" +
 					"<div>{adhesion}</div>" +

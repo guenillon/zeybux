@@ -55,7 +55,9 @@ class OperationService
 	private function insert($pOperation) {
 		
 		$pOperation->setDate(StringUtils::dateTimeAujourdhuiDb());
-		$pOperation->setIdLogin($_SESSION[DROIT_ID]);
+		if(isset($_SESSION[DROIT_ID])) {
+			$pOperation->setIdLogin($_SESSION[DROIT_ID]);
+		}
 		
 		$lId = OperationManager::insert($pOperation); // Ajout de l'opération
 		$pOperation->setId($lId);
@@ -276,7 +278,9 @@ class OperationService
 		$lHistoriqueOperation->setDate($pOperation->getDate());
 		$lHistoriqueOperation->setTypePaiement($pOperation->getTypePaiement()	);
 		$lHistoriqueOperation->setType($pOperation->getType());
-		$lHistoriqueOperation->setIdConnexion($_SESSION[ID_CONNEXION]);
+		if(isset($_SESSION[ID_CONNEXION])) {
+			$lHistoriqueOperation->setIdConnexion($_SESSION[ID_CONNEXION]);
+		}
 		return HistoriqueOperationManager::insert($lHistoriqueOperation);
 	}
 	

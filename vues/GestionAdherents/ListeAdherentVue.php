@@ -21,7 +21,7 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_ADHERENTS]) || i
 			
 		switch($lParam["fonction"]) {
 			case "afficher":
-				echo $lListeAdherentControleur->getListeAdherent()->exportToJson();	
+				echo $lListeAdherentControleur->getListeAdherent($lParam)->exportToJson();	
 				$lLogger->log("Affichage de la liste des adhérents par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 				break;
 	

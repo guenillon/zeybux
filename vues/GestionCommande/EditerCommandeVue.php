@@ -84,6 +84,11 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_COMMANDE]) || is
 						echo $lControleur->autorisationSupprimerLot($lParam)->exportToJson();
 						$lLogger->log("Demande d'autorisation à la suppression de lot dans la vue EditerCommande par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 					break;
+					
+				case "nbResaNonAdherent":
+						echo $lControleur->nbResaNonAdherent($lParam)->exportToJson();
+						$lLogger->log("Demande du nombre de réservation non adhérent dans la vue EditerCommande par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
+					break;
 
 				default:
 					$lLogger->log("Demande d'accés à EditerCommande sans identifiant commande par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs

@@ -314,6 +314,10 @@ body {
 	top: 60px;
 }
 
+.com-btn-a {
+	padding: 4px;
+}
+
 /*** Recherche ***/
 .recherche {
 	width:220px;

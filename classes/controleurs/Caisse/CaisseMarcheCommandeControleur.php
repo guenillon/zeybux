@@ -20,6 +20,7 @@ include_once(CHEMIN_CLASSES_SERVICE . "AchatService.php");
 include_once(CHEMIN_CLASSES_SERVICE . "TypePaiementService.php");
 include_once(CHEMIN_CLASSES_SERVICE . "OperationService.php");
 include_once(CHEMIN_CLASSES_SERVICE . "AdhesionService.php" );
+include_once(CHEMIN_CLASSES_SERVICE . "AdherentService.php" );
 include_once(CHEMIN_CLASSES_VO . "IdReservationVO.php");
 include_once(CHEMIN_CLASSES_RESPONSE . MOD_CAISSE . "/InfoAchatCommandeResponse.php" );
 include_once(CHEMIN_CLASSES_VIEW_MANAGER . "StockSolidaireViewManager.php");
@@ -60,8 +61,8 @@ class CaisseMarcheCommandeControleur
 		$lVr = MarcheValid::validGetMarcheListeReservation($pParam);
 		if($lVr->getValid()) {
 			$lResponse = new ListeAdherentCommandeResponse();
-			$lListe = ListeAdherentViewManager::selectAll();
-			$lResponse->setListeAdherentCommande($lListe);
+			$lAdherentService = new AdherentService();
+			$lResponse->setListeAdherentCommande($lAdherentService->getAllResumeSolde(array(1, 3)));
 			
 			$lMarcheService = new MarcheService();
 			$lMarche = $lMarcheService->getInfoMarche($pParam['id_commande']);
@@ -79,7 +80,8 @@ class CaisseMarcheCommandeControleur
 	 */
 	public function getListeAdherent() {
 		$lResponse = new ListeAdherentCommandeResponse();
-		$lResponse->setListeAdherentCommande(ListeAdherentViewManager::selectAll());			
+		$lAdherentService = new AdherentService();
+		$lResponse->setListeAdherentCommande($lAdherentService->getAllResumeSolde(array(1, 3)));			
 		return $lResponse;
 	}
 

@@ -41,6 +41,7 @@ class CommandeManager
 	const CHAMP_COMMANDE_DATE_DEBUT_RESERVATION = "com_date_debut_reservation";
 	const CHAMP_COMMANDE_DATE_FIN_RESERVATION = "com_date_fin_reservation";
 	const CHAMP_COMMANDE_ARCHIVE = "com_archive";
+	const CHAMP_COMMANDE_DROIT_NON_ADHERENT = "com_droit_non_adherent";
 
 	/**
 	* @name select($pId)
@@ -63,7 +64,8 @@ class CommandeManager
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN . 
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION . 
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION . 
-			"," . CommandeManager::CHAMP_COMMANDE_ARCHIVE . "
+			"," . CommandeManager::CHAMP_COMMANDE_ARCHIVE .
+			"," . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT . "
 			FROM " . CommandeManager::TABLE_COMMANDE . " 
 			WHERE " . CommandeManager::CHAMP_COMMANDE_ID . " = '" . StringUtils::securiser($pId) . "'";
 
@@ -81,7 +83,8 @@ class CommandeManager
 				$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN],
 				$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION],
 				$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION],
-				$lLigne[CommandeManager::CHAMP_COMMANDE_ARCHIVE]);
+				$lLigne[CommandeManager::CHAMP_COMMANDE_ARCHIVE],
+				$lLigne[CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT]);
 		} else {
 			return new CommandeVO();
 		}
@@ -106,7 +109,8 @@ class CommandeManager
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN . 
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION . 
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION . 
-			"," . CommandeManager::CHAMP_COMMANDE_ARCHIVE . "
+			"," . CommandeManager::CHAMP_COMMANDE_ARCHIVE .
+			"," . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT. "
 			FROM " . CommandeManager::TABLE_COMMANDE;
 
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
@@ -125,65 +129,14 @@ class CommandeManager
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN],
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION],
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION],
-					$lLigne[CommandeManager::CHAMP_COMMANDE_ARCHIVE]));
+					$lLigne[CommandeManager::CHAMP_COMMANDE_ARCHIVE],
+					$lLigne[CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT]));
 			}
 		} else {
 			$lListeCommande[0] = new CommandeVO();
 		}
 		return $lListeCommande;
 	}
-
-	/**
-	 * @name selectAll()
-	 * @return array(CommandeVO)
-	 * @desc Récupères toutes les lignes de la table et les renvoie sous forme d'une collection de CommandeVO
-	 */
-	/*public static function selectAll() {
-		// Initialisation du Logger
-		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
-		$lLogger->setMask(Log::MAX(LOG_LEVEL));
-		$lRequete =
-		"SELECT "
-				. CommandeManager::CHAMP_COMMANDE_ID .
-			"," . ProduitManager::CHAMP_PRODUIT_ID . 
-			"," . StockManager::CHAMP_STOCK_ID .
-			"," . StockManager::CHAMP_STOCK_QUANTITE .
-			"," . ProduitManager::CHAMP_PRODUIT_UNITE_MESURE .
-			"," . StockManager::CHAMP_STOCK_TYPE .
-			"," . StockManager::CHAMP_STOCK_ID_COMPTE .
-			"," . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID .
-			"," . AdherentManager::CHAMP_ADHERENT_ID .
-			"," . AdherentManager::CHAMP_ADHERENT_NOM .
-			"," . AdherentManager::CHAMP_ADHERENT_PRENOM .
-			"," . AdherentManager::CHAMP_ADHERENT_TELEPHONE_PRINCIPAL .
-			"," . CompteManager::CHAMP_COMPTE_LABEL . "
-		FROM " . CommandeManager::TABLE_COMMANDE . "
-		JOIN " . ProduitManager::TABLE_PRODUIT . "
-			ON " . CommandeManager::CHAMP_COMMANDE_ID . " = " . ProduitManager::CHAMP_PRODUIT_ID_COMMANDE . "
-		JOIN " . DetailCommandeManager::TABLE_DETAILCOMMANDE . "
-			ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . ProduitManager::CHAMP_PRODUIT_ID . "
-		JOIN " . StockManager::TABLE_STOCK . "
-			ON " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . " = " . StockManager::CHAMP_STOCK_ID_DETAIL_COMMANDE ."
-			AND " . StockManager::CHAMP_STOCK_TYPE . " = 0
-			AND " . StockManager::CHAMP_STOCK_ID_COMPTE . " <> 0
-		JOIN " . AdherentManager::TABLE_ADHERENT . " 
-			ON " . StockManager::CHAMP_STOCK_ID_COMPTE . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE ."
-			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . " = 1
-		JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . " 
-			ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
-			AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = " . CommandeManager::CHAMP_COMMANDE_ID . "
-		JOIN " . OperationManager::TABLE_OPERATION . "
-			ON " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . " 
-			AND " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " = 0
-		JOIN " . CompteManager::TABLE_COMPTE . "	
-			ON " . CompteManager::CHAMP_COMPTE_ID . " = " . StockManager::CHAMP_STOCK_ID_COMPTE . "		
-					
-		WHERE   
-			
-					
-			" . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " in (0,1)
-			AND " . CommandeManager::CHAMP_COMMANDE_ID . " = '" . StringUtils::securiser($pId) . "';";
-	}*/
 	
 	/**
 	 * @name rechercheReservation( $pTypeRecherche, $pTypeCritere, $pCritereRecherche, $pTypeTri, $pCritereTri )
@@ -366,7 +319,7 @@ class CommandeManager
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN],
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION],
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION],
-					''));
+					'','' ));
 			}
 		} else {
 			$lListeCommande[0] = new CommandeVO();
@@ -377,10 +330,15 @@ class CommandeManager
 	/**
 	* @name selectNonAchatParCompte($pIdCompte)
 	* @param integer
+	* @param array(integer)
 	* @return array(CommandeVO)
 	* @desc Récupères les marchés en cours sans achat par l'adhérent
 	*/
-	public static function selectNonAchatParCompte($pIdCompte) {
+	public static function selectNonAchatParCompte($pIdCompte, $pDroitNonAdherent = null) {
+		if(is_null($pDroitNonAdherent)) {
+			$pDroitNonAdherent = array(0, 1);
+		}
+
 		// Initialisation du Logger
 		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 		$lLogger->setMask(Log::MAX(LOG_LEVEL));
@@ -404,7 +362,9 @@ class CommandeManager
    					AND " . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . $pIdCompte . ")
    			AND " . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION . " <= now()
    			AND " . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION . " >= now()
-			AND " . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " = 0)
+			AND " . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " = 0
+			AND " . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT . " in ( '" .  str_replace(",", "','", StringUtils::securiser( implode(",", $pDroitNonAdherent) ) ) . "')
+			)
 			
 			UNION
 			
@@ -438,7 +398,9 @@ class CommandeManager
    					
    			AND " . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION . " <= now()
    			AND " . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION . " < now()
-			AND " . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " = 0)
+			AND " . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " = 0
+			AND " . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT . " in ( '" .  str_replace(",", "','", StringUtils::securiser( implode(",", $pDroitNonAdherent) ) ) . "')
+			)
 			
    			ORDER BY " . CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_DEBUT . " ASC";
 
@@ -458,6 +420,7 @@ class CommandeManager
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN],
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION],
 					$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION],
+					'',
 					''));
 			}
 		} else {
@@ -491,7 +454,8 @@ class CommandeManager
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN .
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION .
 			"," . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION .
-			"," . CommandeManager::CHAMP_COMMANDE_ARCHIVE		);
+			"," . CommandeManager::CHAMP_COMMANDE_ARCHIVE .
+			"," . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT		);
 
 		// Préparation de la requète de recherche
 		$lRequete = DbUtils::prepareRequeteRecherche(CommandeManager::TABLE_COMMANDE, $lChamps, $pTypeRecherche, $pTypeCritere, $pCritereRecherche, $pTypeTri, $pCritereTri);
@@ -517,7 +481,8 @@ class CommandeManager
 						$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN],
 						$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION],
 						$lLigne[CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION],
-						$lLigne[CommandeManager::CHAMP_COMMANDE_ARCHIVE]));
+						$lLigne[CommandeManager::CHAMP_COMMANDE_ARCHIVE],
+						$lLigne[CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT]));
 				}
 			} else {
 				$lListeCommande[0] = new CommandeVO();
@@ -531,7 +496,7 @@ class CommandeManager
 	}
 
 	/**
-	* @name remplirCommande($pId, $pNumero, $pNom, $pDescription, $pDateMarcheDebut, $pDateMarcheFin, $pDateDebutReservation, $pDateFinReservation, $pArchive)
+	* @name remplirCommande($pId, $pNumero, $pNom, $pDescription, $pDateMarcheDebut, $pDateMarcheFin, $pDateDebutReservation, $pDateFinReservation, $pArchive, $pDroitNonAdherent)
 	* @param int(11)
 	* @param int(11)
 	* @param varchar(100)
@@ -541,10 +506,11 @@ class CommandeManager
 	* @param datetime
 	* @param datetime
 	* @param tinyint(1)
+	* @param tinyint(1)
 	* @return CommandeVO
 	* @desc Retourne une CommandeVO remplie
 	*/
-	private static function remplirCommande($pId, $pNumero, $pNom, $pDescription, $pDateMarcheDebut, $pDateMarcheFin, $pDateDebutReservation, $pDateFinReservation, $pArchive) {
+	private static function remplirCommande($pId, $pNumero, $pNom, $pDescription, $pDateMarcheDebut, $pDateMarcheFin, $pDateDebutReservation, $pDateFinReservation, $pArchive, $pDroitNonAdherent) {
 		$lCommande = new CommandeVO();
 		$lCommande->setId($pId);
 		$lCommande->setNumero($pNumero);
@@ -555,6 +521,7 @@ class CommandeManager
 		$lCommande->setDateDebutReservation($pDateDebutReservation);
 		$lCommande->setDateFinReservation($pDateFinReservation);
 		$lCommande->setArchive($pArchive);
+		$lCommande->setDroitNonAdherent($pDroitNonAdherent);
 		return $lCommande;
 	}
 
@@ -579,7 +546,8 @@ class CommandeManager
 				," . CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_FIN . "
 				," . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION . "
 				," . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION . "
-				," . CommandeManager::CHAMP_COMMANDE_ARCHIVE . ")
+				," . CommandeManager::CHAMP_COMMANDE_ARCHIVE .
+				"," . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT . ")
 			VALUES (NULL
 				,'" . StringUtils::securiser( $pVo->getNumero() ) . "'
 				,'" . StringUtils::securiser( $pVo->getNom() ) . "'
@@ -588,7 +556,8 @@ class CommandeManager
 				,'" . StringUtils::securiser( $pVo->getDateMarcheFin() ) . "'
 				,'" . StringUtils::securiser( $pVo->getDateDebutReservation() ) . "'
 				,'" . StringUtils::securiser( $pVo->getDateFinReservation() ) . "'
-				,'" . StringUtils::securiser( $pVo->getArchive() ) . "')";
+				,'" . StringUtils::securiser( $pVo->getArchive() ) . "'
+				,'" . StringUtils::securiser( $pVo->getDroitNonAdherent() ) . "')";
 
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		return Dbutils::executerRequeteInsertRetourId($lRequete);
@@ -615,6 +584,7 @@ class CommandeManager
 				," . CommandeManager::CHAMP_COMMANDE_DATE_DEBUT_RESERVATION . " = '" . StringUtils::securiser( $pVo->getDateDebutReservation() ) . "'
 				," . CommandeManager::CHAMP_COMMANDE_DATE_FIN_RESERVATION . " = '" . StringUtils::securiser( $pVo->getDateFinReservation() ) . "'
 				," . CommandeManager::CHAMP_COMMANDE_ARCHIVE . " = '" . StringUtils::securiser( $pVo->getArchive() ) . "'
+				," . CommandeManager::CHAMP_COMMANDE_DROIT_NON_ADHERENT . " = '" . StringUtils::securiser( $pVo->getDroitNonAdherent() )  . "'
 			 WHERE " . CommandeManager::CHAMP_COMMANDE_ID . " = '" . StringUtils::securiser( $pVo->getId() ) . "'";
 
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs

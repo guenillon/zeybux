@@ -1,8 +1,11 @@
 ;function ListeAdherentVue(pParam) {
+	this.mParam = {};
+	
 	this.construct = function(pParam) {
 		$.history( {'vue':function() {ListeAdherentVue(pParam);}} );
 		var that = this;
 		var lVo = {fonction:"afficher"};
+		this.mParam = $.extend(lVo, pParam);
 		$.post(	"./index.php?m=GestionAdherents&v=ListeAdherent", "pParam=" + $.toJSON(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
@@ -18,7 +21,7 @@
 					}
 				},"json"
 		);
-	};	
+	};
 	
 	this.afficher = function(lResponse) {
 		var that = this;
@@ -37,9 +40,17 @@
 			});
 			
 			if(lResponse.listeAdherent.length == 1) {
-				lResponse.totalAdherent = "L'adhérent";
+				if(this.mParam.type == 3) {
+					lResponse.totalAdherent = "Le non adhérent";
+				} else {
+					lResponse.totalAdherent = "L'adhérent";					
+				}
 			} else {
-				lResponse.totalAdherent = "Les " + lResponse.listeAdherent.length + " adhérents";
+				if(this.mParam.type == 3) {
+					lResponse.totalAdherent = "Les " + lResponse.listeAdherent.length + " non adhérents";
+				} else {
+					lResponse.totalAdherent = "Les " + lResponse.listeAdherent.length + " adhérents";
+				}
 			}
 			$('#contenu').replaceWith(that.affect($(lTemplate.template(lResponse))));
 		} else {
@@ -97,9 +108,13 @@
 	
 
 	this.affectAjoutAdherent = function(pData) {
-		pData.find('#btn-nv-adherent').click(function() {
-			AjoutAdherentVue();
-		});
+		if(this.mParam.type == 3) {
+			pData.find('#btn-nv-adherent').remove();
+		} else {
+			pData.find('#btn-nv-adherent').click(function() {
+				AjoutAdherentVue();
+			});			
+		}
 		return pData;
 	};
 				

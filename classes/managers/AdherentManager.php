@@ -268,8 +268,8 @@ class AdherentManager
 	public static function selectActifByIdCompte($pId) {
 		return AdherentManager::rechercheAdherent(
 				array(AdherentManager::CHAMP_ADHERENT_ID_COMPTE, AdherentManager::CHAMP_ADHERENT_ETAT),
-				array('=','='),
-				array($pId,1),
+				array('=','in'),
+				array($pId,array(1,3)),
 				array(AdherentManager::CHAMP_ADHERENT_NUMERO),
 				array('ASC'));
 	}
@@ -324,7 +324,7 @@ class AdherentManager
 				  	WHERE " . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ETAT . " = 0
 				  ) ads
 				 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = ads." . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_ADHERENT . "
-				 WHERE " . AdherentManager::CHAMP_ADHERENT_ETAT . " = 1 
+				 WHERE " . AdherentManager::CHAMP_ADHERENT_ETAT . " in( 1, 3) 
 			 ) UNION ( 
 			 	SELECT "
 					. AdherentManager::CHAMP_ADHERENT_ID .

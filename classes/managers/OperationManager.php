@@ -2028,5 +2028,62 @@ class OperationManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		return Dbutils::executerRequete($lRequete);
 	}
+	
+	/**
+	 * @name selectOperationReservationAdherent($pIdMarche, $pStatutAdherent)
+	 * @return array(OperationDetailVO) ou false en erreur
+	 * @desc Retourne l'ensemble des opérations de réservations sur un marché selon un type d'adhérent
+	 */
+	public static function selectOperationReservationAdherent($pIdMarche, $pStatutAdherent) {
+		// Initialisation du Logger
+		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
+		$lLogger->setMask(Log::MAX(LOG_LEVEL));
+		
+		$lRequete =
+		"SELECT "  
+				. OperationManager::CHAMP_OPERATION_ID .
+			"," . OperationManager::CHAMP_OPERATION_ID_COMPTE .
+			"," . OperationManager::CHAMP_OPERATION_MONTANT .
+			"," . OperationManager::CHAMP_OPERATION_LIBELLE .
+			"," . OperationManager::CHAMP_OPERATION_DATE .
+			"," . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT .
+			"," . OperationManager::CHAMP_OPERATION_TYPE .
+			"," . OperationManager::CHAMP_OPERATION_DATE_MAJ .
+			"," . OperationManager::CHAMP_OPERATION_ID_LOGIN . "
+		FROM " .  OperationManager::TABLE_OPERATION . "
+		JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+			ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . " = " . OperationManager::CHAMP_OPERATION_ID . "
+			AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1 
+			AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser($pIdMarche) . "'
+		JOIN " . CompteManager::TABLE_COMPTE . " 
+			ON " . CompteManager::CHAMP_COMPTE_ID . " = " . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+		JOIN " . AdherentManager::TABLE_ADHERENT . "
+			ON " . AdherentManager::CHAMP_ADHERENT_ID . " = " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . "
+			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . " = '" . StringUtils::securiser($pStatutAdherent) . "'
+		WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " = 0 ;";
+				
+		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
+		$lSql = Dbutils::executerRequete($lRequete);
+		
+		$lListeOperation = array();
+		if( mysql_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysql_fetch_assoc($lSql)) {
+				array_push($lListeOperation,
+				OperationManager::remplirOperation(
+				$lLigne[OperationManager::CHAMP_OPERATION_ID],
+				$lLigne[OperationManager::CHAMP_OPERATION_ID_COMPTE],
+				$lLigne[OperationManager::CHAMP_OPERATION_MONTANT],
+				$lLigne[OperationManager::CHAMP_OPERATION_LIBELLE],
+				$lLigne[OperationManager::CHAMP_OPERATION_DATE],
+				$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT],
+				$lLigne[OperationManager::CHAMP_OPERATION_TYPE],
+				$lLigne[OperationManager::CHAMP_OPERATION_DATE_MAJ],
+				$lLigne[OperationManager::CHAMP_OPERATION_ID_LOGIN]));
+			}
+		} else {
+			$lListeOperation[0] = new OperationVO();
+		}
+		return $lListeOperation;
+	}
 }
 ?>

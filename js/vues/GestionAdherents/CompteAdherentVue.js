@@ -3,6 +3,7 @@
 	this.mAdhNumero = null;
 	this.mCptLabel = null;
 	this.mAdherentCompte = [];
+	this.mType = 1;
 	
 	this.construct = function(pParam) {
 		$.history( {'vue':function() {CompteAdherentVue(pParam);}} );
@@ -30,7 +31,7 @@
 		var that = this;
 
 		var lGestionAdherentsTemplate = new GestionAdherentsTemplate();
-		
+		this.mType = lResponse.adherent.adhEtat;
 		this.mIdAdherent = lResponse.adherent.adhId;
 		this.mAdhNumero = lResponse.adherent.adhNumero;
 		this.mCptLabel = lResponse.adherent.cptLabel;
@@ -41,10 +42,12 @@
 		lResponse.adherent.adhDateNaissance = lResponse.adherent.adhDateNaissance.extractDbDate().dateDbToFr();
 		lResponse.adherent.adhDateAdhesion = lResponse.adherent.adhDateAdhesion.extractDbDate().dateDbToFr();
 		
-		if(lResponse.nbAdhesionEnCours > 0) {
-			lResponse.adherent.adhesion = lGestionAdherentsTemplate.adhesionOK;
-		} else {
-			lResponse.adherent.adhesion = lGestionAdherentsTemplate.adhesionKO;			
+		if(this.mType == 1) { // Affichage du statut de l'adhésion uniquement pour les adhérents
+			if(lResponse.nbAdhesionEnCours > 0) {
+				lResponse.adherent.adhesion = lGestionAdherentsTemplate.adhesionOK;
+			} else {
+				lResponse.adherent.adhesion = lGestionAdherentsTemplate.adhesionKO;			
+			}
 		}
 		
 		var lSolde = null;
@@ -129,7 +132,10 @@
 		
 		var lHtml = lCoreTemplate.debutContenu;		
 		lHtml += lGestionAdherentsTemplate.infoCompteAdherentDebut.template(lResponse.adherent);
-		lHtml += lGestionAdherentsTemplate.infoCompteAdherentAutorisation.template(lResponse);
+		if(this.mType == 1) { // Affichage du statut de l'adhésion uniquement pour les adhérents
+			lHtml += lGestionAdherentsTemplate.infoCompteAdherentAutorisation.template(lResponse);
+		}
+		
 		lHtml += lGestionAdherentsTemplate.infoCompteAdherentFin.template(lResponse);
 		lHtml += lGestionAdherentsTemplate.listeOperationAdherentDebut.template(lResponse);
 		lHtml += lGestionAdherentsTemplate.listeOperationPassee.template(lResponse);
@@ -285,12 +291,7 @@
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {
-										if(lResponse.valid) {
-											/*var lGestionAdherentsTemplate = new GestionAdherentsTemplate();
-											var lTemplate = lGestionAdherentsTemplate.supprimerAdherentSucces;
-											$('#contenu').replaceWith(lTemplate.template(lResponse));
-											$(lDialog).dialog('close');*/
-											
+										if(lResponse.valid) {											
 											var lVR = new Object();
 											var erreur = new VRerreur();
 											erreur.code = ERR_357_CODE;
@@ -300,7 +301,7 @@
 											lVR.log.valid = false;
 											lVR.log.erreurs.push(erreur);
 											
-											ListeAdherentVue({vr:lVR});
+											ListeAdherentVue({vr:lVR, type:[that.mType]});
 											
 											$(lDialog).dialog('close');
 										} else {
@@ -324,7 +325,8 @@
 	};
 	
 	this.affectRetour = function(pData) {
-		pData.find("#lien-retour").click(function() { ListeAdherentVue();});
+		var that = this;
+		pData.find("#lien-retour").click(function() { ListeAdherentVue({type:[that.mType]});});
 		return pData;
 	};
 		

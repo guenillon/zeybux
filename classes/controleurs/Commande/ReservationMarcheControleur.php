@@ -76,22 +76,27 @@ class ReservationMarcheControleur
 
 		$lVr = ReservationMarcheValid::validGetReservation($pParam);
 		if($lVr->getValid()) {
-		
-			$lResponse = new ReservationMarcheResponse();
-			$lMarcheService = new MarcheService();
-			$lResponse->setMarche($lMarcheService->get($pParam["id_commande"]));
-			$lResponse->setAdherent(AdherentViewManager::select($_SESSION[DROIT_ID]));
-			
-			// Ajoute la réservation si elle existe
+
 			$lReservationService = new ReservationService();
-			$lIdReservation = new IdReservationVO();
-			$lIdReservation->setIdCompte($_SESSION[ID_COMPTE]);
-			$lIdReservation->setIdCommande($pParam["id_commande"]);
-			if($lReservationService->enCours($lIdReservation)) {
-				$lResponse->setReservation($lReservationService->get($lIdReservation)->getDetailReservation());			
-			}
+			$lAutorisation = $lReservationService->reservationCompteAutorise($pParam['idCompte'], $pParam["id_commande"]);
 			
-			return $lResponse;
+			if($lAutorisation) {
+				$lMarcheService = new MarcheService();
+				$lResponse = new ReservationMarcheResponse();
+				$lResponse->setMarche($lMarcheService->get($pParam["id_commande"]));
+				$lResponse->setAdherent(AdherentViewManager::select($_SESSION[DROIT_ID]));
+				
+				// Ajoute la réservation si elle existe
+				
+				$lIdReservation = new IdReservationVO();
+				$lIdReservation->setIdCompte($_SESSION[ID_COMPTE]);
+				$lIdReservation->setIdCommande($pParam["id_commande"]);
+				if($lReservationService->enCours($lIdReservation)) {
+					$lResponse->setReservation($lReservationService->get($lIdReservation)->getDetailReservation());			
+				}
+				
+				return $lResponse;
+			}
 		}				
 		return $lVr;
 	}
@@ -107,55 +112,58 @@ class ReservationMarcheControleur
 		$lVr = ReservationMarcheValid::validUpdate($pParam);
 		if($lVr->getValid()) {
 			$lReservationService = new ReservationService();
-			
-			$lIdLot = $pParam["detailReservation"][0]["stoIdDetailCommande"];
-			$lDetailMarche = DetailMarcheViewManager::selectByLot($lIdLot);
-	
-			$lReservation = new ReservationVO();
-			$lReservation->getId()->setIdCompte($_SESSION[ID_COMPTE]);
-			$lReservation->getId()->setIdCommande($lDetailMarche[0]->getComId());
-			
-			$lReservationAbonnement = array();
-			
-			$lReservationsActuelle = $lReservationService->get($lReservation->getId());
-			$lProduitsAbonnementMarche = ProduitManager::selectbyIdMarcheProduitAbonnement($lDetailMarche[0]->getComId());
-			foreach($lReservationsActuelle->getDetailReservation() as $lReservationActuelle) {
-		 		foreach($lProduitsAbonnementMarche as $lProduitAboMarche) {
-					if($lReservationActuelle->getIdProduit() == $lProduitAboMarche->getId()) {
-						$lReservationAbonnement[$lProduitAboMarche->getId()] = $lReservationActuelle;
-					}
-		 		}
-			}
-			
-			
-			foreach($pParam["detailReservation"] as $lDetail) {
-					$lDetailCommande = DetailCommandeManager::select($lDetail["stoIdDetailCommande"]);				
-					$lPrix = $lDetail["stoQuantite"] / $lDetailCommande->getTaille() * $lDetailCommande->getPrix();
-	
-					$lDetailReservation = new DetailReservationVO();
-					
-					$lDetailReservation->setIdDetailCommande($lDetail["stoIdDetailCommande"]);
-					$lDetailReservation->setQuantite($lDetail["stoQuantite"]);
-					$lDetailReservation->setMontant($lPrix);
-					
-					$lAjout = true;
-					foreach($lProduitsAbonnementMarche as $lProduitAboMarche) {
-						if($lDetailCommande->getIdProduit() == $lProduitAboMarche->getId()) {
-							if(!isset($lReservationAbonnement[$lProduitAboMarche->getId()])) {
-								$lReservationAbonnement[$lProduitAboMarche->getId()] = $lDetailReservation;		
-							}
-							$lAjout = false;
+			$lAutorisation = $lReservationService->reservationCompteAutorise($pParam['idCompte'], $pParam["id_commande"]);
+				
+			if($lAutorisation) {
+				$lIdLot = $pParam["detailReservation"][0]["stoIdDetailCommande"];
+				$lDetailMarche = DetailMarcheViewManager::selectByLot($lIdLot);
+		
+				$lReservation = new ReservationVO();
+				$lReservation->getId()->setIdCompte($_SESSION[ID_COMPTE]);
+				$lReservation->getId()->setIdCommande($lDetailMarche[0]->getComId());
+				
+				$lReservationAbonnement = array();
+				
+				$lReservationsActuelle = $lReservationService->get($lReservation->getId());
+				$lProduitsAbonnementMarche = ProduitManager::selectbyIdMarcheProduitAbonnement($lDetailMarche[0]->getComId());
+				foreach($lReservationsActuelle->getDetailReservation() as $lReservationActuelle) {
+			 		foreach($lProduitsAbonnementMarche as $lProduitAboMarche) {
+						if($lReservationActuelle->getIdProduit() == $lProduitAboMarche->getId()) {
+							$lReservationAbonnement[$lProduitAboMarche->getId()] = $lReservationActuelle;
 						}
 			 		}
-					
-			 		if($lAjout) {
-						$lReservation->addDetailReservation($lDetailReservation);
-			 		}
+				}
+				
+				
+				foreach($pParam["detailReservation"] as $lDetail) {
+						$lDetailCommande = DetailCommandeManager::select($lDetail["stoIdDetailCommande"]);				
+						$lPrix = $lDetail["stoQuantite"] / $lDetailCommande->getTaille() * $lDetailCommande->getPrix();
+		
+						$lDetailReservation = new DetailReservationVO();
+						
+						$lDetailReservation->setIdDetailCommande($lDetail["stoIdDetailCommande"]);
+						$lDetailReservation->setQuantite($lDetail["stoQuantite"]);
+						$lDetailReservation->setMontant($lPrix);
+						
+						$lAjout = true;
+						foreach($lProduitsAbonnementMarche as $lProduitAboMarche) {
+							if($lDetailCommande->getIdProduit() == $lProduitAboMarche->getId()) {
+								if(!isset($lReservationAbonnement[$lProduitAboMarche->getId()])) {
+									$lReservationAbonnement[$lProduitAboMarche->getId()] = $lDetailReservation;		
+								}
+								$lAjout = false;
+							}
+				 		}
+						
+				 		if($lAjout) {
+							$lReservation->addDetailReservation($lDetailReservation);
+				 		}
+				}
+				foreach($lReservationAbonnement as $lReservationAbo) {
+					$lReservation->addDetailReservation($lReservationAbo);
+				}
+				$lIdOperation = $lReservationService->set($lReservation);
 			}
-			foreach($lReservationAbonnement as $lReservationAbo) {
-				$lReservation->addDetailReservation($lReservationAbo);
-			}
-			$lIdOperation = $lReservationService->set($lReservation);
 		}				
 		return $lVr;
 	}
@@ -191,14 +199,18 @@ class ReservationMarcheControleur
 		$lVr = ReservationMarcheValid::validDelete($pParam);
 		if($lVr->getValid()) {
 			$lReservationService = new ReservationService();
-			$lIdReservation = new IdReservationVO();
-			$lIdReservation->setIdCompte($pParam['idCompte']);
-			$lIdReservation->setIdCommande($pParam["id_commande"]);
-			$lReservationService->delete($lIdReservation);
+			$lAutorisation = $lReservationService->reservationCompteAutorise($pParam['idCompte'], $pParam["id_commande"]);
 			
-			// Repositionne une réservations sur les abonnements
-			$lAbonnementService = new AbonnementService();
-			$lAbonnementService->ajoutReservation($pParam['idCompte'],$pParam["id_commande"]);
+			if($lAutorisation) {
+				$lIdReservation = new IdReservationVO();
+				$lIdReservation->setIdCompte($pParam['idCompte']);
+				$lIdReservation->setIdCommande($pParam["id_commande"]);
+				$lReservationService->delete($lIdReservation);
+				
+				// Repositionne une réservations sur les abonnements
+				$lAbonnementService = new AbonnementService();
+				$lAbonnementService->ajoutReservation($pParam['idCompte'],$pParam["id_commande"]);
+			}
 		}
 		return $lVr;
 	}

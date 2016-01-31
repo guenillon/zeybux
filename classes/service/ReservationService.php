@@ -19,6 +19,8 @@ include_once(CHEMIN_CLASSES_VIEW_MANAGER . "ReservationDetailViewManager.php");
 include_once(CHEMIN_CLASSES_VIEW_MANAGER . "DetailMarcheViewManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "HistoriqueStockManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "CommandeManager.php");
+include_once(CHEMIN_CLASSES_SERVICE . "AdherentService.php" );
+include_once(CHEMIN_CLASSES_SERVICE . "MarcheService.php" );
 
 /**
  * @name ReservationService
@@ -482,5 +484,56 @@ class ReservationService
 			array(AdherentManager::CHAMP_ADHERENT_NOM,AdherentManager::CHAMP_ADHERENT_PRENOM), 
 			array('ASC','ASC'));
 	}
+	
+	/**
+	 * @name nbReservationNonAdherent($pIdMarche)
+	 * @param integer
+	 * @return array(ReservationDetailViewVO)
+	 * @desc Retourne le nombre de réservations non adhérent positionnées sur le marche
+	 */
+	public function nbReservationNonAdherent($pIdMarche) {
+		 $lReservation = OperationManager::selectOperationReservationAdherent($pIdMarche,3);
+		 $lFirstId = $lReservation[0]->getId();
+		 if(is_null($lFirstId)) {
+		 	$lNbReservation = 0;
+		 } else {
+		 	$lNbReservation = count($lReservation);
+		 }
+		 
+		 return $lNbReservation;
+	}
+	
+	/**
+	 * @name reservationCompteAutorise($pIdCompte, $pIdMarche)
+	 * @param integer
+	 * @param integer
+	 * @return bool
+	 * @desc Retourne si le compte est autorise à effectuer des réservations sur le marche
+	 */
+	public function reservationCompteAutorise($pIdCompte, $pIdMarche) {
+		$lRetour = false;
+		
+		$lAdherentService = new AdherentService();
+		$lAdherents = $lAdherentService->selectByIdCompte($pIdCompte);
+		$lNonAdherent = false;
+		foreach($lAdherents as $lAdherent) {
+			if($lAdherent->getAdhEtat() == 3) {
+				$lNonAdherent = true;
+			}
+		}
+		
+		if($lNonAdherent) {
+			$lMarcheService = new MarcheService();
+			$lMarche = $lMarcheService->getInfoMarche($pIdMarche);
+			
+			if($lMarche->getDroitNonAdherent() == 1) {
+				$lRetour = true;
+			}
+		} else {
+			$lRetour = true;
+		}
+		
+		return $lRetour;
+	}	
 }
 ?>

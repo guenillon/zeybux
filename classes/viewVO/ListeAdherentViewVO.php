@@ -54,12 +54,16 @@ class ListeAdherentViewVO extends DataTemplate
 	*/
 	protected $mCptSolde;
 	
-	
 	/**
 	* @var varchar(30)
 	* @desc CptLabel de la AdherentViewVO
 	*/
 	protected $mCptLabel;
+	/**
+	* @var int(11)
+	* @desc AdhEtat de la ListeAdherentViewVO
+	*/
+	protected $mAdhEtat;
 
 	/**
 	* @name getAdhId()
@@ -185,6 +189,24 @@ class ListeAdherentViewVO extends DataTemplate
 	*/
 	public function setCptLabel($pCptLabel) {
 		$this->mCptLabel = $pCptLabel;
+	}
+
+	/**
+	* @name getAdhEtat()
+	* @return int(11)
+	* @desc Renvoie le membre AdhEtat de la ListeAdherentViewVO
+	*/
+	public function getAdhEtat(){
+		return $this->mAdhEtat;
+	}
+
+	/**
+	* @name setAdhEtat($pAdhEtat)
+	* @param int(11)
+	* @desc Remplace le membre AdhEtat de la ListeAdherentViewVO par $pAdhEtat
+	*/
+	public function setAdhEtat($pAdhEtat) {
+		$this->mAdhEtat = $pAdhEtat;
 	}
 }
 ?>

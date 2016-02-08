@@ -10,7 +10,7 @@
 		var that = this;
 		this.mIdAdhesion = pParam.id;
 		pParam.fonction = "listeAdherentAdhesion";
-		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -154,7 +154,7 @@
 		var lParam = {'id':this.mIdAdhesion, 'idAdherent':pIdAdherent,
 						fonction:"infoAjoutAdhesionAdherent"};
 		
-		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -225,7 +225,7 @@
 										if(lVr.valid) {
 											lVo.fonction = "ajoutAdhesionAdherent";
 											var lDialog = this;
-											$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lVo),
+											$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lVo),
 												function(lResponse) {
 													Infobulle.init(); // Supprime les erreurs
 													if(lResponse.valid) {
@@ -332,7 +332,7 @@
 		var lParam = {'id':pIdAdhesionAdherent,
 						fonction:"infoModificationAdhesionAdherent"};
 		
-		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -401,7 +401,7 @@
 									if(lVr.valid) {
 										lVo.fonction = "updateAdhesionAdherent";
 										var lDialog = this;
-										$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lVo),
+										$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lVo),
 											function(lResponse) {
 												Infobulle.init(); // Supprime les erreurs
 												if(lResponse.valid) {
@@ -447,7 +447,7 @@
 												if(lVr.valid) {
 													lVo.fonction = "deleteAdhesionAdherent";
 													var lDialog = this;
-													$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lVo),
+													$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lVo),
 														function(lResponse) {
 															Infobulle.init(); // Supprime les erreurs
 															if(lResponse.valid) {

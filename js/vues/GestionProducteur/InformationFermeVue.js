@@ -7,7 +7,7 @@
 		$.history( {'vue':function() {InformationFermeVue(pParam);}} );
 		var that = this;
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=GestionProducteur&v=InformationFerme", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionProducteur&v=InformationFerme", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -184,7 +184,7 @@
 			lVo.fonction = "modifier";
 			Infobulle.init(); // Supprime les erreurs
 			// Ajout de l'adherent
-			$.post(	"./index.php?m=GestionProducteur&v=InformationFerme", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProducteur&v=InformationFerme", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -244,7 +244,7 @@
 					'Supprimer': function() {
 						var lParam = {id:that.mFerme.ferId,fonction:"supprimer"};
 						var lDialog = this;
-						$.post(	"./index.php?m=GestionProducteur&v=InformationFerme", "pParam=" + $.toJSON(lParam),
+						$.post(	"./index.php?m=GestionProducteur&v=InformationFerme", "pParam=" + toJsonURIEncode(lParam),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

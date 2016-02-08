@@ -6,7 +6,7 @@
 		var that = this;
 		var lParam = {fonction:"afficher"};
 		lParam = $.extend(lParam,pParam);
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -72,7 +72,7 @@
 	this.dialogAjoutProduit = function(pData) {
 		var that = this;
 		var lParam = {fonction:"listeFerme"};
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -114,7 +114,7 @@
 			$("#detail-produit").replaceWith("<div id=\"detail-produit\"></div>");
 			if(lId > 0) {
 				var lParam = {fonction:"listeProduit",id:lId};
-				$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -192,7 +192,7 @@
 			var lId = $(this).val();
 			if(lId > 0) {
 				var lParam = {fonction:"listeUnite",id:lId};
-				$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -449,7 +449,7 @@
 			if(lVr.valid) {	
 				Infobulle.init();
 				lProduitAbonnement.fonction = "ajouter";
-				$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lProduitAbonnement),
+				$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lProduitAbonnement),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {

@@ -7,7 +7,7 @@
 		$.history( {'vue':function() {RechargerCompteVue(pParam);}} );
 		var that = this;
 		var lParam = {fonction:"listeAdherent"};
-		$.post(	"./index.php?m=RechargementCompte&v=RechargerCompte", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=RechargementCompte&v=RechargerCompte", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -77,7 +77,7 @@
 			var lParam = {'id':$(this).attr("id-adherent"),
 							fonction:"infoRechargement"};
 			
-			$.post(	"./index.php?m=RechargementCompte&v=RechargerCompte", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=RechargementCompte&v=RechargerCompte", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -112,7 +112,7 @@
 										if(lVr.valid) {
 											lVo.fonction = "rechargerCompte";
 											var lDialog = this;
-											$.post(	"./index.php?m=RechargementCompte&v=RechargerCompte", "pParam=" + $.toJSON(lVo),
+											$.post(	"./index.php?m=RechargementCompte&v=RechargerCompte", "pParam=" + toJsonURIEncode(lVo),
 												function(lResponse) {
 													Infobulle.init(); // Supprime les erreurs
 													if(lResponse.valid) {

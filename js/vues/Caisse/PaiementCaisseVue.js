@@ -2,7 +2,7 @@
 	this.construct = function(pParam) {
 		$.history( {'vue':function() {PaiementCaisseVue(pParam);}} );
 		var that = this;
-		$.post(	"./index.php?m=Caisse&v=PaiementCaisse", "pParam=" + $.toJSON({fonction:'listeMarche'}),
+		$.post(	"./index.php?m=Caisse&v=PaiementCaisse", "pParam=" + toJsonURIEncode({fonction:'listeMarche'}),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

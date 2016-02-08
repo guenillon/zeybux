@@ -5,7 +5,7 @@
 		var that = this;
 		pParam.fonction = "afficher";
 		this.mIdFerme = pParam.id;
-		$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -82,7 +82,7 @@
 			
 			var lId = $(this).attr("id-producteur");
 			var lParam = {id:lId,fonction:"detailProducteur"};
-			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -171,7 +171,7 @@
 			Infobulle.init();
 			lVo.fonction = "ajouter";
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -206,7 +206,7 @@
 
 			var lId = $(this).attr("id-producteur");
 			var lParam = {id:lId,fonction:"detailProducteur"};
-			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -277,7 +277,7 @@
 			Infobulle.init();
 			lVo.fonction = "modifier";
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -324,7 +324,7 @@
 					'Supprimer': function() {
 						var lParam = {id:lId,fonction:"supprimer"};
 						var lDialog = this;
-						$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + $.toJSON(lParam),
+						$.post(	"./index.php?m=GestionProducteur&v=ListeProducteur", "pParam=" + toJsonURIEncode(lParam),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

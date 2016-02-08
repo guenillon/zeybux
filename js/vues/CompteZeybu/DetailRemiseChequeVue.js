@@ -6,7 +6,7 @@
 		$.history( {'vue':function() {DetailRemiseChequeVue(pParam);}} );
 		var that = this;		
 		pParam.fonction = 'detailRemise';
-		$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode(pParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -179,7 +179,7 @@
 					if(lVr.valid) {
 						// Enregistrement
 						lVo.fonction = 'supprimerOperation';
-						$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode(lVo),
 							function(lResponse) {
 								Infobulle.init(); // Supprime les erreurs
 								if(lResponse) {
@@ -243,7 +243,7 @@
 					if(lVr.valid) {
 						// Enregistrement
 						lVo.fonction = 'encaisser';
-						$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode(lVo),
 							function(lResponse) {
 								Infobulle.init(); // Supprime les erreurs
 								if(lResponse) {
@@ -306,7 +306,7 @@
 					if(lVr.valid) {
 						// Enregistrement
 						lVo.fonction = 'supprimer';
-						$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode(lVo),
 							function(lResponse) {
 								Infobulle.init(); // Supprime les erreurs
 								if(lResponse) {

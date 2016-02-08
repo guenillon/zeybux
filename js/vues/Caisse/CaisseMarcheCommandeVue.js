@@ -11,7 +11,7 @@
 			}
 		
 			$.history( {'vue':function() {CaisseMarcheCommandeVue(pParam);}} );
-			$.post(	"./index.php?m=Caisse&v=CaisseMarcheCommande","pParam=" + $.toJSON(pParam),
+			$.post(	"./index.php?m=Caisse&v=CaisseMarcheCommande","pParam=" + toJsonURIEncode(pParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {

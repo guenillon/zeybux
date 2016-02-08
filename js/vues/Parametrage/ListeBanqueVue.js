@@ -7,7 +7,7 @@
 		var that = this;
 		this.mParam = $.extend(this.mParam, pParam);
 		this.mParam.fonction = "liste";
-		$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + $.toJSON(this.mParam),
+		$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + toJsonURIEncode(this.mParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -71,7 +71,7 @@
 		.click(function() {		
 			var lId = $(this).closest('tr').attr('id');
 			var lParam = {id:lId,fonction:"detail"};
-			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -145,7 +145,7 @@
 			Infobulle.init();
 			lVo.fonction = "ajouter";
 			// Ajout
-			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -183,7 +183,7 @@
 			
 			var lId = $(this).closest('tr').attr('id');
 			var lParam = {id:lId,fonction:"detail"};
-			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -234,7 +234,7 @@
 			Infobulle.init();
 			lVo.fonction = "modifier";
 			// Modification
-			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -296,7 +296,7 @@
 		var that = this;
 		var lParam = {fonction:"supprimer", id:pId};
 		// Suppression
-		$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=Parametrage&v=Banque", "pParam=" + toJsonURIEncode(lParam),
 			function (lResponse) {		
 				if(lResponse) {
 					if(lResponse.valid) {

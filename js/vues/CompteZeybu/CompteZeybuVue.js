@@ -11,7 +11,7 @@
 		}*/
 		
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=CompteZeybu&v=CompteZeybu", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=CompteZeybu&v=CompteZeybu", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -76,7 +76,7 @@
 		
 		pData.find("#btn-edit-compte").click(function() {
 			// Charge les informations du compte
-			$.post(	"./index.php?m=CompteZeybu&v=InformationBancaire", "pParam=" + $.toJSON({fonction:"afficher"}),
+			$.post(	"./index.php?m=CompteZeybu&v=InformationBancaire", "pParam=" + toJsonURIEncode({fonction:"afficher"}),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -108,7 +108,7 @@
 										if(lVr.valid) {
 											// Enregistrement
 											lVo.fonction = 'enregistrer';
-											$.post(	"./index.php?m=CompteZeybu&v=InformationBancaire", "pParam=" + $.toJSON(lVo),
+											$.post(	"./index.php?m=CompteZeybu&v=InformationBancaire", "pParam=" + toJsonURIEncode(lVo),
 												function(lResponse) {
 													Infobulle.init(); // Supprime les erreurs
 													if(lResponse) {
@@ -201,7 +201,7 @@
 	this.recherche = function(pVo) {
 		var that = this;
 		pVo.fonction = "rechercher";
-		$.post(	"./index.php?m=CompteZeybu&v=CompteZeybu", "pParam=" + $.toJSON(pVo),
+		$.post(	"./index.php?m=CompteZeybu&v=CompteZeybu", "pParam=" + toJsonURIEncode(pVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

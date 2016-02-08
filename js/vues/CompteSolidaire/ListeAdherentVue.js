@@ -6,7 +6,7 @@
 	var that = this;
 	var lParam = {fonction:"adherent"};
 	$.history( {'vue':function() {CompteSolidaireListeAdherentVue(pParam);}} );
-	$.post(	"./index.php?m=CompteSolidaire&v=ListeAdherent", "pParam=" + $.toJSON(lParam),
+	$.post(	"./index.php?m=CompteSolidaire&v=ListeAdherent", "pParam=" + toJsonURIEncode(lParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -122,7 +122,7 @@
 		if(lVr.valid) {
 			lVo.fonction = "ajoutVirement";
 			//var lDialog = this;
-			$.post(	"./index.php?m=CompteSolidaire&v=ListeAdherent", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteSolidaire&v=ListeAdherent", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

@@ -13,7 +13,7 @@
 		var that = this;
 		var lParam = {fonction:"detailProduit"};
 		lParam = $.extend(lParam,pParam);
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -146,7 +146,7 @@
 		var that = this;
 		pData.find("#btn-modifier").click(function() {
 			var lParam = {fonction:"detailProduitModifier", id:$(this).attr("idProduit")};
-			$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -605,7 +605,7 @@
 		if(lVr.valid) {	
 			Infobulle.init();
 			lProduitAbonnement.fonction = "modifier";
-			$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lProduitAbonnement),
+			$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lProduitAbonnement),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -648,7 +648,7 @@
 					'Supprimer': function() {
 						var lParam = {fonction:"supprimer", id:$(lButton).attr("idProduit")};
 						var lDialog = this;
-						$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + $.toJSON(lParam),
+						$.post(	"./index.php?m=GestionAbonnement&v=ListeProduit", "pParam=" + toJsonURIEncode(lParam),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

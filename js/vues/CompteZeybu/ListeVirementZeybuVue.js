@@ -5,7 +5,7 @@
 		$.history( {'vue':function() {ListeVirementZeybuVue(pParam);}} );
 		var that = this;
 		var lParam = {fonction:"listeVirement"};
-		$.post(	"./index.php?m=CompteZeybu&v=Virements", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=CompteZeybu&v=Virements", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -151,7 +151,7 @@
 		if(lVr.valid) {
 			lVo.fonction = "modifier";
 			//var lDialog = this;
-			$.post(	"./index.php?m=CompteZeybu&v=Virements", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteZeybu&v=Virements", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -233,7 +233,7 @@
 		if(lVr.valid) {
 			lVo.fonction = "supprimer";
 			//var lDialog = this;
-			$.post(	"./index.php?m=CompteZeybu&v=Virements", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteZeybu&v=Virements", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

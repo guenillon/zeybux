@@ -3,7 +3,7 @@
 		$.history( {'vue':function() {ListeFermeVue(pParam);}} );
 		var that = this;
 		var lParam = {fonction:"afficher"};
-		$.post(	"./index.php?m=GestionProducteur&v=ListeFerme", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionProducteur&v=ListeFerme", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -128,7 +128,7 @@
 			Infobulle.init();
 			lVo.fonction = "ajouter";
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=ListeFerme", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProducteur&v=ListeFerme", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {

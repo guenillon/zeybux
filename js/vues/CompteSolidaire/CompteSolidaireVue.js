@@ -6,7 +6,7 @@
 		var that = this;
 		var lParam = {fonction:"compte"};
 		$.history( {'vue':function() {CompteSolidaireVue(pParam);}} );
-		$.post(	"./index.php?m=CompteSolidaire&v=CompteSolidaire", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=CompteSolidaire&v=CompteSolidaire", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -168,7 +168,7 @@
 		if(lVr.valid) {
 			lVo.fonction = "modifierVirement";
 			//var lDialog = this;
-			$.post(	"./index.php?m=CompteSolidaire&v=CompteSolidaire", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteSolidaire&v=CompteSolidaire", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -250,7 +250,7 @@
 		if(lVr.valid) {
 			lVo.fonction = "supprimerVirement";
 			//var lDialog = this;
-			$.post(	"./index.php?m=CompteSolidaire&v=CompteSolidaire", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteSolidaire&v=CompteSolidaire", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

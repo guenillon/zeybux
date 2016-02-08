@@ -5,7 +5,7 @@
 		$.history( {'vue':function() {InfoCommandeArchiveVue(pParam);}} );
 		var that = this;
 		pParam.fonction = 'afficher';
-		$.post(	"./index.php?m=GestionCommande&v=InfoCommandeArchive", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=InfoCommandeArchive", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

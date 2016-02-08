@@ -9,7 +9,7 @@
 		$.history( {'vue':function() {ListeAdhesionVue(pParam);}} );
 		var that = this;
 		var lVo = {fonction:"listeAdhesion"};
-		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -69,7 +69,7 @@
 		var that = this;
 		pData.find(".btn-modifier-adhesion").click(function() {
 			var lId = $(this).data('id');
-			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON({fonction:'detailAdhesion', id:lId}),
+			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode({fonction:'detailAdhesion', id:lId}),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -143,7 +143,7 @@
 						if(lVr.valid) {	
 							var lDialog = $(this);
 							lVo.fonction = 'updateAdhesion';
-							$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lVo),
+							$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lVo),
 									function(lResponse) {
 										Infobulle.init(); // Supprime les erreurs
 										if(lResponse) {
@@ -243,7 +243,7 @@
 		pData.find('.btn-sup-type-adhesion').click(function() {
 			var lId = $(this).data('id');
 			// Vérification si il y a des adhérent sur le type d'ahésion
-			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON({fonction:'autorisationSupprimerTypeAdhesion',id:lId}),
+			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode({fonction:'autorisationSupprimerTypeAdhesion',id:lId}),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -319,7 +319,7 @@
 	this.chargerPerimetre = function(pCallBack, pCallBackParam) {
 		var that = this;
 		if(this.mPerimetres.length == 0) {
-			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON({fonction:'listePerimetre'}),
+			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode({fonction:'listePerimetre'}),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -373,7 +373,7 @@
 					if(lVr.valid) {	
 						var lDialog = $(this);
 						lVo.fonction = 'ajoutAdhesion';
-						$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lVo),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {
@@ -479,7 +479,7 @@
 		pData.find('.btn-supprimer-adhesion').click(function() {
 			var lId = $(this).data('id');
 			// Vérification si il y a des adhérent sur le type d'ahésion
-			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON({fonction:'autorisationSupprimerAdhesion',id:lId}),
+			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode({fonction:'autorisationSupprimerAdhesion',id:lId}),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -537,7 +537,7 @@
 			buttons: {
 				'Supprimer': function() {
 					var lDialog = $(this);
-					$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON({fonction:'supprimerAdhesion',id:pId}),
+					$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode({fonction:'supprimerAdhesion',id:pId}),
 							function(lResponse) {
 								Infobulle.init(); // Supprime les erreurs
 								if(lResponse) {

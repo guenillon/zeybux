@@ -8,7 +8,7 @@
 		pParam = $.extend(true,{},pParam);
 		
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -60,7 +60,7 @@
 		
 		pData.find("#btn-edit-compte").click(function() {
 			// Charge les informations du compte
-			$.post(	"./index.php?m=CompteAssociation&v=InformationBancaire", "pParam=" + $.toJSON({fonction:"afficher"}),
+			$.post(	"./index.php?m=CompteAssociation&v=InformationBancaire", "pParam=" + toJsonURIEncode({fonction:"afficher"}),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -92,7 +92,7 @@
 										if(lVr.valid) {
 											// Enregistrement
 											lVo.fonction = 'enregistrer';
-											$.post(	"./index.php?m=CompteAssociation&v=InformationBancaire", "pParam=" + $.toJSON(lVo),
+											$.post(	"./index.php?m=CompteAssociation&v=InformationBancaire", "pParam=" + toJsonURIEncode(lVo),
 												function(lResponse) {
 													Infobulle.init(); // Supprime les erreurs
 													if(lResponse) {
@@ -183,7 +183,7 @@
 	this.recherche = function(pVo) {
 		var that = this;
 		pVo.fonction = "rechercher";
-		$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + $.toJSON(pVo),
+		$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + toJsonURIEncode(pVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -292,7 +292,7 @@
 			var lParam = {fonction:"infoOperation"};
 			
 			if(that.mBanques.length == 0) {
-				$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -339,7 +339,7 @@
 					if(lVr.valid) {
 						lVo.fonction = "ajoutOperation";
 						var lDialog = this;
-						$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + toJsonURIEncode(lVo),
 							function(lResponse) {
 								Infobulle.init(); // Supprime les erreurs
 								if(lResponse.valid) {
@@ -462,7 +462,7 @@
 		if(lVr.valid) {
 			lVo.fonction = "ajoutVirement";
 			//var lDialog = this;
-			$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteAssociation&v=Compte", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

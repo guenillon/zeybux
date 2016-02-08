@@ -6,7 +6,7 @@
 		var that = this;
 		this.pParam = pParam;
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=Commande&v=MesAchatsDetail", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=Commande&v=MesAchatsDetail", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

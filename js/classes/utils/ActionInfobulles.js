@@ -40,7 +40,7 @@
 
 		Infobulle.init(); // Supprime les erreurs
 		if (lVr.valid) {
-			$.post(	"./index.php?m=Identification&v=Identification", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=Identification&v=Identification", "pParam=" + toJsonURIEncode(lVo),
 					function(lResponse) {
 					  	Infobulle.init(); // Supprime les erreurs
 						if(lResponse.valid) {												

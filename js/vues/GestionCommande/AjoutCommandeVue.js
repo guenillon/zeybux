@@ -22,7 +22,7 @@
 		}
 		
 		var that = this;
-		$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -217,7 +217,7 @@
 			$("#prix-stock-produit").replaceWith("<div id=\"prix-stock-produit\"></div>");
 			if(lId > 0) {
 				var lParam = {fonction:"listeProduit",id:lId};
-				$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + toJsonURIEncode(lParam),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -295,7 +295,7 @@
 				
 				if(!that.mMarche.produits[lId] || !that.mMarche.produitsAbonnement[lId]) {
 					var lParam = {fonction:"listeModeleLot",idNomProduit:lId};
-					$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + $.toJSON(lParam),
+					$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + toJsonURIEncode(lParam),
 						function (lResponse) {		
 							if(lResponse) {
 								if(lResponse.valid) {
@@ -1689,7 +1689,7 @@
 				
 				//var lVo = this.mMarche;
 				lVo.fonction = "ajouter";
-				$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + $.toJSON(lVo),
+				$.post(	"./index.php?m=GestionCommande&v=AjoutCommande", "pParam=" + toJsonURIEncode(lVo),
 						function (lResponse) {		
 							if(lResponse) {
 								if(lResponse.valid) {

@@ -7,7 +7,7 @@
 		var that = this;	
 		this.mIdMarche = pParam.id;
 		pParam.fonction = "listePaiement";
-		$.post(	"./index.php?m=Caisse&v=PaiementCaisse", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=Caisse&v=PaiementCaisse", "pParam=" + toJsonURIEncode(pParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {

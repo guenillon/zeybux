@@ -17,7 +17,7 @@
 		if(pParam.retour) {
 			this.retour = pParam.retour;
 		}
-		$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -457,7 +457,7 @@
 		.click(function() {		
 			var lId = $(this).attr('id-produit');
 			var lParam = {id:lId,fonction:"detailProduit"};
-			$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -789,7 +789,7 @@
 				lVo.id_compte = this.mAdherent.adhIdCompte;
 				lVo.id_commande = this.infoCommande.comId;
 				//lParam = {"reservation":lVo,"id_compte":this.mAdherent.adhIdCompte,fonction:"modifierReservation"};
-				$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + $.toJSON(lVo),
+				$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + toJsonURIEncode(lVo),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -873,7 +873,7 @@
 										id_compte:that.mAdherent.adhIdCompte,
 										fonction:"supprimerReservation"};
 						var lDialog = this;
-						$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + $.toJSON(lParam),
+						$.post(	"./index.php?m=GestionCommande&v=ReservationAdherent", "pParam=" + toJsonURIEncode(lParam),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

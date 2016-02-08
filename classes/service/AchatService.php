@@ -55,48 +55,70 @@ class AchatService
 	public function set($pAchat) {
 		$lAchatValid = new NAMESPACE_CLASSE\NAMESPACE_VALIDATEUR\MOD_SERVICE\AchatValid();
 		if($lAchatValid->input($pAchat)) {
+						
+			$lIdRequete = 0;
+				
+			$lOperationAchat = $pAchat->getOperationAchat()->getMontant();
+			$lOperationAchatSolidaire = $pAchat->getOperationAchatSolidaire()->getMontant();
+			$lOperationRechargement = $pAchat->getRechargement()->getMontant();
+				
+			$lIdCompte = null;
+			$lIdMarche = null;
 			
-			if($lAchatValid->insert($pAchat)) {
-				$lIdRequete = 0;
+			if(!is_null($lOperationAchat) && !empty($lOperationAchat)) {
+				$lOperationAchatChampComp = $pAchat->getOperationAchat()->getChampComplementaire();
+				$lIdRequete = $lOperationAchatChampComp[15]->getValeur();
 				
-				$lOperationAchat = $pAchat->getOperationAchat()->getMontant();
-				$lOperationAchatSolidaire = $pAchat->getOperationAchatSolidaire()->getMontant();
-				$lOperationRechargement = $pAchat->getRechargement()->getMontant();
+				$lIdCompte = $pAchat->getOperationAchat()->getIdCompte();
+				if(isset($lOperationAchatChampComp[1])) {
+					$lIdMarche = $lOperationAchatChampComp[1]->getValeur();
+				}
 				
-				if(!is_null($lOperationAchat) && !empty($lOperationAchat)) {
-					$lOperationAchatChampComp = $pAchat->getOperationAchat()->getChampComplementaire();
-					$lIdRequete = $lOperationAchatChampComp[15]->getValeur();
+			}
+			if(!is_null($lOperationAchatSolidaire) && !empty($lOperationAchatSolidaire)) {
+				$lOperationAchatSolidaireChampComp = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
+				$lIdRequete = $lOperationAchatSolidaireChampComp[15]->getValeur();
+				
+				$lIdCompte = $pAchat->getOperationAchatSolidaire()->getIdCompte();
+				if(isset($lOperationAchatSolidaireChampComp[1])) {
+					$lIdMarche = $lOperationAchatSolidaireChampComp[1]->getValeur();
 				}
-				if(!is_null($lOperationAchatSolidaire) && !empty($lOperationAchatSolidaire)) {
-					$lOperationAchatSolidaireChampComp = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
-					$lIdRequete = $lOperationAchatSolidaireChampComp[15]->getValeur();
+			}
+			if(!is_null($lOperationRechargement) && !empty($lOperationRechargement)) {
+				$lOperationRechargementChampComp = $pAchat->getRechargement()->getChampComplementaire();
+				$lIdRequete = $lOperationRechargementChampComp[15]->getValeur();
+				
+				$lIdCompte = $pAchat->getRechargement()->getIdCompte();
+				if(isset($lOperationRechargementChampComp[1])) {
+					$lIdMarche = $lOperationRechargementChampComp[1]->getValeur();
 				}
-				if(!is_null($lOperationRechargement) && !empty($lOperationRechargement)) {
-					$lOperationRechargementChampComp = $pAchat->getRechargement()->getChampComplementaire();
-					$lIdRequete = $lOperationRechargementChampComp[15]->getValeur();
-				}
-
-				$lOperationService = new OperationService();
-				$lOperations = $lOperationService->getByIdrequete($lIdRequete);
-				$lIdOperation = $lOperations[0]->getId();
-				if(is_null($lIdOperation) && empty($lIdOperation)) {
-					return $this->insert($pAchat);
-				} else { // C'est un doublon il faut passer en maj
-					
-					$lAchatActuel = $this->select($lIdOperation); // Récupération des Id
-					if(!is_null($lAchatActuel->getOperationAchat())) {
-						$pAchat->getOperationAchat()->setId($lAchatActuel->getOperationAchat()->getId());
+			}
+		
+			$lReservationService = new ReservationService();
+			if($lReservationService->reservationCompteAutorise($lIdCompte, $lIdMarche)) {
+				if($lAchatValid->insert($pAchat)) {
+					$lOperationService = new OperationService();
+					$lOperations = $lOperationService->getByIdrequete($lIdRequete);
+					$lIdOperation = $lOperations[0]->getId();
+					if(is_null($lIdOperation) && empty($lIdOperation)) {
+						return $this->insert($pAchat);
+					} else { // C'est un doublon il faut passer en maj
+						
+						$lAchatActuel = $this->select($lIdOperation); // Récupération des Id
+						if(!is_null($lAchatActuel->getOperationAchat())) {
+							$pAchat->getOperationAchat()->setId($lAchatActuel->getOperationAchat()->getId());
+						}
+						if(!is_null($lAchatActuel->getOperationAchatSolidaire())) {
+							$pAchat->getOperationAchatSolidaire()->setId($lAchatActuel->getOperationAchatSolidaire()->getId());
+						}
+						if(!is_null($lAchatActuel->getRechargement())) {
+							$pAchat->getRechargement()->setId($lAchatActuel->getRechargement()->getId());
+						}
+						return $this->update($pAchat);
 					}
-					if(!is_null($lAchatActuel->getOperationAchatSolidaire())) {
-						$pAchat->getOperationAchatSolidaire()->setId($lAchatActuel->getOperationAchatSolidaire()->getId());
-					}
-					if(!is_null($lAchatActuel->getRechargement())) {
-						$pAchat->getRechargement()->setId($lAchatActuel->getRechargement()->getId());
-					}
+				} else if($lAchatValid->update($pAchat)) {
 					return $this->update($pAchat);
 				}
-			} else if($lAchatValid->update($pAchat)) {
-				return $this->update($pAchat);
 			}
 		}
 		return false;
@@ -356,12 +378,13 @@ class AchatService
 		
 		// Retourne l'Id de l'achat ou à defaut celui de l'achat solidaire
 		$lIdRetour = $lIdOperationAchat;
-		if($lIdRetour == 0 && $lIdOperationAchatSolidaire != 0) {
-			$lIdRetour = $lIdOperationAchatSolidaire;
-		} else {
-			$lIdRetour = $lIdRechargement;
+		if($lIdRetour == 0) {
+			if($lIdOperationAchatSolidaire != 0) {
+				$lIdRetour = $lIdOperationAchatSolidaire;
+			} else {
+				$lIdRetour = $lIdRechargement;
+			}
 		}
-		
 		return $lIdRetour;
 	}
 	
@@ -862,58 +885,65 @@ class AchatService
 		if(!is_null($pId) && $lAchatValid->select($pId)) {
 			$lAchatActuel = $this->select($pId);
 			
-			$lOperationService = new OperationService();
-			
-			// Suppression des opérations 
-			if(!is_null($lAchatActuel->getRechargement())) { // Rechargement
-				$lOperationService->delete($lAchatActuel->getRechargement()->getId());
-			}
-			
 			$lIdCompte = 0;
 			$lIdMarche = 0;
-			
-			$lIdOperationAchat = 0;
 			if(!is_null($lAchatActuel->getOperationAchat())) { // Achat avec Ope Zeybu
-				$lIdOperationAchat = $lAchatActuel->getOperationAchat()->getId();
-				$lOperationService->delete($lAchatActuel->getOperationAchat()->getId());
 				$lOperationAchatChampComp = $lAchatActuel->getOperationAchat()->getChampComplementaire();
-				$lOperationService->delete($lOperationAchatChampComp[8]->getValeur());
-				
 				$lIdCompte = $lAchatActuel->getOperationAchat()->getIdCompte();
 				$lIdMarche = $lOperationAchatChampComp[1]->getValeur();
 			}
-			
-			$lIdOperationAchatSolidaire = 0;
+
 			if(!is_null($lAchatActuel->getOperationAchatSolidaire())) { // Achat solidaire avec ope zeybu
-				$lIdOperationAchatSolidaire = $lAchatActuel->getOperationAchatSolidaire()->getId();
-				$lOperationService->delete($lAchatActuel->getOperationAchatSolidaire()->getId());
 				$lOperationAchatSolidaireChampComp = $lAchatActuel->getOperationAchatSolidaire()->getChampComplementaire();
-				$lOperationService->delete($lOperationAchatSolidaireChampComp[8]->getValeur());
-				
 				$lIdCompte = $lAchatActuel->getOperationAchatSolidaire()->getIdCompte();
 				$lIdMarche = $lOperationAchatSolidaireChampComp[1]->getValeur();
 			}
 			
-			// Suppression de l'ensemble des lignes de produit
-			DetailAchatManager::delete($lIdOperationAchat, $lIdOperationAchatSolidaire);
-			
-			$lDetailOperationService = new DetailOperationService();
-			$lStockService = new StockService();
-			foreach($lAchatActuel->getProduits() as $lProduitInital ) {
-				$lStockService->delete( $lProduitInital->getIdStock() );
-				$lDetailOperationService->delete($lProduitInital->getIdDetailOperation());
-				$lStockService->delete( $lProduitInital->getIdStockSolidaire() );
-				$lDetailOperationService->delete($lProduitInital->getIdDetailOperationSolidaire());
-			}
-			
-			// Suppression de la réservation
 			$lReservationService = new ReservationService();
-			$lIdReservation = new IdReservationVO();
-			$lIdReservation->setIdCompte($lIdCompte);
-			$lIdReservation->setIdCommande($lIdMarche);
-			$lReservationService->delete($lIdReservation);
-			
-			return true;
+			if($lReservationService->reservationCompteAutorise($lIdCompte, $lIdMarche)) {
+				$lOperationService = new OperationService();
+				
+				// Suppression des opérations 
+				if(!is_null($lAchatActuel->getRechargement())) { // Rechargement
+					$lOperationService->delete($lAchatActuel->getRechargement()->getId());
+				}
+	
+				$lIdOperationAchat = 0;
+				if(!is_null($lAchatActuel->getOperationAchat())) { // Achat avec Ope Zeybu
+					$lIdOperationAchat = $lAchatActuel->getOperationAchat()->getId();
+					$lOperationService->delete($lAchatActuel->getOperationAchat()->getId());
+					$lOperationAchatChampComp = $lAchatActuel->getOperationAchat()->getChampComplementaire();
+					$lOperationService->delete($lOperationAchatChampComp[8]->getValeur());
+				}
+				
+				$lIdOperationAchatSolidaire = 0;
+				if(!is_null($lAchatActuel->getOperationAchatSolidaire())) { // Achat solidaire avec ope zeybu
+					$lIdOperationAchatSolidaire = $lAchatActuel->getOperationAchatSolidaire()->getId();
+					$lOperationService->delete($lAchatActuel->getOperationAchatSolidaire()->getId());
+					$lOperationAchatSolidaireChampComp = $lAchatActuel->getOperationAchatSolidaire()->getChampComplementaire();
+					$lOperationService->delete($lOperationAchatSolidaireChampComp[8]->getValeur());
+				}
+				
+				// Suppression de l'ensemble des lignes de produit
+				DetailAchatManager::delete($lIdOperationAchat, $lIdOperationAchatSolidaire);
+				
+				$lDetailOperationService = new DetailOperationService();
+				$lStockService = new StockService();
+				foreach($lAchatActuel->getProduits() as $lProduitInital ) {
+					$lStockService->delete( $lProduitInital->getIdStock() );
+					$lDetailOperationService->delete($lProduitInital->getIdDetailOperation());
+					$lStockService->delete( $lProduitInital->getIdStockSolidaire() );
+					$lDetailOperationService->delete($lProduitInital->getIdDetailOperationSolidaire());
+				}
+				
+				// Suppression de la réservation
+				$lIdReservation = new IdReservationVO();
+				$lIdReservation->setIdCompte($lIdCompte);
+				$lIdReservation->setIdCommande($lIdMarche);
+				$lReservationService->delete($lIdReservation);
+				
+				return true;
+			}
 		}
 		return false;
 	}
@@ -1097,7 +1127,7 @@ class AchatService
 	 * @desc Retourne les achats et réservations positionnées sur les produits
 	 */
 	public function getAchatEtReservationProduit($pIdProduits) {
-		return AdherentManager::rechercheAchatEtReservation($pIdProduits);
+		return AdherentManager::rechercheAchatEtReservation($pIdProduits, array(1,3));
 	}
 }
 ?>

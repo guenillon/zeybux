@@ -186,7 +186,7 @@ class CommandeManager
 		JOIN " . AdherentManager::TABLE_ADHERENT . " 
 			ON " . StockManager::CHAMP_STOCK_ID_COMPTE . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . "
 			AND " . CompteManager::CHAMP_COMPTE_ID_ADHERENT_PRINCIPAL . " = " . AdherentManager::CHAMP_ADHERENT_ID . "
-			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . " = 1";
+			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . " in (1, 3)";
 		
 		// Uniquement les commandes actives
 		array_push($pTypeRecherche, CommandeManager::CHAMP_COMMANDE_ARCHIVE);

@@ -18,31 +18,12 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_COMMANDE]) || is
 			include_once(CHEMIN_CLASSES_CONTROLEURS . MOD_GESTION_COMMANDE . "/EditerAchatControleur.php");						
 			$lControleur = new EditerAchatControleur();
 			
-			switch($lParam["fonction"]) {					
-				/*case "listeReservation":
-						echo $lControleur->getMarcheListeReservation($lParam)->exportToJson();
-						$lLogger->log("Affichage de la vue MarcheCommande par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
-					break;
-					
-				case "listeAdherent":
-						echo $lControleur->getListeAdherent()->exportToJson();
-						$lLogger->log("Affichage de la vue MarcheCommande liste des adherents par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
-					break;*/
+			switch($lParam["fonction"]) {
 					
 				case "infoAchat":
 						echo $lControleur->getInfoAchatMarche($lParam)->exportToJson();
 						$lLogger->log("Affichage de la vue Gestion Commande InfoAchat par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 					break;
-					
-				/*case "infoMarche":
-						echo $lControleur->getInfoMarche($lParam)->exportToJson();
-						$lLogger->log("Affichage de la vue AchatCommande (infoMarche) par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
-					break;
-					
-				case "infoListeProduitDisponible":
-						echo $lControleur->getProduitsDisponible()->exportToJson();
-						$lLogger->log("Affichage de la vue AchatCommande (ListeProduitDisponible) par l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
-					break;*/
 				
 				case "acheter":
 						$lResponse = $lControleur->enregistrerAchat($lParam);

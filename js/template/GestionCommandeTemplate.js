@@ -1413,7 +1413,7 @@
 	
 	this.rechercheAchatAdherent =
 		"<div class=\"com-widget-header ui-widget ui-widget-header ui-corner-all\">" +
-			"Liste des Achats et Réservations" +
+			"Liste des Achats" +
 			"<span class=\"com-cursor-pointer com-btn-header ui-widget-content ui-corner-all\" id=\"btn-export-achat\" title=\"Exporter les Achats et les réservations\">" +
 				"<span class=\"ui-icon ui-icon-print\">" +
 				"</span>" +

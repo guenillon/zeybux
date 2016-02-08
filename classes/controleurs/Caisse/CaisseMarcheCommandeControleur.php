@@ -62,11 +62,20 @@ class CaisseMarcheCommandeControleur
 		if($lVr->getValid()) {
 			$lResponse = new ListeAdherentCommandeResponse();
 			$lAdherentService = new AdherentService();
-			$lResponse->setListeAdherentCommande($lAdherentService->getAllResumeSolde(array(1, 3)));
 			
 			$lMarcheService = new MarcheService();
 			$lMarche = $lMarcheService->getInfoMarche($pParam['id_commande']);
 			$lResponse->setNumeroMarche($lMarche->getNumero());
+			
+			$lType = array(1);
+			if($pParam['id_commande'] <> -1) {
+				if($lMarche->getDroitNonAdherent() == 1) {
+					array_push($lType,3);
+				}
+			}
+			
+
+			$lResponse->setListeAdherentCommande($lAdherentService->getAllResumeSolde($lType));
 			
 			return $lResponse;		
 		}				
@@ -74,15 +83,21 @@ class CaisseMarcheCommandeControleur
 	}
 	
 	/**
-	 * @name getListeAdherent()
+	 * @name getListeAdherent($pParam)
 	 * @return ListeAdherentCommandeResponse
 	 * @desc Retourne la liste des adhérents.
 	 */
-	public function getListeAdherent() {
-		$lResponse = new ListeAdherentCommandeResponse();
-		$lAdherentService = new AdherentService();
-		$lResponse->setListeAdherentCommande($lAdherentService->getAllResumeSolde(array(1, 3)));			
-		return $lResponse;
+	public function getListeAdherent($pParam) {
+		$lVr = MarcheValid::validGetMarcheListeReservation($pParam);
+		if($lVr->getValid()) {
+			$lResponse = new ListeAdherentCommandeResponse();
+			$lAdherentService = new AdherentService();
+			$lType = array(1, 3);
+			
+			$lResponse->setListeAdherentCommande($lAdherentService->getAllResumeSolde($lType));			
+			return $lResponse;
+		}				
+		return $lVr;
 	}
 
 	/**

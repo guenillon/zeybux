@@ -906,5 +906,20 @@ class MarcheService
 			array(CommandeManager::CHAMP_COMMANDE_DATE_MARCHE_DEBUT),
 			array('DESC'));
 	}
+	
+	/**
+	 * @name getListeAdherentAchatMarche($IdMarche)
+	 * @return array(ListeAchatReservationVO)
+	 * @desc Retourne la liste des adhérents
+	 */
+	public function getListeAdherentAchatMarche($IdMarche) {
+		$lMarche = $this->getInfoMarche($IdMarche);
+		$pType = array(1);
+				
+		if($lMarche->getDroitNonAdherent()) {
+			array_push($pType, 3);
+		}
+		return AdherentManager::selectListeAdherentAchatMarche($IdMarche, $pType);
+	}
 }
 ?>

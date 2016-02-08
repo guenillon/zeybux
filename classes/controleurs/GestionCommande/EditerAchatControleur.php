@@ -10,33 +10,6 @@
 //****************************************************************
 
 // Inclusion des classes
-/*include_once(CHEMIN_CLASSES_RESPONSE . MOD_CAISSE . "/ListeAdherentCommandeResponse.php" );
-include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_CAISSE . "/MarcheValid.php");
-
-include_once(CHEMIN_CLASSES_SERVICE . "MarcheService.php");
-include_once(CHEMIN_CLASSES_SERVICE . "ReservationService.php");
-include_once(CHEMIN_CLASSES_SERVICE . "StockService.php");
-include_once(CHEMIN_CLASSES_SERVICE . "AchatService.php");
-include_once(CHEMIN_CLASSES_SERVICE . "TypePaiementService.php");
-include_once(CHEMIN_CLASSES_VO . "IdReservationVO.php");
-include_once(CHEMIN_CLASSES_RESPONSE . MOD_CAISSE . "/InfoAchatCommandeResponse.php" );
-include_once(CHEMIN_CLASSES_VIEW_MANAGER . "StockSolidaireViewManager.php");
-include_once(CHEMIN_CLASSES_VIEW_MANAGER . "AdherentViewManager.php");
-include_once(CHEMIN_CLASSES_VIEW_MANAGER . "ListeAdherentViewManager.php");
-include_once(CHEMIN_CLASSES_VIEW_MANAGER . "ModeleLotViewManager.php");
-include_once(CHEMIN_CLASSES_VO . "AchatVO.php");
-include_once(CHEMIN_CLASSES_MANAGERS . "DetailCommandeManager.php");
-
-include_once(CHEMIN_CLASSES_VR . "VRerreur.php" );
-include_once(CHEMIN_CLASSES_VR . "TemplateVR.php" );
-include_once(CHEMIN_CLASSES_VO . "IdAchatVO.php");
-
-//include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_GESTION_COMMANDE . "/AfficheAchatAdherentValid.php");
-include_once(CHEMIN_CLASSES_SERVICE . "AchatService.php");
-include_once(CHEMIN_CLASSES_SERVICE . "BanqueService.php" );
-include_once(CHEMIN_CLASSES_TOVO . "AchatToVO.php");*/
-
-
 include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_GESTION_COMMANDE . "/AchatValid.php");
 include_once(CHEMIN_CLASSES_RESPONSE . MOD_GESTION_COMMANDE . "/InfoAchatCommandeResponse.php" );
 include_once(CHEMIN_CLASSES_SERVICE . "AchatService.php");
@@ -71,7 +44,6 @@ class EditerAchatControleur
 			$lResponse = new InfoAchatCommandeResponse();
 
 			$lProduitsAchat = array();
-			
 
 			$lIdMarche = 0;
 			$lIdCompte = 0;
@@ -114,7 +86,7 @@ class EditerAchatControleur
 			$lStockProduitsDisponible = $lStockService->getProduitsDisponible();
 			
 			$lStock = array();	
-			$lProduitsMarche = array();		
+			$lProduitsMarche = array();
 			if($lIdMarche != 0) { // Si ce n'est pas la caisse permanente
 				$lMarcheService = new MarcheService();
 				$lMarche = $lMarcheService->get($lIdMarche);

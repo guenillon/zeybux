@@ -41,7 +41,7 @@ class GestionCommandeReservationProducteurViewManager
 		$lRequete =
 			"SELECT "
 			    . ProduitManager::CHAMP_PRODUIT_ID_COMMANDE . 
-			"," . ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME . 
+			"," . StockManager::CHAMP_STOCK_ID_COMPTE .  
 			"," . ProduitManager::CHAMP_PRODUIT_ID . 
 			"," . StockManager::CHAMP_STOCK_ID . "
 			FROM " . GestionCommandeReservationProducteurViewManager::VUE_GESTIONCOMMANDERESERVATIONPRODUCTEUR . " 
@@ -56,7 +56,7 @@ class GestionCommandeReservationProducteurViewManager
 				array_push($lListeGestionCommandeReservationProducteur,
 					GestionCommandeReservationProducteurViewManager::remplir(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
-					$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME],
+					$lLigne[StockManager::CHAMP_STOCK_ID_COMPTE],
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
 					$lLigne[StockManager::CHAMP_STOCK_ID]));
 			}
@@ -78,7 +78,7 @@ class GestionCommandeReservationProducteurViewManager
 		$lRequete =
 			"SELECT "
 			    . ProduitManager::CHAMP_PRODUIT_ID_COMMANDE . 
-			"," . ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME . 
+			"," . StockManager::CHAMP_STOCK_ID_COMPTE . 
 			"," . ProduitManager::CHAMP_PRODUIT_ID . 
 			"," . StockManager::CHAMP_STOCK_ID . "
 			FROM " . GestionCommandeReservationProducteurViewManager::VUE_GESTIONCOMMANDERESERVATIONPRODUCTEUR;
@@ -92,7 +92,7 @@ class GestionCommandeReservationProducteurViewManager
 				array_push($lListeGestionCommandeReservationProducteur,
 					GestionCommandeReservationProducteurViewManager::remplir(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
-					$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME],
+					$lLigne[StockManager::CHAMP_STOCK_ID_COMPTE],
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
 					$lLigne[StockManager::CHAMP_STOCK_ID]));
 			}
@@ -111,7 +111,7 @@ class GestionCommandeReservationProducteurViewManager
 	*/
 	public static function getStockReservationProducteur($pIdCompteProducteur,$pIdProduit) {		
 		return GestionCommandeReservationProducteurViewManager::recherche(
-				array(ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME,ProduitManager::CHAMP_PRODUIT_ID),
+				array(StockManager::CHAMP_STOCK_ID_COMPTE,ProduitManager::CHAMP_PRODUIT_ID),
 				array('=', '='),
 				array($pIdCompteProducteur,$pIdProduit),
 				array(''),
@@ -136,7 +136,7 @@ class GestionCommandeReservationProducteurViewManager
 		// Préparation de la requète
 		$lChamps = array( 
 			    ProduitManager::CHAMP_PRODUIT_ID_COMMANDE .
-			"," . ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME .
+			"," . StockManager::CHAMP_STOCK_ID_COMPTE .
 			"," . ProduitManager::CHAMP_PRODUIT_ID .
 			"," . StockManager::CHAMP_STOCK_ID		);
 
@@ -157,7 +157,7 @@ class GestionCommandeReservationProducteurViewManager
 					array_push($lListeGestionCommandeReservationProducteur,
 						GestionCommandeReservationProducteurViewManager::remplir(
 						$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
-						$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMPTE_FERME],
+						$lLigne[StockManager::CHAMP_STOCK_ID_COMPTE],
 						$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
 						$lLigne[StockManager::CHAMP_STOCK_ID]));
 				}

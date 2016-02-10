@@ -27,7 +27,6 @@
 			return true;
 		}
     };
-    
 /*
  * Plugin jquery d'édition de formulaire
  * Cache le formulaire pour afficher sa valeur dans une span
@@ -58,6 +57,11 @@
 		return this;
     };    */
 })(jQuery);
+
+
+function toJsonURIEncode(obj) {    	
+	return encodeURIComponent($.toJSON(obj));
+};
 
 function clone(srcInstance)
 {

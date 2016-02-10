@@ -153,7 +153,7 @@
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
 			lVo.fonction = "ajouter";
-			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -234,7 +234,7 @@
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
 			lVo.fonction = "modifier";
-			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -313,7 +313,7 @@
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
 			lVo.fonction = "modifierPass";
-			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -385,7 +385,7 @@
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
 			lVo.fonction = "supprimer";
-			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionComptesSpeciaux&v=Gestion", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

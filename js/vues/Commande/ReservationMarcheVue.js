@@ -12,7 +12,7 @@
 		var that = this;
 		pParam.fonction = "afficher";
 		$.history( {'vue':function() {ReservationMarcheVue(pParam);}} );
-		$.post(	"./index.php?m=Commande&v=ReservationMarche","pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=Commande&v=ReservationMarche","pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -417,7 +417,7 @@
 		.click(function() {		
 			var lId = $(this).attr('id-produit');
 			var lParam = {id:lId,fonction:"detailProduit"};
-			$.post(	"./index.php?m=Commande&v=ReservationMarche", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=Commande&v=ReservationMarche", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -763,7 +763,7 @@
 				// Maj de la reservation
 				lVo.fonction = "modifier";
 				lVo.id_commande = this.infoCommande.comId;
-				$.post(	"./index.php?m=Commande&v=ReservationMarche", "pParam=" + $.toJSON(lVo),
+				$.post(	"./index.php?m=Commande&v=ReservationMarche", "pParam=" + toJsonURIEncode(lVo),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -836,7 +836,7 @@
 						var lParam = {	id_commande:that.infoCommande.comId,
 										fonction:"supprimer"};
 						var lDialog = this;
-						$.post(	"./index.php?m=Commande&v=ReservationMarche", "pParam=" + $.toJSON(lParam),
+						$.post(	"./index.php?m=Commande&v=ReservationMarche", "pParam=" + toJsonURIEncode(lParam),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

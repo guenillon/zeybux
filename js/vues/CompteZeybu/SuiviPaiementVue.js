@@ -15,7 +15,7 @@
 		if(pParam && pParam.selectedTabs) {
 			this.mSelectedTabs = pParam.selectedTabs;
 		}
-		$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + toJsonURIEncode(lParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -229,7 +229,7 @@
 		var that = this;
 		
 		// Récupération de la liste des remises actives
-		$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON({fonction:"listeActive"}),
+		$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode({fonction:"listeActive"}),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -304,7 +304,7 @@
 		if(lVr.valid) {
 			// Enregistrement de la remise de cheque
 			lVo.fonction = 'ajoutOperation';
-			$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -378,7 +378,7 @@
 		if(lVr.valid) {
 			// Enregistrement de la remise de cheque
 			lVo.fonction = 'ajout';
-			$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteZeybu&v=RemiseCheque", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -830,7 +830,7 @@
 		var that = this;
 		var lVo = { id:pIdOperation,
 					fonction:"valider"};
-		$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + toJsonURIEncode(lVo),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -925,7 +925,7 @@
 		
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
-			$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -993,7 +993,7 @@
 		var that = this;
 		var lVo = { id:pIdOperation,
 					fonction:"supprimer"};
-		$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=CompteZeybu&v=SuiviPaiement", "pParam=" + toJsonURIEncode(lVo),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {

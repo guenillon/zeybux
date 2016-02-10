@@ -3,7 +3,7 @@
 		$.history( {'vue':function() {ListeAdherentVue(pParam);}} );
 		var that = this;
 		var lVo = {fonction:"afficher"};
-		$.post(	"./index.php?m=GestionAdherents&v=ListeAdherent", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=GestionAdherents&v=ListeAdherent", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

@@ -13,7 +13,7 @@
 		var that = this;		
 		var lParam = {fonction:"detailAbonne"};
 		lParam = $.extend(lParam,pParam);
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -136,7 +136,7 @@
 		if(lVr.valid) {	
 			Infobulle.init();
 			lCompteAbonnementVO.fonction = "suspendre";
-			$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lCompteAbonnementVO),
+			$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lCompteAbonnementVO),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -227,7 +227,7 @@
 						Infobulle.init();
 						lCompteAbonnementVO.fonction = "arretSuspension";
 						var lDialog = $(this);
-						$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lCompteAbonnementVO),
+						$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lCompteAbonnementVO),
 							function (lResponse) {		
 								if(lResponse) {
 									if(lResponse.valid) {
@@ -272,7 +272,7 @@
 	this.dialogAjoutAbonnement = function(pData) {
 		var that = this;
 		var lParam = {fonction:"listeFerme"};
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -313,7 +313,7 @@
 			$("#detail-produit").replaceWith("<div id=\"detail-produit\"></div>");
 			if(lId > 0) {
 				var lParam = {fonction:"listeProduit",id:that.idCompte,idFerme:lId};
-				$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -393,7 +393,7 @@
 			var lId = $(this).val();
 			if(lId > 0) {
 				var lParam = {fonction:"detailProduit",id:lId};
-				$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -570,7 +570,7 @@
 			if(lVr.valid) {	
 				Infobulle.init();
 				lCompteAbonnementVO.fonction = "ajouter";
-				$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lCompteAbonnementVO),
+				$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lCompteAbonnementVO),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -610,7 +610,7 @@
 	this.dialogModifierAbonnement = function(pIdProduit,pIdCompteAbonnement) {
 		var that = this;
 		var lParam = {fonction:"detailAbonnement",idProduit:pIdProduit,idCompteAbonnement:pIdCompteAbonnement};
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 			function (lResponse) {		
 				if(lResponse) {
 					if(lResponse.valid) {
@@ -707,7 +707,7 @@
 		if(lVr.valid) {	
 			Infobulle.init();
 			lCompteAbonnementVO.fonction = "modifier";
-			$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lCompteAbonnementVO),
+			$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lCompteAbonnementVO),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -757,7 +757,7 @@
 				'Supprimer': function() {
 					var lParam = {fonction:"supprimer", id:pIdCompteAbonnement};
 					var lDialog = this;
-					$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+					$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 							function(lResponse) {
 								Infobulle.init(); // Supprime les erreurs
 								if(lResponse) {

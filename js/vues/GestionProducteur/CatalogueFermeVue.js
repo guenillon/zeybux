@@ -17,7 +17,7 @@
 		//pParam.fonction = "afficher";
 		this.mParam = $.extend(this.mParam, pParam);
 		this.mParam.fonction = "afficher";
-		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(this.mParam),
+		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(this.mParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -183,7 +183,7 @@
 	this.refreshCategorie = function(pParam) {
 		var that = this;
 		pParam.fonction = "listeCategorie";
-		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -228,7 +228,7 @@
 		var that = this;
 		pParam.fonction = "listeProduit";
 		pParam.id = this.mParam.id;
-		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -315,7 +315,7 @@
 			Infobulle.init();
 			var lParam = {fonction:"ajouterCategorie",categorieProduit:lVo};
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -355,7 +355,7 @@
 			
 			var lId = $(this).closest('tr').attr('id-cat');
 			var lParam = {id:lId,fonction:"detailCategorie"};
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -405,7 +405,7 @@
 			Infobulle.init();
 			var lParam = {fonction:"modifierCategorie",categorieProduit:lVo};
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -443,7 +443,7 @@
 		.click(function() {
 			var lId = $(this).closest('tr').attr('id-cat');
 			var lParam = {fonction:"autorisationSupprimerCategorie",id:lId};
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -491,7 +491,7 @@
 		var that = this;
 		var lParam = {fonction:"supprimerCategorie",id:pId};
 		// Ajout
-		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 			function (lResponse) {		
 				if(lResponse) {
 					if(lResponse.valid) {
@@ -552,7 +552,7 @@
 			} else {
 				if(that.mInfoFormulaireProduit == null) {
 					lParam = {fonction:'infoFomulaireProduit',id:that.mParam.id};
-					$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+					$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 						function (lResponse) {		
 							if(lResponse) {
 								if(lResponse.valid) {
@@ -787,7 +787,7 @@
 			lVo.fonction = "ajouterProduit";
 			lVo.id = this.mParam.id;
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -850,7 +850,7 @@
 	this.supprimerProduit = function(pId) {
 		var that = this;
 		var lParam = {fonction:"supprimerProduit",idNomProduit:pId};
-		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 			function (lResponse) {		
 				if(lResponse) {
 					if(lResponse.valid) {
@@ -880,7 +880,7 @@
 		.click(function() {		
 			var lId = $(this).closest('tr').attr('id-pro');
 			var lParam = {idNomProduit:lId,fonction:"detailProduit"};
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -941,7 +941,7 @@
 	this.dialogModifierProduit = function(pId) {
 		var that = this;
 		var lParam = {idNomProduit:pId,fonction:"infoFomulaireModifierProduit"};
-		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -1059,7 +1059,7 @@
 			lVo.fonction = "modifierProduit";
 			lVo.id = this.mParam.id;
 			// Ajout
-			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProducteur&v=CatalogueFerme", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {

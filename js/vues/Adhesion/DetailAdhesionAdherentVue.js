@@ -4,7 +4,7 @@
 		$.history( {'vue':function() {DetailAdhesionAdherentVue(pParam);}} );
 		var that = this;
 		pParam.fonction = "adhesionSurAdherent";
-		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(pParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -77,7 +77,7 @@
 			var lParam = {'id':$(this).data('id-adhesion-adherent'),
 							fonction:"infoModificationAdhesionAdherent"};
 			
-			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=Adhesion&v=GestionAdhesion", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

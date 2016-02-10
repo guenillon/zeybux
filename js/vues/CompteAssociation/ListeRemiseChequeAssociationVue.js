@@ -11,7 +11,7 @@
 			lParam.fonction = 'listeActive';
 		}
 		
-		$.post(	"./index.php?m=CompteAssociation&v=RemiseCheque", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=CompteAssociation&v=RemiseCheque", "pParam=" + toJsonURIEncode(lParam),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {

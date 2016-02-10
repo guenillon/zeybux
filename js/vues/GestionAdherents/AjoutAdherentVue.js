@@ -55,7 +55,7 @@
 		
 		// Sélection du compte adhérent à sélectionner
 		var lVo = {fonction:"listeAdherent"};
-		$.post(	"./index.php?m=GestionAdherents&v=AjoutAdherent", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=GestionAdherents&v=AjoutAdherent", "pParam=" + toJsonURIEncode(lVo),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -167,7 +167,7 @@
 		if(lVr.valid) {
 			Infobulle.init(); // Supprime les erreurs
 			// Ajout de l'adherent
-			$.post(	"./index.php?m=GestionAdherents&v=AjoutAdherent", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionAdherents&v=AjoutAdherent", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

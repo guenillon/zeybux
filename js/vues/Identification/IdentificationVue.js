@@ -40,7 +40,7 @@
 			//$('#formulaire_identification_int').hide().after(lIdentificationTemplate.chargementIdentification);
 			//$('#contenu').replaceWith(lIdentificationTemplate.chargementIdentification);
 			$('.formulaire_identification').toggle();
-			$.post(	"./index.php?m=Identification&v=Identification", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=Identification&v=Identification", "pParam=" + toJsonURIEncode(lVo),
 					function(lResponse) {
 					  	Infobulle.init(); // Supprime les erreurs
 					  	if(lResponse) {

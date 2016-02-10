@@ -4,7 +4,7 @@
 		var that = this;
 		var lParam = {fonction:"afficher"};
 		lParam = $.extend(lParam,pParam);
-		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionAbonnement&v=ListeAbonne", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

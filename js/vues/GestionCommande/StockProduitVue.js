@@ -3,7 +3,7 @@
 		$.history( {'vue':function() {StockProduitVue(pParam);}} );
 		var that = this;
 		pParam.fonction ="detailFerme";
-		$.post(	"./index.php?m=GestionCommande&v=StockProduit", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=StockProduit", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -120,7 +120,7 @@
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
 			lVo.fonction = "modifierStock";
-			$.post(	"./index.php?m=GestionCommande&v=StockProduit", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionCommande&v=StockProduit", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

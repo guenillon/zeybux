@@ -8,7 +8,7 @@
 		//pParam.fonction = "afficher";
 		this.mParam = $.extend(this.mParam, pParam);
 		this.mParam.fonction = "afficher";
-		$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(this.mParam),
+		$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(this.mParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -74,7 +74,7 @@
 			
 			var lId = $(this).closest('tr').attr('id');
 			var lParam = {id:lId,fonction:"detailCaracteristique"};
-			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -147,7 +147,7 @@
 			Infobulle.init();
 			lVo.fonction = "ajouter";
 			// Ajout
-			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -186,7 +186,7 @@
 			
 			var lId = $(this).closest('tr').attr('id');
 			var lParam = {id:lId,fonction:"detailCaracteristique"};
-			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -236,7 +236,7 @@
 			Infobulle.init();
 			lVo.fonction = "modifier";
 			// Ajout
-				$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(lVo),
+				$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(lVo),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -272,7 +272,7 @@
 		.click(function() {
 			var lId = $(this).closest('tr').attr('id');
 			var lParam = {fonction:"autorisationSupprimer",id:lId};
-			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -320,7 +320,7 @@
 		var that = this;
 		var lParam = {fonction:"supprimer",id:pId};
 		// Ajout
-		$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionProduit&v=GestionCaracteristique", "pParam=" + toJsonURIEncode(lParam),
 			function (lResponse) {		
 				if(lResponse) {
 					if(lResponse.valid) {

@@ -11,7 +11,7 @@
 		}
 		
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=GestionCommande&v=Achat", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=Achat", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -92,7 +92,7 @@
 	this.recherche = function(pVo) {
 		var that = this;
 		pVo.fonction = "rechercher";
-		$.post(	"./index.php?m=GestionCommande&v=Achat", "pParam=" + $.toJSON(pVo),
+		$.post(	"./index.php?m=GestionCommande&v=Achat", "pParam=" + toJsonURIEncode(pVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

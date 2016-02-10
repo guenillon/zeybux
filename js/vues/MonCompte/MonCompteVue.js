@@ -307,7 +307,7 @@
 			lVo.fonction = "information";
 			Infobulle.init(); // Supprime les erreurs
 			// Ajout de l'adherent
-			$.post(	"./index.php?m=MonCompte&v=ModifierMonCompte", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=MonCompte&v=ModifierMonCompte", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -379,7 +379,7 @@
 		
 		if(lVr.valid) {
 			lVo.fonction = "pass";
-			$.post(	"./index.php?m=MonCompte&v=ModifierMonCompte", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=MonCompte&v=ModifierMonCompte", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

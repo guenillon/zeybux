@@ -5,7 +5,7 @@
 		$.history( {'vue':function() {GestionCaisseVue(pParam);}} );
 		var that = this;
 		var lParam = {'fonction':'etatCaisse'};
-		$.post(	"./index.php?m=GestionCaisse&v=GestionCaisse", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionCaisse&v=GestionCaisse", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -69,7 +69,7 @@
 		var that = this;
 		pData.find("#btn-caisse").click(function() {
 			var lParam = {'fonction':'fermerCaisse'};
-			$.post(	"./index.php?m=GestionCaisse&v=GestionCaisse", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCaisse&v=GestionCaisse", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -89,7 +89,7 @@
 		var that = this;
 		pData.find("#btn-caisse").click(function() {
 			var lParam = {'fonction':'ouvrirCaisse'};
-			$.post(	"./index.php?m=GestionCaisse&v=GestionCaisse", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCaisse&v=GestionCaisse", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {

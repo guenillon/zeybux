@@ -12,7 +12,7 @@
 		$.history( {'vue':function() {BonDeCommandeVue(pParam);}} );
 		var that = this;
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=GestionCommande&v=BonDeCommande", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=BonDeCommande", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -85,7 +85,7 @@
 			var lParam = {	"id_commande":that.mIdCommande,
 						 	"id_compte_ferme":lIdCompteProducteur,
 						 	fonction:"afficherProducteur"};
-			$.post(	"./index.php?m=GestionCommande&v=BonDeCommande", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCommande&v=BonDeCommande", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -350,7 +350,7 @@
 		
 		if(lVr.valid) {
 			lParam.fonction = "enregistrer";
-			return $.post(	"./index.php?m=GestionCommande&v=BonDeCommande", "pParam=" + $.toJSON(lParam),
+			return $.post(	"./index.php?m=GestionCommande&v=BonDeCommande", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {

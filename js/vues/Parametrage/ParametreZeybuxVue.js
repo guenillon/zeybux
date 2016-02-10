@@ -6,7 +6,7 @@
 		var that = this;
 		this.mParam = $.extend(this.mParam, pParam);
 		this.mParam.fonction = "detail";
-		$.post(	"./index.php?m=Parametrage&v=ParametreZeybux", "pParam=" + $.toJSON(this.mParam),
+		$.post(	"./index.php?m=Parametrage&v=ParametreZeybux", "pParam=" + toJsonURIEncode(this.mParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -62,7 +62,7 @@
 				Infobulle.init();
 				lVo.fonction = "modifier";
 				// Modification
-				$.post(	"./index.php?m=Parametrage&v=ParametreZeybux", "pParam=" + $.toJSON(lVo),
+				$.post(	"./index.php?m=Parametrage&v=ParametreZeybux", "pParam=" + toJsonURIEncode(lVo),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {

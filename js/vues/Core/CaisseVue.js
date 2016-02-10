@@ -41,7 +41,7 @@
 		
 		this.mModule = pParam.module;
 				
-		$.post(	"./index.php?m=" + this.mModule + "&v=CaisseMarcheCommande", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=" + this.mModule + "&v=CaisseMarcheCommande", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -1057,7 +1057,7 @@
 		lVo.fonction = "acheter";
 		//lVo.idAchat = this.mIdAchat;
 		
-		$.post(	"./index.php?m=" + this.mModule + "&v=CaisseMarcheCommande","pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=" + this.mModule + "&v=CaisseMarcheCommande","pParam=" + toJsonURIEncode(lVo),
 				function(lVoRetour) {
 					if(lVoRetour) {
 						if(lVoRetour.valid) {
@@ -1092,7 +1092,7 @@
 					'Supprimer': function() {
 						var lDialog = $(this);
 						var lVo = {id:that.mParam.id , fonction:"supprimer"};	
-						$.post(	"./index.php?m=GestionCommande&v=CaisseMarcheCommande","pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=GestionCommande&v=CaisseMarcheCommande","pParam=" + toJsonURIEncode(lVo),
 							function(lVoRetour) {
 								if(lVoRetour) {
 									if(lVoRetour.valid) {

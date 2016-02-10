@@ -5,7 +5,7 @@
 		$.history( {'vue':function() {StockProduitListeFermeVue(pParam);}} );
 		var that = this;
 		var lParam = {fonction:"ListeFerme"};
-		$.post(	"./index.php?m=GestionCommande&v=StockProduit", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionCommande&v=StockProduit", "pParam=" + toJsonURIEncode(lParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

@@ -32,7 +32,7 @@
 			this.mTypeEdition = 0;
 		}
 		
-		$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -198,7 +198,7 @@
 				if(that.mIdMarche > 0) {
 					lVo.idMarche = that.mIdMarche;
 				}
-				$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + $.toJSON(lVo),
+				$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + toJsonURIEncode(lVo),
 						function(lResponse) {
 							Infobulle.init(); // Supprime les erreurs
 							if(lResponse) {
@@ -337,7 +337,7 @@
 		var that = this;
 		pData.find('.btn-ajout-produit').click(function() {
 			var lIdNomProduit = $(this).data('id-nom-produit');
-			$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + $.toJSON({fonction: 'uniteProduit',id: lIdNomProduit}),
+			$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + toJsonURIEncode({fonction: 'uniteProduit',id: lIdNomProduit}),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -708,7 +708,7 @@
 		Infobulle.init(); // Supprime les erreurs
 		if(lVr.valid) {
 			lVo.fonction = "enregistrer";
-			$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse.valid) {
@@ -763,7 +763,7 @@
 					'Supprimer': function() {
 						var lDialog = this;
 						var lVo = {fonction:'supprimer', id:that.mFactureInitiale.facture.id.id};						
-						$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=GestionCommande&v=Facture", "pParam=" + toJsonURIEncode(lVo),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

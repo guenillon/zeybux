@@ -8,7 +8,7 @@
 		$.history( {'vue':function() {CompteAdherentVue(pParam);}} );
 		var that = this;
 		pParam.fonction = 'afficher';
-		$.post(	"./index.php?m=GestionAdherents&v=CompteAdherent", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionAdherents&v=CompteAdherent", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -281,7 +281,7 @@
 					if(lVr.valid) {
 						Infobulle.init(); // Supprime les erreurs
 
-						$.post(	"./index.php?m=GestionAdherents&v=SuppressionAdherent", "pParam=" + $.toJSON(lVo),
+						$.post(	"./index.php?m=GestionAdherents&v=SuppressionAdherent", "pParam=" + toJsonURIEncode(lVo),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {

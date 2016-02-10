@@ -20,7 +20,7 @@
 		this.mParam = pParam;
 		var that = this;
 		pParam.fonction = 'afficher';
-		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -353,7 +353,7 @@
 					'Cloturer': function() {
 						var lParam = {id_marche:that.mIdMarche,fonction:"cloturer"};
 						var lDialog = this;
-						$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+						$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 								function(lResponse) {
 									Infobulle.init(); // Supprime les erreurs
 									if(lResponse) {
@@ -396,7 +396,7 @@
 		pData.find('#btn-pause-com')
 		.click(function() {
 			var lParam = {id_marche:that.mIdMarche,fonction:"pause"};
-			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -429,7 +429,7 @@
 		pData.find('#btn-play-com')
 		.click(function() {
 			var lParam = {id_marche:that.mIdMarche,fonction:"play"};
-			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {
@@ -482,7 +482,7 @@
 	this.dialogModifierProduit = function(pId) {
 		var that = this;
 		var lParam = {fonction:"detailProduitMarche",id:pId};
-		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -1475,7 +1475,7 @@
 					if(lVr.valid) {	
 						Infobulle.init();
 						lVoProduit.fonction = "modifierProduitMarche";
-						$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lVoProduit),
+						$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lVoProduit),
 								function (lResponse) {		
 									if(lResponse) {
 										if(lResponse.valid) {
@@ -1557,7 +1557,7 @@
 	this.supprimerProduit = function(pId) {
 		var that = this;
 		var lParam = {fonction:"supprimerProduitMarche",id:pId};
-		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+		$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -1646,7 +1646,7 @@
 		
 		if(lVR.valid) {
 			lVo.fonction = "modifierInformationMarche";
-			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lVo),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -1716,7 +1716,7 @@
 		var that = this;
 		pData.find("#btn-ajout-produit").click(function() {
 			var lParam = {fonction:"listeFerme"};
-			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 				function (lResponse) {		
 					if(lResponse) {
 						if(lResponse.valid) {
@@ -1761,7 +1761,7 @@
 			$("#prix-stock-produit").replaceWith("<div id=\"prix-stock-produit\"></div>");	
 			if(lId > 0) {
 				var lParam = {fonction:"listeProduit",id:lId};
-				$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+				$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 					function (lResponse) {		
 						if(lResponse) {
 							if(lResponse.valid) {
@@ -1839,7 +1839,7 @@
 			if(lId > 0) {
 				if(!that.mMarche.produits[lId] || !that.mMarche.produitsAbonnement[lId]) {
 					var lParam = {fonction:"listeModeleLot",idNomProduit:lId};
-					$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+					$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 						function (lResponse) {		
 							if(lResponse) {
 								if(lResponse.valid) {
@@ -2085,7 +2085,7 @@
 							if(lVr.valid) {	
 								Infobulle.init();
 								lVoProduit.fonction = "ajouterProduitMarche";
-								$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lVoProduit),
+								$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lVoProduit),
 										function (lResponse) {		
 											if(lResponse) {
 												if(lResponse.valid) {

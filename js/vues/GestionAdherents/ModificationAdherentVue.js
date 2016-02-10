@@ -10,7 +10,7 @@
 		$.history( {'vue':function() {ModificationAdherentVue(pParam);}} );
 		var that = this;
 		pParam.fonction = "afficher";
-		$.post(	"./index.php?m=GestionAdherents&v=ModificationAdherent", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionAdherents&v=ModificationAdherent", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -176,7 +176,7 @@
 		
 		// Sélection du compte adhérent à sélectionner
 		var lVo = {fonction:"listeAdherent"};
-		$.post(	"./index.php?m=GestionAdherents&v=AjoutAdherent", "pParam=" + $.toJSON(lVo),
+		$.post(	"./index.php?m=GestionAdherents&v=AjoutAdherent", "pParam=" + toJsonURIEncode(lVo),
 			function(lResponse) {
 				Infobulle.init(); // Supprime les erreurs
 				if(lResponse) {
@@ -225,7 +225,7 @@
 		var that = this;
 		pData.find('.compte-ligne').click(function() {
 			var lVo = {fonction:"adherentCompte", id:$(this).attr('data-id-compte')};
-			$.post(	"./index.php?m=GestionAdherents&v=ModificationAdherent", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionAdherents&v=ModificationAdherent", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -375,7 +375,7 @@
 			Infobulle.init(); // Supprime les erreurs
 			lVo.fonction = 'modifier';
 			// Ajout de l'adherent
-			$.post(	"./index.php?m=GestionAdherents&v=ModificationAdherent", "pParam=" + $.toJSON(lVo),
+			$.post(	"./index.php?m=GestionAdherents&v=ModificationAdherent", "pParam=" + toJsonURIEncode(lVo),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {

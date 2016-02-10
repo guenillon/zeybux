@@ -6,7 +6,7 @@
 		//this.mParam = pParam;
 		var that = this;
 		pParam.fonction = 'afficher';
-		$.post(	"./index.php?m=GestionCommande&v=ListeReservationMarche", "pParam=" + $.toJSON(pParam),
+		$.post(	"./index.php?m=GestionCommande&v=ListeReservationMarche", "pParam=" + toJsonURIEncode(pParam),
 				function(lResponse) {
 					Infobulle.init(); // Supprime les erreurs
 					if(lResponse) {
@@ -109,7 +109,7 @@
 		pData.find('#btn-export-resa')
 		.click(function() {			
 			var lParam = {fonction:'afficher',id_marche:that.mIdMarche};
-			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + $.toJSON(lParam),
+			$.post(	"./index.php?m=GestionCommande&v=EditerCommande", "pParam=" + toJsonURIEncode(lParam),
 					function(lResponse) {
 						Infobulle.init(); // Supprime les erreurs
 						if(lResponse) {

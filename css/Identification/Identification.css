@@ -115,3 +115,10 @@
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
+.btn-inscription a {
+	display:block;
+	margin-top:30px;
+	width:360px;
+	margin-left:320px;
+}

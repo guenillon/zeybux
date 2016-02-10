@@ -26,6 +26,7 @@ include_once(CHEMIN_CLASSES_SERVICE . "StockService.php" );
 include_once(CHEMIN_CLASSES_SERVICE . "OperationService.php" );
 include_once(CHEMIN_CLASSES_SERVICE . "AbonnementService.php" );
 include_once(CHEMIN_CLASSES_SERVICE . "ReservationService.php");
+include_once(CHEMIN_CLASSES_SERVICE . "AdherentService.php" );
 /**
  * @name MarcheService
  * @author Julien PIERRE
@@ -51,6 +52,7 @@ class MarcheService
 		$lMarche->setDateDebutReservation($pMarche->getDateDebutReservation());
 		$lMarche->setDateFinReservation($pMarche->getDateFinReservation());
 		$lMarche->setArchive($pMarche->getArchive());
+		$lMarche->setDroitNonAdherent($pMarche->getDroitNonAdherent());
 		
 		$lIdMarche = CommandeManager::insert($lMarche);
 		// Le Numéro du marche
@@ -328,6 +330,7 @@ class MarcheService
 		$lMarche->setDateDebutReservation($pMarche->getDateDebutReservation());
 		$lMarche->setDateFinReservation($pMarche->getDateFinReservation());
 		$lMarche->setArchive($pMarche->getArchive());
+		$lMarche->setDroitNonAdherent($pMarche->getDroitNonAdherent());
 		
 		CommandeManager::update($lMarche); // Maj des infos de la commande
 
@@ -487,6 +490,13 @@ class MarcheService
 		$lMarche->setDateDebutReservation($pMarche->getDateDebutReservation());
 		$lMarche->setDateFinReservation($pMarche->getDateFinReservation());
 		
+		$lReservationService = new ReservationService();
+		$lNbReservationNonAdherent = $lReservationService->nbReservationNonAdherent($lIdMarche);
+		// Modification de l'ouverture aux non adhérents uniquement s'il n'y a pas de réservation de non adhérent.
+		if($lNbReservationNonAdherent == 0) { 
+			$lMarche->setDroitNonAdherent($pMarche->getDroitNonAdherent());
+		}
+				
 		CommandeManager::update($lMarche); // Maj des infos de la commande
 		return $lIdMarche;
 	}	
@@ -671,7 +681,7 @@ class MarcheService
 	* @return array(CommandeVO)
 	* @desc Récupères les commandes en cours non réservées par l'adhérent
 	*/
-	public function getNonReserveeParCompte($pIdCompte) {		// TODO les tests	
+	public function getNonReserveeParCompte($pIdCompte) {
 		return CommandeManager::selectNonReserveeParCompte($pIdCompte);
 	}
 	
@@ -681,8 +691,23 @@ class MarcheService
 	* @return array(CommandeVO)
 	* @desc Récupères les commandes en cours sans achat par l'adhérent
 	*/
-	public function getNonAchatParCompte($pIdCompte) {		// TODO les tests	
-		return CommandeManager::selectNonAchatParCompte($pIdCompte);
+	public function getNonAchatParCompte($pIdCompte) {
+		$lAdherentService = new AdherentService();
+		$lAdherents = $lAdherentService->selectByIdCompte($pIdCompte);
+		$lNonAdherent = false;
+		foreach($lAdherents as $lAdherent) {
+			if($lAdherent->getAdhEtat() == 3) {
+				$lNonAdherent = true;
+			}
+		}
+		
+		if($lNonAdherent) {
+			$lRetour = CommandeManager::selectNonAchatParCompte($pIdCompte, array(1));			
+		} else {
+			$lRetour = CommandeManager::selectNonAchatParCompte($pIdCompte);
+		}
+		
+		return $lRetour;
 	}
 	
 	/**
@@ -710,17 +735,7 @@ class MarcheService
 	* @desc Retourne une Commande
 	*/
 	public function select($pId) {
-		// Information du marche
-		/*$lMarche->setId($lDetailMarche[0]->getComId());
-		$lMarche->setNumero($lDetailMarche[0]->getComNumero());
-		$lMarche->setNom($lDetailMarche[0]->getComNom());
-		$lMarche->setDescription($lDetailMarche[0]->getComDescription());
-		$lMarche->setDateMarcheDebut($lDetailMarche[0]->getComDateMarcheDebut());
-		$lMarche->setDateMarcheFin($lDetailMarche[0]->getComDateMarcheFin());
-		$lMarche->setDateDebutReservation($lDetailMarche[0]->getComDateDebutReservation());
-		$lMarche->setDateFinReservation($lDetailMarche[0]->getComDateFinReservation());
-		$lMarche->setArchive($lDetailMarche[0]->getComArchive());*/
-		
+		// Information du marche		
 		$lInfoMarche = $this->getInfoMarche($pId);
 		
 		$lMarche = new MarcheVO();				
@@ -734,6 +749,7 @@ class MarcheService
 		$lMarche->setDateDebutReservation($lInfoMarche->getDateDebutReservation());
 		$lMarche->setDateFinReservation($lInfoMarche->getDateFinReservation());
 		$lMarche->setArchive($lInfoMarche->getArchive());
+		$lMarche->setDroitNonAdherent($lInfoMarche->getDroitNonAdherent());
 
 		$lDetailMarche = DetailMarcheViewManager::select($pId);
 		foreach($lDetailMarche as $lDetail) {
@@ -939,6 +955,21 @@ class MarcheService
 	 */
 	public function getNbAchatMarche($pIdMarche) {
 		return CommandeManager::selectNbAchatMarche($pIdMarche);
+	}
+	
+	/**
+	 * @name getListeAdherentAchatMarche($IdMarche)
+	 * @return array(ListeAchatReservationVO)
+	 * @desc Retourne la liste des adhérents
+	 */
+	public function getListeAdherentAchatMarche($IdMarche) {
+		$lMarche = $this->getInfoMarche($IdMarche);
+		$pType = array(1);
+	
+		if($lMarche->getDroitNonAdherent()) {
+			array_push($pType, 3);
+		}
+		return AdherentManager::selectListeAdherentAchatMarche($IdMarche, $pType);
 	}
 }
 ?>

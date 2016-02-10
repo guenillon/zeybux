@@ -114,6 +114,14 @@ class CommandeCompleteValid
 			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
 			$lVr->getArchive()->addErreur($lErreur);	
 		}
+		if(!isset($pData['droitNonAdherent'])) {
+			$lVr->setValid(false);
+			$lVr->getDroitNonAdherent()->setValid(false);
+			$lErreur = new VRerreur();
+			$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
+			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
+			$lVr->getDroitNonAdherent()->addErreur($lErreur);	
+		}
 		if(!isset($pData['produits'])) {
 			$lVr->setValid(false);
 			$lVr->getLog()->setValid(false);
@@ -285,6 +293,14 @@ class CommandeCompleteValid
 				$lErreur->setMessage(MessagesErreurs::ERR_101_MSG);
 				$lVr->getArchive()->addErreur($lErreur);	
 			}
+			if(!TestFonction::checkLength($pData['droitNonAdherent'],0,1)) {
+				$lVr->setValid(false);
+				$lVr->getDroitNonAdherente()->setValid(false);
+				$lErreur = new VRerreur();
+				$lErreur->setCode(MessagesErreurs::ERR_101_CODE);
+				$lErreur->setMessage(MessagesErreurs::ERR_101_MSG);
+				$lVr->getDroitNonAdherente()->addErreur($lErreur);	
+			}
 			if(!is_array($pData['produits'])) {
 				$lVr->setValid(false);
 				$lVr->getLog()->setValid(false);
@@ -375,6 +391,14 @@ class CommandeCompleteValid
 				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
 				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
 				$lVr->getArchive()->addErreur($lErreur);	
+			}
+			if(empty($pData['droitNonAdherent']) && intval($pData['droitNonAdherent']) != 0) {
+				$lVr->setValid(false);
+				$lVr->getDroitNonAdherent()->setValid(false);
+				$lErreur = new VRerreur();
+				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
+				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
+				$lVr->getDroitNonAdherent()->addErreur($lErreur);	
 			}
 			if(empty($pData['produits']) && empty($pData['produitsAbonnement'])) {
 				$lVr->setValid(false);

@@ -47,11 +47,7 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_ADHERENTS]) || i
 	} else {
 		$lLogger->log("Demande d'accés sans parametre à l'ajout d'adhérent",PEAR_LOG_INFO);	// Maj des logs
 		header('location:./index.php?cx=1');
-	}/*else {		
-		// Chargement de la liste des modules
-		echo $lControleur->getListeModule()->exportToJson();
-		$lLogger->log("Affichage du formulaire d'ajout d'adhérent par : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
-	}*/
+	}
 } else {
 	$lLogger->log("Demande d'accés sans autorisation à l'ajout d'adhérent",PEAR_LOG_INFO);	// Maj des logs
 	header('location:./index.php?cx=1');

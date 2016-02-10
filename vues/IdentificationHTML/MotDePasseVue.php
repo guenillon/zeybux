@@ -27,7 +27,7 @@ $lTemplate->set_filenames( array('page' => 'Page.html') );
 $lTemplate->set_filenames( array('entete' =>  COMMUN_TEMPLATE . 'Entete.html') );
 $lTemplate->assign_vars( array( 'TITRE' => TITRE) );
 InfobullesUtils::generer($lTemplate); // Messages d'erreur
-$lTemplate->assign_var_from_handle('ENTETE', 'entete');	
+
 
 if(isset($_POST['numero']) && isset($_POST['mail'])) {
 	include_once(CHEMIN_CLASSES_CONTROLEURS . MOD_IDENTIFICATION . "/MotDePasseControleur.php");						
@@ -62,6 +62,7 @@ $lTemplate->assign_vars( array(
 		'PROP_MEL' =>	PROP_MEL,
 		'ZEYBUX_TITRE_SITE' =>	ZEYBUX_TITRE_SITE) );
 
+$lTemplate->assign_var_from_handle('ENTETE', 'entete');
 $lTemplate->assign_var_from_handle('PIED_PAGE', 'piedPage');
 
 // Affichage

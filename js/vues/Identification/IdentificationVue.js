@@ -39,7 +39,7 @@
 			var lIdentificationTemplate = new IdentificationTemplate();
 			//$('#formulaire_identification_int').hide().after(lIdentificationTemplate.chargementIdentification);
 			//$('#contenu').replaceWith(lIdentificationTemplate.chargementIdentification);
-			$('.formulaire_identification').toggle();
+			$('.formulaire_identification, .btn-inscription').toggle();
 			$.post(	"./index.php?m=Identification&v=Identification", "pParam=" + toJsonURIEncode(lVo),
 					function(lResponse) {
 					  	Infobulle.init(); // Supprime les erreurs
@@ -53,7 +53,7 @@
 							} else {
 								//alert(lContenu);
 								//$('#contenu').replaceWith(that.affect($(lIdentificationTemplate.formulaireIdentification)));
-								$('.formulaire_identification').toggle();
+								$('.formulaire_identification, .btn-inscription').toggle();
 								Infobulle.generer(lResponse,'');
 							}
 					  	}

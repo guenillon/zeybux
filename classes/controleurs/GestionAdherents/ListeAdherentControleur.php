@@ -25,11 +25,17 @@ class ListeAdherentControleur
 	* @return ListeAdherentResponse
 	* @desc Recherche la liste des adherents
 	*/
-	public function getListeAdherent() {		
+	public function getListeAdherent($pParam) {	
+		if(isset($pParam['type'])) {
+			$lType = $pParam['type'];
+		} else {
+			$lType = array(1);
+		}
+		
 		// Lancement de la recherche
 		$lResponse = new ListeAdherentResponse();
 		$lAdherentService = new AdherentService();
-		$lResponse->setListeAdherent($lAdherentService->getAllResumeSolde());
+		$lResponse->setListeAdherent($lAdherentService->getAllResumeSolde($lType));
 		return $lResponse;
 	}
 }

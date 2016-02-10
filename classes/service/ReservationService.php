@@ -19,6 +19,8 @@ include_once(CHEMIN_CLASSES_VIEW_MANAGER . "ReservationDetailViewManager.php");
 include_once(CHEMIN_CLASSES_VIEW_MANAGER . "DetailMarcheViewManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "HistoriqueStockManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "CommandeManager.php");
+include_once(CHEMIN_CLASSES_SERVICE . "AdherentService.php" );
+include_once(CHEMIN_CLASSES_SERVICE . "MarcheService.php" );
 
 /**
  * @name ReservationService
@@ -37,13 +39,16 @@ class ReservationService
 	public function set($pReservation) {
 		$lReservationValid = new ReservationValid();
 		if($lReservationValid->insert($pReservation)) {
-			$lOperations = $this->selectOperationReservation($pReservation->getId());
-			$lOperation = $lOperations[0];
-			$lIdOperation = $lOperation->getId();
-			if(is_null($lIdOperation) || $lOperation->getTypePaiement() != 0) {
-				return $this->insert($pReservation);			
-			} else if($lReservationValid->update($pReservation)) {
-				return $this->update($pReservation);
+			if($this->reservationCompteAutorise($pReservation->getId()->getIdCompte(), $pReservation->getId()->getIdCommande())) {
+				$lOperations = $this->selectOperationReservation($pReservation->getId());
+				$lOperation = $lOperations[0];
+				$lIdOperation = $lOperation->getId();
+				
+				if(is_null($lIdOperation) || $lOperation->getTypePaiement() != 0) {
+					return $this->insert($pReservation);			
+				} else if($lReservationValid->update($pReservation)) {
+					return $this->update($pReservation);
+				}
 			}
 		}
 		return false;
@@ -241,21 +246,23 @@ class ReservationService
 	* @desc Met à jour une réservation
 	*/
 	public function delete($pIdReservation) {
-		$lReservationsActuelle = $this->get($pIdReservation);
-		$lOperations = $this->selectOperationReservation($pIdReservation);
-		$lOperation = $lOperations[0];
-		$lIdOperation = $lOperation->getId();
-		
-		// Suppression de l'opération
-		$lOperationService = new OperationService();
-		$lOperationService->delete($lIdOperation);
-		
-		$lStockService = new StockService();
-		$lDetailOperationService = new DetailOperationService();
-		foreach($lReservationsActuelle->getDetailReservation() as $lReservationActuelle) {
-			// Suppression du stock et du detail operation
-			$lStockService->delete($lReservationActuelle->getId()->getIdStock());
-			$lDetailOperationService->delete($lReservationActuelle->getId()->getIdDetailOperation());
+		if($this->reservationCompteAutorise($pIdReservation->getIdCompte(), $pIdReservation->getIdCommande())) {
+			$lReservationsActuelle = $this->get($pIdReservation);
+			$lOperations = $this->selectOperationReservation($pIdReservation);
+			$lOperation = $lOperations[0];
+			$lIdOperation = $lOperation->getId();
+			
+			// Suppression de l'opération
+			$lOperationService = new OperationService();
+			$lOperationService->delete($lIdOperation);
+			
+			$lStockService = new StockService();
+			$lDetailOperationService = new DetailOperationService();
+			foreach($lReservationsActuelle->getDetailReservation() as $lReservationActuelle) {
+				// Suppression du stock et du detail operation
+				$lStockService->delete($lReservationActuelle->getId()->getIdStock());
+				$lDetailOperationService->delete($lReservationActuelle->getId()->getIdDetailOperation());
+			}
 		}
 	}
 	
@@ -538,6 +545,57 @@ class ReservationService
 		
 		// Export
 		$lExportService->export($lconfig);
+	}
+	
+	/**
+	 * @name nbReservationNonAdherent($pIdMarche)
+	 * @param integer
+	 * @return array(ReservationDetailViewVO)
+	 * @desc Retourne le nombre de réservations non adhérent positionnées sur le marche
+	 */
+	public function nbReservationNonAdherent($pIdMarche) {
+		$lReservation = OperationManager::selectOperationReservationAdherent($pIdMarche,3);
+		$lFirstId = $lReservation[0]->getId();
+		if(is_null($lFirstId)) {
+			$lNbReservation = 0;
+		} else {
+			$lNbReservation = count($lReservation);
+		}
+			
+		return $lNbReservation;
+	}
+	
+	/**
+	 * @name reservationCompteAutorise($pIdCompte, $pIdMarche)
+	 * @param integer
+	 * @param integer
+	 * @return bool
+	 * @desc Retourne si le compte est autorise à effectuer des réservations sur le marche
+	 */
+	public function reservationCompteAutorise($pIdCompte, $pIdMarche) {
+		$lRetour = false;
+	
+		$lAdherentService = new AdherentService();
+		$lAdherents = $lAdherentService->selectByIdCompte($pIdCompte);
+		$lNonAdherent = false;
+		foreach($lAdherents as $lAdherent) {
+			if($lAdherent->getAdhEtat() == 3) {
+				$lNonAdherent = true;
+			}
+		}
+	
+		if($lNonAdherent) {
+			$lMarcheService = new MarcheService();
+			$lMarche = $lMarcheService->getInfoMarche($pIdMarche);
+				
+			if($lMarche->getDroitNonAdherent() == 1) {
+				$lRetour = true;
+			}
+		} else {
+			$lRetour = true;
+		}
+	
+		return $lRetour;
 	}
 }
 ?>

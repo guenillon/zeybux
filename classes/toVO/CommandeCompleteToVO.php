@@ -41,6 +41,7 @@ class CommandeCompleteToVO
 			&& isset($lJson->dateFinReservation)
 			&& isset($lJson->timeFinReservation)
 			&& isset($lJson->archive)
+			&& isset($lJson->droitNonAdherent)
 			&& isset($lJson->produits)
 			&& isset($lJson->produitsAbonnement);
 
@@ -57,6 +58,7 @@ class CommandeCompleteToVO
 				$lVo->setDateDebutReservation($lJson->dateDebutReservation . " " . $lJson->timeDebutReservation);
 				$lVo->setDateFinReservation($lJson->dateFinReservation . " " . $lJson->timeFinReservation);
 				$lVo->setArchive($lJson->archive);
+				$lVo->setDroitNonAdherent($lJson->droitNonAdherent);
 				foreach($lProduits as $lProduit) {
 					$lVo->addProduits(ProduitCommandeToVO::convertFromArray($lProduit));
 				}
@@ -89,6 +91,7 @@ class CommandeCompleteToVO
 			&& isset($pArray['dateFinReservation'])
 			&& isset($pArray['timeFinReservation'])
 			&& isset($pArray['archive'])
+			&& isset($pArray['droitNonAdherent'])
 			&& isset($pArray['produits'])
 			&& is_array($pArray['produits'])
 			&& isset($pArray['produitsAbonnement'])
@@ -105,6 +108,7 @@ class CommandeCompleteToVO
 			$lVo->setDateDebutReservation($pArray['dateDebutReservation'] . " " . $pArray['timeDebutReservation']);
 			$lVo->setDateFinReservation($pArray['dateFinReservation'] . " " . $pArray['timeFinReservation']);
 			$lVo->setArchive($pArray['archive']);
+			$lVo->setDroitNonAdherent($pArray['droitNonAdherent']);
 			foreach($pArray['produits'] as $lProduit) {
 				$lVo->addProduits(ProduitCommandeToVO::convertFromArray($lProduit));
 			}

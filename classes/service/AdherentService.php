@@ -83,8 +83,11 @@ class AdherentService
 		
 		// Insertion de la première mise à jour
 		$pAdherent->setDateMaj( StringUtils::dateTimeAujourdhuiDb() );
-		// L'adherent n'est pas supprimé
-		$pAdherent->setEtat(1);
+		
+		// Si ce n'est pas une inscription extérieur l'éadhérent est immédiatement actif.
+		if($pAdherent->getEtat() != 3) {
+			$pAdherent->setEtat(1);
+		}
 		
 		// Mise en forme des données
 		$pAdherent->setNom(StringUtils::formaterNom(trim($pAdherent->getNom())));
@@ -206,6 +209,10 @@ class AdherentService
 		$VerifEnvoiMail = TRUE;
 		$VerifEnvoiMail = @mail ($lTo, $lSujet, $lContenu, $lHeaders);
 		
+		$lSessionId = 0;
+		if(isset($_SESSION[ID_CONNEXION])) {
+			$lSessionId = $_SESSION[ID_CONNEXION];
+		}
 		if ($VerifEnvoiMail === FALSE) {
 			$lVr = new TemplateVR();
 			$lVr->setValid(false);
@@ -214,11 +221,11 @@ class AdherentService
 			$lErreur->setCode(MessagesErreurs::ERR_118_CODE);
 			$lErreur->setMessage(MessagesErreurs::ERR_118_MSG);
 			$lVr->getLog()->addErreur($lErreur);
-			$lLogger->log("Erreur d'envoi du mail de création de l'adhérent " . $pAdherent->getNumero() . "par : " . $_SESSION[ID_CONNEXION] . ".",PEAR_LOG_INFO);	// Maj des logs
+			$lLogger->log("Erreur d'envoi du mail de création de l'adhérent " . $pAdherent->getNumero() . "par : " . $lSessionId . ".",PEAR_LOG_INFO);	// Maj des logs
 			$lLogger->log($lVr->export(),PEAR_LOG_INFO);	// Maj des logs
 					
 		} else {
-			$lLogger->log("Envoi du mail de création de l'adhérent " . $pAdherent->getNumero() . "par : " . $_SESSION[ID_CONNEXION] . ".",PEAR_LOG_INFO);	// Maj des logs
+			$lLogger->log("Envoi du mail de création de l'adhérent " . $pAdherent->getNumero() . "par : " . $lSessionId . ".",PEAR_LOG_INFO);	// Maj des logs
 		}
 		
 		return $pAdherent;
@@ -233,42 +240,52 @@ class AdherentService
 	private function update($pAdherent) {
 		$lAdherentActuel = AdherentManager::select($pAdherent->getId());
 		
-		// Si pas de liaison création d'un nouveau compte
-		if($pAdherent->getIdCompte() == 0) {
-			// Création d'un nouveau compte
-			$lCompte = new CompteVO();
+		if($lAdherentActuel->getEtat() == 3) {// Non adhérent pas de modification de compte
+			$pAdherent->setIdCompte($lAdherentActuel->getIdCompte());
+		} else {
+			// Positionnement sur un nouveau compte uniquement s'il s'agit d'un compte adhérent
 			$lCompteService = new CompteService();
-			$lCompte = $lCompteService->set($lCompte);
-			$pAdherent->setIdCompte($lCompte->getId()); // Laision avec l'adhérent
-			$lCompte->setIdAdherentPrincipal($pAdherent->getId()); // Positionnement de l'adhérent en adhérent principal du compte
-			$lCompteService->set($lCompte);
-		} else if($pAdherent->getIdCompte() != $lAdherentActuel->getIdCompte()){ // Liaison avec un autre compte
-			$lAdhesionService = new AdhesionService();
-			// Suppression des adhésions actuelles
-			$lAdhesionService->deleteAdhesionAdherentByIdAdherent($pAdherent->getId());
-
-			// Les adhérents du compte
-			$lListeAdherent = $this->selectActifByIdCompte($pAdherent->getIdCompte());
-			// Le premier adhérent
-			$lAdherent = $lListeAdherent[0];
-
-			// Les adhésions sur le premier adhérent
-			$lAdhesions = $lAdhesionService->getAdhesionSurAdherent($lAdherent->getId());
-				
-			// Positionne les mêmes adhésions si elles existent
-			foreach($lAdhesions as $lAdhesion) {
-				$lAdhesionAdherentDetail = $lAdhesionService->getAdhesionAdherent($lAdhesion->getAdadId());
-				if($lAdhesionAdherentDetail) {
-					$lAdhesionAdherent = $lAdhesionAdherentDetail->getAdhesionAdherent();
-					
-					$lTypeAdhesion = $lAdhesionService->getTypeAdhesion($lAdhesionAdherent->getIdTypeAdhesion());
-					
-					if($lTypeAdhesion->getIdPerimetre() == 2) { // Si type d'adhésion sur périmètre compte
-						$lAdhesionAdherent->setId('');
-						$lAdhesionAdherent->setIdAdherent($pAdherent->getId());
-						$lAdhesionService->setAdhesionAdherent($lAdhesionAdherent);
+			$lAdherentNouveauCompte = $lCompteService->getAdherentCompte($pAdherent->getIdCompte());
+			if($lAdherentNouveauCompte[0]->getEtat() == 1 ||  is_null($lAdherentNouveauCompte[0]->getEtat())) {
+				// Si pas de liaison création d'un nouveau compte
+				if($pAdherent->getIdCompte() == 0) {
+					// Création d'un nouveau compte
+					$lCompte = new CompteVO();
+					$lCompte = $lCompteService->set($lCompte);
+					$pAdherent->setIdCompte($lCompte->getId()); // Laision avec l'adhérent
+					$lCompte->setIdAdherentPrincipal($pAdherent->getId()); // Positionnement de l'adhérent en adhérent principal du compte
+					$lCompteService->set($lCompte);
+				} else if($pAdherent->getIdCompte() != $lAdherentActuel->getIdCompte()){ // Liaison avec un autre compte
+					$lAdhesionService = new AdhesionService();
+					// Suppression des adhésions actuelles
+					$lAdhesionService->deleteAdhesionAdherentByIdAdherent($pAdherent->getId());
+		
+					// Les adhérents du compte
+					$lListeAdherent = $this->selectActifByIdCompte($pAdherent->getIdCompte());
+					// Le premier adhérent
+					$lAdherent = $lListeAdherent[0];
+		
+					// Les adhésions sur le premier adhérent
+					$lAdhesions = $lAdhesionService->getAdhesionSurAdherent($lAdherent->getId());
+						
+					// Positionne les mêmes adhésions si elles existent
+					foreach($lAdhesions as $lAdhesion) {
+						$lAdhesionAdherentDetail = $lAdhesionService->getAdhesionAdherent($lAdhesion->getAdadId());
+						if($lAdhesionAdherentDetail) {
+							$lAdhesionAdherent = $lAdhesionAdherentDetail->getAdhesionAdherent();
+							
+							$lTypeAdhesion = $lAdhesionService->getTypeAdhesion($lAdhesionAdherent->getIdTypeAdhesion());
+							
+							if($lTypeAdhesion->getIdPerimetre() == 2) { // Si type d'adhésion sur périmètre compte
+								$lAdhesionAdherent->setId('');
+								$lAdhesionAdherent->setIdAdherent($pAdherent->getId());
+								$lAdhesionService->setAdhesionAdherent($lAdhesionAdherent);
+							}
+						}
 					}
 				}
+			} else { // Sinon on reste sur le compte actuel
+				$pAdherent->setIdCompte($lAdherentActuel->getIdCompte());
 			}
 		}
 				
@@ -279,7 +296,9 @@ class AdherentService
 		$pAdherent->setNumero($lAdherentActuel->getNumero());
 		
 		// L'adherent n'est pas supprimé
-		$pAdherent->setEtat(1);
+		if(empty($pAdherent->getEtat())) {
+			$pAdherent->setEtat($lAdherentActuel->getEtat());
+		}
 		
 		// Mise en forme des données
 		$pAdherent->setNom(StringUtils::formaterNom(trim($pAdherent->getNom())));
@@ -307,58 +326,60 @@ class AdherentService
 		// Maj de l'adherent dans la BDD
 		$lRetour = AdherentManager::update( $pAdherent );
 			
-		// Récupération des autorisations acutelles
-		$lAutorisationsActuelles = AutorisationManager::selectByIdAdherent( $pAdherent->getId() );
-		
-		$lModuleService = new ModuleService();
-		$lModulesDefaut = $lModuleService->selectAllDefautVisible();
-		$lIdModuleDefaut = array();
-		foreach($lModulesDefaut as $lModule) {
-			array_push($lIdModuleDefaut, $lModule->getId());
-		}
-				
-		// Suppression des autorisations
-		$lIdSuppAutorisation = array();
-		foreach($lAutorisationsActuelles as $lAutorisationActu) {
-			// Suppression si ce n'est pas un module par defaut
-			if(!in_array($lAutorisationActu->getIdModule(),$lIdModuleDefaut)) {
-				$lSupp = true;
-				foreach( $pAdherent->getListeModule() as $lIdModule) {
-					if($lAutorisationActu->getIdModule() == $lIdModule)	{
-						$lSupp = false;
+		if($lAdherentActuel->getEtat() != 3) {
+			// Récupération des autorisations acutelles
+			$lAutorisationsActuelles = AutorisationManager::selectByIdAdherent( $pAdherent->getId() );
+			
+			$lModuleService = new ModuleService();
+			$lModulesDefaut = $lModuleService->selectAllDefautVisible();
+			$lIdModuleDefaut = array();
+			foreach($lModulesDefaut as $lModule) {
+				array_push($lIdModuleDefaut, $lModule->getId());
+			}
+					
+			// Suppression des autorisations
+			$lIdSuppAutorisation = array();
+			foreach($lAutorisationsActuelles as $lAutorisationActu) {
+				// Suppression si ce n'est pas un module par defaut
+				if(!in_array($lAutorisationActu->getIdModule(),$lIdModuleDefaut)) {
+					$lSupp = true;
+					foreach( $pAdherent->getListeModule() as $lIdModule) {
+						if($lAutorisationActu->getIdModule() == $lIdModule)	{
+							$lSupp = false;
+						}
+					}
+					if($lSupp) {
+						array_push($lIdSuppAutorisation,$lAutorisationActu->getId());
 					}
 				}
-				if($lSupp) {
-					array_push($lIdSuppAutorisation,$lAutorisationActu->getId());
-				}
 			}
-		}
-		if(!empty($lIdSuppAutorisation)) {
-			AutorisationManager::deleteByArray($lIdSuppAutorisation);
-		}	
-		
-		// Ajout des nouvelles autorisations du compte
-		$lAutorisations = array();
-		foreach( $pAdherent->getListeModule() as $lIdModule) {
-			$lAjout = true;
-			foreach($lAutorisationsActuelles as $lAutorisationActu) {
-				if($lAutorisationActu->getIdModule() == $lIdModule)	{
-					$lAjout = false;
-				}
-			}
-		
-			if($lAjout) {
-				$lAutorisation = new AutorisationVO();
-				$lAutorisation->setIdAdherent($pAdherent->getId());
-				$lAutorisation->setIdModule($lIdModule);
-				
-				array_push($lAutorisations,$lAutorisation);
-			}
-		}
-		if(!empty($lAutorisations)) {
-			AutorisationManager::insertByArray($lAutorisations);
-		}
+			if(!empty($lIdSuppAutorisation)) {
+				AutorisationManager::deleteByArray($lIdSuppAutorisation);
+			}	
 			
+			// Ajout des nouvelles autorisations du compte
+			$lAutorisations = array();
+			foreach( $pAdherent->getListeModule() as $lIdModule) {
+				$lAjout = true;
+				foreach($lAutorisationsActuelles as $lAutorisationActu) {
+					if($lAutorisationActu->getIdModule() == $lIdModule)	{
+						$lAjout = false;
+					}
+				}
+			
+				if($lAjout) {
+					$lAutorisation = new AutorisationVO();
+					$lAutorisation->setIdAdherent($pAdherent->getId());
+					$lAutorisation->setIdModule($lIdModule);
+					
+					array_push($lAutorisations,$lAutorisation);
+				}
+			}
+			if(!empty($lAutorisations)) {
+				AutorisationManager::insertByArray($lAutorisations);
+			}
+		}
+
 		//Mise à jour des inscriptions de mailing liste
 		$lMailingListeService = new MailingListeService();
 		
@@ -547,21 +568,27 @@ class AdherentService
 	}
 	
 	/**
-	* @name getAllResumeSolde()
+	* @name getAllResumeSolde($pType)
 	* @return array(ListeAdherentViewVO)
 	* @desc Retourne la liste des adhérents
 	*/
-	public function getAllResumeSolde() {
-		return ListeAdherentViewManager::selectAll();
+	public function getAllResumeSolde($pType = null) {
+		if(is_null($pType)) {
+			$pType = array(1);
+		}
+		return ListeAdherentViewManager::selectAll($pType);
 	}
 	
 	/**
-	 * @name getAllResumeSansSolde()
+	 * @name getAllResumeSansSolde($pType)
 	 * @return array(ListeAdherentViewVO)
 	 * @desc Retourne la liste des adhérents
 	 */
-	public function getAllResumeSansSolde() {
-		return ListeAdherentViewManager::selectAll(true);
+	public function getAllResumeSansSolde($pType = null) {
+		if(is_null($pType)) {
+			$pType = array(1);
+		}
+		return ListeAdherentViewManager::selectAll($pType, true);
 	}
 	
 	/**
@@ -581,7 +608,7 @@ class AdherentService
 	public function estActif($pId) {
 		$lAdherent = $this->get($pId);
 		if($lAdherent !== FALSE) {
-			return $lAdherent->getAdhEtat() == 1;
+			return $lAdherent->getAdhEtat() == 1 || $lAdherent->getAdhEtat() == 3;
 		}
 		return false;
 	}
@@ -593,6 +620,16 @@ class AdherentService
 	 */
 	public function selectActifByIdCompte($pIdCompte) {
 		return AdherentManager::selectActifByIdCompte($pIdCompte);
+	}
+	
+	/**
+	 * @name selectInfo($pId)
+	 * @param int(11)
+	 * @return AdherentVO
+	 * @desc Retourne un AdherentVO simple
+	 */
+	public function selectInfo($pId) {
+		return AdherentManager::select($pId);
 	}
 }
 ?>

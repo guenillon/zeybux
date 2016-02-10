@@ -308,11 +308,12 @@ class AdhesionService
 		
 		// L'adhésion
 		$pAdhesionAdherent->getAdhesionAdherent()->setIdOperation($lIdOperation);
+		$lAdherentService = new AdherentService();
 		
 		if($lTypeAdhesion->getIdPerimetre() == 1) { // Périmètre Adhérent	
 			$lIdAdhesionAdherent = AdhesionAdherentManager::insert($pAdhesionAdherent->getAdhesionAdherent());
 		} else if($lTypeAdhesion->getIdPerimetre() == 2) { // Périmètre Compte
-			$lAdherentService = new AdherentService();
+			
 			// Récupérer les adhérents du compte
 			$lAdherent = $lAdherentService->get($pAdhesionAdherent->getAdhesionAdherent()->getIdAdherent());
 			$lListeAdherent = $lAdherentService->selectActifByIdCompte($lAdherent->getAdhIdCompte());
@@ -332,6 +333,13 @@ class AdhesionService
 				$pAdhesionAdherent->getAdhesionAdherent()->setIdAdherent($lAdh->getId());
 				$lIdAdhesionAdherent = AdhesionAdherentManager::insert($pAdhesionAdherent->getAdhesionAdherent());
 			}
+		}		
+		
+		//Si non adhérent changement à l'état adhérent
+		$lAdherent = $lAdherentService->selectInfo($pAdhesionAdherent->getAdhesionAdherent()->getIdAdherent());
+		if($lAdherent->getEtat() == 3) {
+			$lAdherent->setEtat(1);
+			$lAdherentService->set($lAdherent);
 		}		
 
 		return $lIdAdhesionAdherent;

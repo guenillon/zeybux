@@ -39,7 +39,7 @@ include_once(CHEMIN_CLASSES_SERVICE . "FermeService.php" );
 include_once(CHEMIN_CLASSES_RESPONSE . MOD_GESTION_COMMANDE . "/AutorisationSupprimerLotResponse.php" );
 include_once(CHEMIN_CLASSES_VO . "LotAbonnementMarcheVO.php" );
 include_once(CHEMIN_CLASSES_VO . "DetailMarcheReservationVO.php" );
-
+include_once(CHEMIN_CLASSES_RESPONSE . MOD_GESTION_COMMANDE . "/NbReservationResponse.php" );
 
 /**
  * @name EditerCommandeControleur
@@ -128,6 +128,7 @@ class EditerCommandeControleur
 			$lMarche->setDateMarcheFin($pParam['dateMarcheFin'] . " " . $pParam['timeMarcheFin']);
 			$lMarche->setDateDebutReservation($pParam['dateDebutReservation'] . " " . $pParam['timeDebutReservation']);
 			$lMarche->setDateFinReservation($pParam['dateFinReservation'] . " " . $pParam['timeFinReservation']);
+			$lMarche->setDroitNonAdherent($pParam['droitNonAdherent']);
 			
 			$lMarcheService = new MarcheService();
 			$lMarcheService->updateInformation($lMarche);
@@ -300,5 +301,22 @@ class EditerCommandeControleur
 		return $lVr;
 	}
 	
+  /**
+	* @name nbResaNonAdherent($pParam)
+	* @return DetailProduitResponse
+	* @desc Retourne les Modèles de lot d'un produit
+	*/
+	public function nbResaNonAdherent($pParam) {		
+		$lVr = EditerCommandeValid::validGetInfoCommande($pParam);
+		if($lVr->getValid()) {
+			$lId = $pParam['id_marche'];
+			$lReservationService = new ReservationService();
+			
+			$lResponse = new NbReservationResponse();
+			$lResponse->setNb($lReservationService->nbReservationNonAdherent($lId));
+			return $lResponse;
+		}		
+		return $lVr;
+	}
 }
 ?>

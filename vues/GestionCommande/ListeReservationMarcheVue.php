@@ -20,7 +20,7 @@ if( isset($_SESSION[DROIT_ID]) && ( isset($_SESSION[MOD_GESTION_COMMANDE]) || is
 			
 			switch($lParam["fonction"]) {				
 				case "afficher":
-						echo $lControleur->getListeAdherent()->exportToJson();
+						echo $lControleur->getListeAdherent($lParam)->exportToJson();
 						$lLogger->log("Affichage de la vue ListeReservationMarche par le compte de l'Adhérent : " . $_SESSION[ID_CONNEXION],PEAR_LOG_INFO);	// Maj des logs
 					break;
 

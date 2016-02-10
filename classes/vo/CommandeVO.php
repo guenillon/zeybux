@@ -73,6 +73,12 @@ class CommandeVO  extends DataTemplate
 	protected $mArchive;
 
 	/**
+	* @var tinyint(1)
+	* @desc DroitNonAdherent de la CommandeVO
+	*/
+	protected $mDroitNonAdherent;
+
+	/**
 	* @name getId()
 	* @return int(11)
 	* @desc Renvoie le membre Id de la CommandeVO
@@ -232,6 +238,24 @@ class CommandeVO  extends DataTemplate
 	*/
 	public function setArchive($pArchive) {
 		$this->mArchive = $pArchive;
+	}
+
+	/**
+	* @name getDroitNonAdherent()
+	* @return tinyint(1)
+	* @desc Renvoie le membre DroitNonAdherent de la CommandeVO
+	*/
+	public function getDroitNonAdherent() {
+		return $this->mDroitNonAdherent;
+	}
+
+	/**
+	* @name setDroitNonAdherent($pDroitNonAdherent)
+	* @param tinyint(1)
+	* @desc Remplace le membre DroitNonAdherent de la CommandeVO par $pDroitNonAdherent
+	*/
+	public function setDroitNonAdherent($pDroitNonAdherent) {
+		$this->mDroitNonAdherent = $pDroitNonAdherent;
 	}
 
 }

@@ -22,7 +22,6 @@
 							that.mIdAdherent = pParam.id;
 							that.mIdCompte = lResponse.adherent.adhIdCompte;
 							that.mAdherentCompte[lResponse.adherent.adhIdCompte] = lResponse.adherentCompte;
-							//that.mIdAncienAdherentPrincipal = lResponse.adherent.cptIdAdherentPrincipal;
 							that.afficher(lResponse);
 						} else {
 							Infobulle.generer(lResponse,'');
@@ -61,15 +60,21 @@
 				}
 			});
 		});		
-		
 
-		
-		
 		lData.formCompte = lGestionAdherentsTemplate.formulaireCompteModificationAdherent.template(lData);
-		lData.autorisation = lGestionAdherentsTemplate.formulaireAutorisationAdherent.template(lData);		
+		
+		if(this.mAdherent.adhEtat == 1) {
+			lData.autorisation = lGestionAdherentsTemplate.formulaireAutorisationAdherent.template(lData);		
+		}
+		
 		var lTemplate = lGestionAdherentsTemplate.formulaireAjoutAdherent;
 		
-		$('#contenu').replaceWith(that.affect($(lTemplate.template(lData))));
+		var lHtml = $(lTemplate.template(lData));
+		if(this.mAdherent.adhEtat == 3) {
+			lHtml.find('#ligne-adherent-principal, #ligne-adherent-compte').hide();
+		}
+		
+		$('#contenu').replaceWith(that.affect(lHtml));
 	};
 	
 	this.affect = function(pData) {

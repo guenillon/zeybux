@@ -12,12 +12,14 @@
 // Inclusion des classes
 include_once(CHEMIN_CLASSES_RESPONSE . MOD_GESTION_COMMANDE . "/ListeAdherentResponse.php" );
 include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_GESTION_COMMANDE . "/ExportListeReservationValid.php" );
+include_once(CHEMIN_CLASSES_VALIDATEUR . MOD_GESTION_COMMANDE . "/EditerCommandeValid.php" );
 include_once(CHEMIN_CLASSES_UTILS . "CSV.php");
 require_once(CHEMIN_CLASSES_PDF . 'html2pdf.class.php');
 include_once(CHEMIN_CLASSES_MANAGERS . "NomProduitManager.php");
 include_once(CHEMIN_CLASSES_MANAGERS . "DetailCommandeManager.php");
 include_once(CHEMIN_CLASSES_SERVICE . "AdherentService.php");
 include_once(CHEMIN_CLASSES_SERVICE . "ReservationService.php");
+include_once(CHEMIN_CLASSES_SERVICE . "MarcheService.php");
 
 /**
  * @name ListeReservationMarcheControleur
@@ -32,11 +34,23 @@ class ListeReservationMarcheControleur
 	* @return ListeAdherentResponse
 	* @desc Recherche la liste des adherents
 	*/
-	public function getListeAdherent() {
-		$lResponse = new ListeAdherentResponse();
-		$lAdherentService = new AdherentService();
-		$lResponse->setListeAdherent($lAdherentService->getAllResumeSansSolde());
-		return $lResponse;
+	public function getListeAdherent($pParam) {
+		$lVr = EditerCommandeValid::validGetInfoCommande($pParam);
+		if($lVr->getValid()) {
+			$lMarcheService = new MarcheService();
+			$lMarche = $lMarcheService->getInfoMarche($pParam['id_marche']);
+			
+			$lTypeAdherent = array(1); // Si ouvert aux non adhérents ils doivent être dans la liste
+			if($lMarche->getDroitNonAdherent() == 1) {
+				array_push($lTypeAdherent, 3);
+			}
+					
+			$lAdherentService = new AdherentService();
+			$lResponse = new ListeAdherentResponse();
+			$lResponse->setListeAdherent($lAdherentService->getAllResumeSansSolde($lTypeAdherent));
+			return $lResponse;
+		}				
+		return $lVr;
 	}
 
 	/**

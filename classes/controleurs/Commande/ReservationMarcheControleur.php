@@ -76,22 +76,27 @@ class ReservationMarcheControleur
 
 		$lVr = ReservationMarcheValid::validGetReservation($pParam);
 		if($lVr->getValid()) {
-		
-			$lResponse = new ReservationMarcheResponse();
-			$lMarcheService = new MarcheService();
-			$lResponse->setMarche($lMarcheService->get($pParam["id_commande"]));
-			$lResponse->setAdherent(AdherentViewManager::select($_SESSION[DROIT_ID]));
-			
-			// Ajoute la réservation si elle existe
+
 			$lReservationService = new ReservationService();
-			$lIdReservation = new IdReservationVO();
-			$lIdReservation->setIdCompte($_SESSION[ID_COMPTE]);
-			$lIdReservation->setIdCommande($pParam["id_commande"]);
-			if($lReservationService->enCours($lIdReservation)) {
-				$lResponse->setReservation($lReservationService->get($lIdReservation)->getDetailReservation());			
-			}
+			$lAutorisation = $lReservationService->reservationCompteAutorise($pParam['idCompte'], $pParam["id_commande"]);
 			
-			return $lResponse;
+			if($lAutorisation) {
+				$lMarcheService = new MarcheService();
+				$lResponse = new ReservationMarcheResponse();
+				$lResponse->setMarche($lMarcheService->get($pParam["id_commande"]));
+				$lResponse->setAdherent(AdherentViewManager::select($_SESSION[DROIT_ID]));
+				
+				// Ajoute la réservation si elle existe
+				
+				$lIdReservation = new IdReservationVO();
+				$lIdReservation->setIdCompte($_SESSION[ID_COMPTE]);
+				$lIdReservation->setIdCommande($pParam["id_commande"]);
+				if($lReservationService->enCours($lIdReservation)) {
+					$lResponse->setReservation($lReservationService->get($lIdReservation)->getDetailReservation());			
+				}
+				
+				return $lResponse;
+			}
 		}				
 		return $lVr;
 	}
@@ -107,7 +112,7 @@ class ReservationMarcheControleur
 		$lVr = ReservationMarcheValid::validUpdate($pParam);
 		if($lVr->getValid()) {
 			$lReservationService = new ReservationService();
-			
+
 			$lIdLot = $pParam["detailReservation"][0]["stoIdDetailCommande"];
 			$lDetailMarche = DetailMarcheViewManager::selectByLot($lIdLot);
 	
@@ -156,6 +161,7 @@ class ReservationMarcheControleur
 				$lReservation->addDetailReservation($lReservationAbo);
 			}
 			$lIdOperation = $lReservationService->set($lReservation);
+
 		}				
 		return $lVr;
 	}

@@ -41,14 +41,19 @@ class MailingListeService
 			// Initialisation du Logger
 			$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 			$lLogger->setMask(Log::MAX(LOG_LEVEL));
-			$conn = new Api(    APPLICATION_KEY,
-					APPLICATION_SECRET,
-					ENDPOINT,
-					CONSUMER_KEY);
-			$content = (object) array('email' => $pMail);
-			$servers = $conn->post('/email/domain/' . MAIL_MAILING_LISTE_DOMAIN . '/mailingList/' . MAIL_MAILING_LISTE . '/subscriber', $content);
-
-			$lLogger->log("Ajout à la mailing liste : " . $pMail . ".",PEAR_LOG_INFO);	// Maj des logs
+			try {
+				$conn = new Api(    APPLICATION_KEY,
+						APPLICATION_SECRET,
+						ENDPOINT,
+						CONSUMER_KEY);
+				$content = (object) array('email' => $pMail);
+				$servers = $conn->post('/email/domain/' . MAIL_MAILING_LISTE_DOMAIN . '/mailingList/' . MAIL_MAILING_LISTE . '/subscriber', $content);
+	
+				$lLogger->log("Ajout à la mailing liste : " . $pMail . ".",PEAR_LOG_INFO);	// Maj des logs
+			} catch (Exception $e) {
+				$lLogger->log("Erreur ajout à la mailing liste : " . $pMail . ".",PEAR_LOG_INFO);	// Maj des logs
+				$lLogger->log($e->getMessage(),PEAR_LOG_DEBUG);	// Maj des logs
+			}
 			
 		}
 		return $lVr;
@@ -67,14 +72,18 @@ class MailingListeService
 			// Initialisation du Logger
 			$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 			$lLogger->setMask(Log::MAX(LOG_LEVEL));
-						
-			$conn = new Api(    APPLICATION_KEY,
-					APPLICATION_SECRET,
-					ENDPOINT,
-					CONSUMER_KEY);
-			$servers = $conn->delete('/email/domain/' . MAIL_MAILING_LISTE_DOMAIN . '/mailingList/' . MAIL_MAILING_LISTE . '/subscriber/' . $pMail);
-			
-			$lLogger->log("Suppression de la mailing liste : " . $pMail . ".",PEAR_LOG_INFO);	// Maj des logs
+			try {			
+				$conn = new Api(    APPLICATION_KEY,
+						APPLICATION_SECRET,
+						ENDPOINT,
+						CONSUMER_KEY);
+				$servers = $conn->delete('/email/domain/' . MAIL_MAILING_LISTE_DOMAIN . '/mailingList/' . MAIL_MAILING_LISTE . '/subscriber/' . $pMail);
+				
+				$lLogger->log("Suppression de la mailing liste : " . $pMail . ".",PEAR_LOG_INFO);	// Maj des logs
+			} catch (Exception $e) {
+				$lLogger->log("Erreur suppression de la mailing liste : " . $pMail . ".",PEAR_LOG_INFO);	// Maj des logs
+				$lLogger->log($e->getMessage(),PEAR_LOG_DEBUG);	// Maj des logs
+			}
 		}
 		return $lVr;
 	}

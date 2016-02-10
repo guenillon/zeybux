@@ -14,6 +14,7 @@
 	this.dateFinReservation = new VRelement();
 	this.timeFinReservation = new VRelement();
 	this.archive = new VRelement();
+	this.droitNonAdherent = new VRelement();
 	this.produits = new Array();
 	this.produitsAbonnement = new Array();
 }

@@ -41,6 +41,11 @@
 				ListeAdherentVue();
 				return false;
 			});	
+			
+			pData.find('#menu-GestionAdherents-ListeNonAdherent').click(function() {
+				ListeAdherentVue({type:[3]});
+				return false;
+			});	
 						
 			pData.find('#menu-GestionCommande-ListeCommande').click(function() {
 				GestionListeCommandeVue();

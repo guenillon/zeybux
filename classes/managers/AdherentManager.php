@@ -194,33 +194,69 @@ class AdherentManager
 	 * @param integer
 	 * @desc Récupère la liste des adhérents actifs avec l'opération d'achat et les adhérents inactif si ils ont un achat
 	 */
-	public static function selectListeAdherentAchatMarche($pIdMarche) {
+	public static function selectListeAdherentAchatMarche($pIdMarche, $pType) {
 		// Initialisation du Logger
 		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 		$lLogger->setMask(Log::MAX(LOG_LEVEL));
-		$lRequete = "SELECT "
-				. AdherentManager::CHAMP_ADHERENT_ID .
-				"," . AdherentManager::CHAMP_ADHERENT_NUMERO .
-				"," . AdherentManager::CHAMP_ADHERENT_ID_COMPTE .
-				"," . CompteManager::CHAMP_COMPTE_LABEL . 
-				"," . AdherentManager::CHAMP_ADHERENT_NOM .
-				"," . AdherentManager::CHAMP_ADHERENT_PRENOM .
-				"," . OperationManager::CHAMP_OPERATION_ID . "
-			 FROM " . AdherentManager::TABLE_ADHERENT . "
-			 JOIN " . CompteManager::TABLE_COMPTE . " ON " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "
-			 LEFT JOIN (
-			 	SELECT " 
-			 		. OperationManager::CHAMP_OPERATION_ID .
-			 		"," . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
-			 	FROM " . OperationManager::TABLE_OPERATION . " 
-			 	JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
-			 		ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
-			 		AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser( $pIdMarche ) . "'
-					AND " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
-				WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " in (7,8) 
-			) AS ope
-			 	ON ope." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . "
-			 GROUP BY " . AdherentManager::CHAMP_ADHERENT_ID . ";";
+		$lRequete = "
+			 SELECT "
+						. AdherentManager::CHAMP_ADHERENT_ID .
+					"," . AdherentManager::CHAMP_ADHERENT_NUMERO .
+					"," . AdherentManager::CHAMP_ADHERENT_ID_COMPTE .
+					"," . CompteManager::CHAMP_COMPTE_LABEL . 
+					"," . AdherentManager::CHAMP_ADHERENT_NOM .
+					"," . AdherentManager::CHAMP_ADHERENT_PRENOM .
+					"," . OperationManager::CHAMP_OPERATION_ID . "
+				 FROM 	
+			((
+				 SELECT "
+						. AdherentManager::CHAMP_ADHERENT_ID .
+					"," . AdherentManager::CHAMP_ADHERENT_NUMERO .
+					"," . AdherentManager::CHAMP_ADHERENT_ID_COMPTE .
+					"," . AdherentManager::CHAMP_ADHERENT_NOM .
+					"," . AdherentManager::CHAMP_ADHERENT_PRENOM . "
+				 FROM " . AdherentManager::TABLE_ADHERENT . "
+				 
+				 WHERE " . AdherentManager::CHAMP_ADHERENT_ETAT . " in ( '" .  str_replace(",", "','", StringUtils::securiser( implode(",", $pType) ) ) . "')	
+			 ) UNION (
+				 SELECT "
+						. AdherentManager::CHAMP_ADHERENT_ID .
+					"," . AdherentManager::CHAMP_ADHERENT_NUMERO .
+					"," . AdherentManager::CHAMP_ADHERENT_ID_COMPTE .
+					"," . AdherentManager::CHAMP_ADHERENT_NOM .
+					"," . AdherentManager::CHAMP_ADHERENT_PRENOM . "
+				 FROM " . AdherentManager::TABLE_ADHERENT . "
+				 LEFT JOIN (
+				 	SELECT " 
+				 		. OperationManager::CHAMP_OPERATION_ID .
+				 		"," . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+				 	FROM " . OperationManager::TABLE_OPERATION . " 
+				 	JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				 		ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
+				 		AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser( $pIdMarche ) . "'
+						AND " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+					WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " in (7,8) 
+				) AS ope
+				 	ON ope." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . "
+				WHERE " . OperationManager::CHAMP_OPERATION_ID . " IS NOT NULL
+			 			
+			 ) )a
+				 			
+			JOIN " . CompteManager::TABLE_COMPTE . " ON a." . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . " = " . CompteManager::CHAMP_COMPTE_ID . "	 		
+			LEFT JOIN (
+				 	SELECT " 
+				 		. OperationManager::CHAMP_OPERATION_ID .
+				 		"," . OperationManager::CHAMP_OPERATION_ID_COMPTE . "
+				 	FROM " . OperationManager::TABLE_OPERATION . " 
+				 	JOIN " . OperationChampComplementaireManager::TABLE_OPERATIONCHAMPCOMPLEMENTAIRE . "
+				 		ON " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_CHCP_ID . " = 1
+				 		AND " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR . " = '" . StringUtils::securiser( $pIdMarche ) . "'
+						AND " . OperationManager::CHAMP_OPERATION_ID . " = " . OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID . "
+					WHERE " . OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT . " in (7,8) 
+				) AS ope
+				 	ON ope." . OperationManager::CHAMP_OPERATION_ID_COMPTE . " = " . AdherentManager::CHAMP_ADHERENT_ID_COMPTE . "	
+				 			
+			GROUP BY " . AdherentManager::CHAMP_ADHERENT_ID . ";";
 			
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
@@ -268,8 +304,8 @@ class AdherentManager
 	public static function selectActifByIdCompte($pId) {
 		return AdherentManager::rechercheAdherent(
 				array(AdherentManager::CHAMP_ADHERENT_ID_COMPTE, AdherentManager::CHAMP_ADHERENT_ETAT),
-				array('=','='),
-				array($pId,1),
+				array('=','in'),
+				array($pId,array(1,3)),
 				array(AdherentManager::CHAMP_ADHERENT_NUMERO),
 				array('ASC'));
 	}
@@ -324,7 +360,7 @@ class AdherentManager
 				  	WHERE " . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ETAT . " = 0
 				  ) ads
 				 	ON " . AdherentManager::CHAMP_ADHERENT_ID . " = ads." . AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_ADHERENT . "
-				 WHERE " . AdherentManager::CHAMP_ADHERENT_ETAT . " = 1 
+				 WHERE " . AdherentManager::CHAMP_ADHERENT_ETAT . " in( 1, 3) 
 			 ) UNION ( 
 			 	SELECT "
 					. AdherentManager::CHAMP_ADHERENT_ID .
@@ -683,7 +719,7 @@ class AdherentManager
 	 * @return ListeAchatEtReservationExportVO
 	 * @desc Récupèrer les achats et réservations pour une liste de produit
 	 */
-	public static function rechercheAchatEtReservation( $pIdProduits ) {
+	public static function rechercheAchatEtReservation( $pIdProduits, $pType ) {
 		// Initialisation du Logger
 		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 		$lLogger->setMask(Log::MAX(LOG_LEVEL));
@@ -699,7 +735,7 @@ class AdherentManager
 		} else {
 			$lIdProduit = " in ( '" . $pIdProduits . "' )";
 		}
-		
+				
 		// Préparation de la requète
 		$lRequete = "SELECT "
 					. ProduitManager::CHAMP_PRODUIT_ID .
@@ -758,8 +794,8 @@ class AdherentManager
 			ON f." . DetailOperationManager::CHAMP_DETAILOPERATION_ID_OPERATION . " = d." . StockManager::CHAMP_STOCK_ID_OPERATION . "
 			AND f." . DetailOperationManager::CHAMP_DETAILOPERATION_ID_DETAIL_COMMANDE . " = " . DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID . "
 		WHERE ( " . AdherentManager::CHAMP_ADHERENT_ID . " IS NOT NULL 	
-			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . "  = 1
-				OR (" . AdherentManager::CHAMP_ADHERENT_ETAT . " <> 1 
+			AND " . AdherentManager::CHAMP_ADHERENT_ETAT . " in ( '" .  str_replace(",", "','", StringUtils::securiser( implode(",", $pType) ) ) . "')	
+				OR (" . AdherentManager::CHAMP_ADHERENT_ETAT . " = 2 
 		        	AND (
 		                b." . StockManager::CHAMP_STOCK_ID . " IS NOT NULL
 		            	OR c." . StockManager::CHAMP_STOCK_ID . " IS NOT NULL

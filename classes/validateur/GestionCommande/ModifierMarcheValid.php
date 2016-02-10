@@ -486,6 +486,14 @@ class ModifierMarcheValid
 			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
 			$lVr->getTimeFinReservation()->addErreur($lErreur);	
 		}
+		if(!isset($pData['droitNonAdherent']) && intval($pData['droitNonAdherent']) != 0) {
+			$lVr->setValid(false);
+			$lVr->getDroitNonAdherent()->setValid(false);
+			$lErreur = new VRerreur();
+			$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
+			$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
+			$lVr->getDroitNonAdherent()->addErreur($lErreur);	
+		}
 		
 		if($lVr->getValid()) {
 			//Tests Techniques
@@ -609,6 +617,14 @@ class ModifierMarcheValid
 				$lErreur->setMessage(MessagesErreurs::ERR_107_MSG);
 				$lVr->getTimeFinReservation()->addErreur($lErreur);	
 			}
+			if(!TestFonction::checkLength($pData['droitNonAdherent'],0,1)) {
+				$lVr->setValid(false);
+				$lVr->getDroitNonAdherent()->setValid(false);
+				$lErreur = new VRerreur();
+				$lErreur->setCode(MessagesErreurs::ERR_101_CODE);
+				$lErreur->setMessage(MessagesErreurs::ERR_101_MSG);
+				$lVr->getDroitNonAdherent()->addErreur($lErreur);
+			}
 
 			//Tests Fonctionnels
 			if(empty($pData['id'])) {
@@ -666,6 +682,14 @@ class ModifierMarcheValid
 				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
 				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
 				$lVr->getTimeFinReservation()->addErreur($lErreur);	
+			}
+			if(empty($pData['droitNonAdherent']) && intval($pData['droitNonAdherent']) != 0) {
+				$lVr->setValid(false);
+				$lVr->getDroitNonAdherent()->setValid(false);
+				$lErreur = new VRerreur();
+				$lErreur->setCode(MessagesErreurs::ERR_201_CODE);
+				$lErreur->setMessage(MessagesErreurs::ERR_201_MSG);
+				$lVr->getDroitNonAdherent()->addErreur($lErreur);
 			}
 			
 			if(!TestFonction::dateTimeEstPLusGrandeEgale($pData['dateMarcheDebut'] . " " . $pData['timeMarcheDebut'],$pData['dateFinReservation'] . " " . $pData['timeFinReservation'],"db")) {

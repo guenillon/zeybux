@@ -46,7 +46,8 @@ class ListeAdherentViewManager
 			"," . AdherentManager::CHAMP_ADHERENT_PRENOM . 
 			"," . AdherentManager::CHAMP_ADHERENT_COURRIEL_PRINCIPAL . 
 			"," . CompteManager::CHAMP_COMPTE_SOLDE . 
-			"," . CompteManager::CHAMP_COMPTE_LABEL . "
+			"," . CompteManager::CHAMP_COMPTE_LABEL . 
+			"," . AdherentManager::CHAMP_ADHERENT_ETAT . "
 			FROM " . ListeAdherentViewManager::VUE_LISTE_ADHERENT. " 
 			WHERE " . AdherentManager::CHAMP_ADHERENT_ID . " = '" . StringUtils::securiser($pId) . "'";
 
@@ -62,18 +63,21 @@ class ListeAdherentViewManager
 				$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM],
 				$lLigne[AdherentManager::CHAMP_ADHERENT_COURRIEL_PRINCIPAL],
 				$lLigne[CompteManager::CHAMP_COMPTE_SOLDE],
-				$lLigne[CompteManager::CHAMP_COMPTE_LABEL]);
+				$lLigne[CompteManager::CHAMP_COMPTE_LABEL],
+				$lLigne[AdherentManager::CHAMP_ADHERENT_ETAT]);
 		} else {
 			return new ListeAdherentViewVO();
 		}
 	}
 
 	/**
-	* @name selectAll()
+	* @name selectAll($pType, $pMasquer)
+	* @param array(int(11))
+	* @param bool
 	* @return array(ListeAdherentViewVO)
 	* @desc Récupères toutes les lignes de la table et les renvoie sous forme d'une collection de ListeAdherentViewVO
 	*/
-	public static function selectAll($pMasquer = false) {
+	public static function selectAll($pType, $pMasquer = false) {
 		// Initialisation du Logger
 		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 		$lLogger->setMask(Log::MAX(LOG_LEVEL));
@@ -85,8 +89,10 @@ class ListeAdherentViewManager
 			"," . AdherentManager::CHAMP_ADHERENT_PRENOM . 
 			"," . AdherentManager::CHAMP_ADHERENT_COURRIEL_PRINCIPAL . 
 			"," . CompteManager::CHAMP_COMPTE_SOLDE . 
-			"," . CompteManager::CHAMP_COMPTE_LABEL . "
-			FROM " . ListeAdherentViewManager::VUE_LISTE_ADHERENT;
+			"," . CompteManager::CHAMP_COMPTE_LABEL .
+			"," . AdherentManager::CHAMP_ADHERENT_ETAT . "
+			FROM " . ListeAdherentViewManager::VUE_LISTE_ADHERENT . " 
+			WHERE " . AdherentManager::CHAMP_ADHERENT_ETAT . " in ( '" .  str_replace(",", "','", StringUtils::securiser( implode(",", $pType) ) ) . "');";
 
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
@@ -103,7 +109,8 @@ class ListeAdherentViewManager
 						$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM],
 						NULL,
 						NULL,
-						$lLigne[CompteManager::CHAMP_COMPTE_LABEL]));
+						$lLigne[CompteManager::CHAMP_COMPTE_LABEL],
+						$lLigne[AdherentManager::CHAMP_ADHERENT_ETAT]));
 				} else {
 					array_push($lListeAdherent,
 						ListeAdherentViewManager::remplir(
@@ -113,7 +120,8 @@ class ListeAdherentViewManager
 							$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM],
 							$lLigne[AdherentManager::CHAMP_ADHERENT_COURRIEL_PRINCIPAL],
 							$lLigne[CompteManager::CHAMP_COMPTE_SOLDE],
-							$lLigne[CompteManager::CHAMP_COMPTE_LABEL]));
+							$lLigne[CompteManager::CHAMP_COMPTE_LABEL],
+							$lLigne[AdherentManager::CHAMP_ADHERENT_ETAT]));
 				}
 			}
 		} else {
@@ -145,7 +153,8 @@ class ListeAdherentViewManager
 			"," . AdherentManager::CHAMP_ADHERENT_PRENOM .
 			"," . AdherentManager::CHAMP_ADHERENT_COURRIEL_PRINCIPAL .
 			"," . CompteManager::CHAMP_COMPTE_SOLDE .
-			"," . CompteManager::CHAMP_COMPTE_LABEL	);
+			"," . CompteManager::CHAMP_COMPTE_LABEL .
+			"," . AdherentManager::CHAMP_ADHERENT_ETAT	);
 
 		// Préparation de la requète de recherche
 		$lRequete = DbUtils::prepareRequeteRecherche(ListeAdherentViewManager::VUE_LISTE_ADHERENT, $lChamps, $pTypeRecherche, $pTypeCritere, $pCritereRecherche, $pTypeTri, $pCritereTri);
@@ -167,7 +176,8 @@ class ListeAdherentViewManager
 							$lLigne[AdherentManager::CHAMP_ADHERENT_PRENOM],
 							$lLigne[AdherentManager::CHAMP_ADHERENT_COURRIEL_PRINCIPAL],
 							$lLigne[CompteManager::CHAMP_COMPTE_SOLDE],
-							$lLigne[CompteManager::CHAMP_COMPTE_LABEL]));
+							$lLigne[CompteManager::CHAMP_COMPTE_LABEL],
+							$lLigne[AdherentManager::CHAMP_ADHERENT_ETAT]));
 				}
 			} else {
 				$lListeAdherent[0] = new ListeAdherentViewVO();
@@ -181,7 +191,7 @@ class ListeAdherentViewManager
 	}
 	
 	/**
-	* @name remplir($pAdhId, $pAdhNumero, $pAdhNom, $pAdhPrenom, $pAdhCourrielPrincipal, $pCptSolde, $pCptLabel)
+	* @name remplir($pAdhId, $pAdhNumero, $pAdhNom, $pAdhPrenom, $pAdhCourrielPrincipal, $pCptSolde, $pCptLabel, $pAdhEtat)
 	* @param int(11)
 	* @param varchar(5)
 	* @param varchar(50)
@@ -189,10 +199,11 @@ class ListeAdherentViewManager
 	* @param varchar(100)
 	* @param decimal(32,2)
 	* @param varchar(30)
+	* @param int(11)
 	* @return ListeAdherentViewVO
 	* @desc Retourne une ListeAdherentiewVO remplie
 	*/
-	private static function remplir($pAdhId, $pAdhNumero, $pAdhNom, $pAdhPrenom, $pAdhCourrielPrincipal, $pCptSolde, $pCptLabel) {
+	private static function remplir($pAdhId, $pAdhNumero, $pAdhNom, $pAdhPrenom, $pAdhCourrielPrincipal, $pCptSolde, $pCptLabel, $pAdhEtat) {
 		$lListeAdherent = new ListeAdherentViewVO();
 		$lListeAdherent->setAdhId($pAdhId);
 		$lListeAdherent->setAdhNumero($pAdhNumero);
@@ -201,6 +212,7 @@ class ListeAdherentViewManager
 		$lListeAdherent->setAdhCourrielPrincipal($pAdhCourrielPrincipal);
 		$lListeAdherent->setCptSolde($pCptSolde);
 		$lListeAdherent->setCptLabel($pCptLabel);
+		$lListeAdherent->setAdhEtat($pAdhEtat);
 		return $lListeAdherent;
 	}
 }

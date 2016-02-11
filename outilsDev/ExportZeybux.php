@@ -449,8 +449,8 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			   				$lLigne = str_replace('./js/zeybux-core.php','./js/zeybux-core-min-' . $lVersionTechnique . '.js',$lLigne);
 			   				$lLigne = str_replace('./css/zeybux.php','./css/zeybux-min-' . $lVersionTechnique . '.css',$lLigne);
 			   				
-			   				$lLigne = str_replace('value="Z"','',$lLigne);
-			   				$lLigne = str_replace('value="zeybu"','',$lLigne);
+			   			//	$lLigne = str_replace('value="Z"','',$lLigne);
+			   			//	$lLigne = str_replace('value="zeybu"','',$lLigne);
 			   				$fp = fopen($pDest.'/'.$entry, 'w');
 			   				fwrite($fp,$lLigne);
 			   				fclose($fp);

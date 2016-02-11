@@ -1,12 +1,12 @@
 /*
 *	Author: Julien PIERRE
 *	Date: 12.08.2014
-*	Version: 2.0.0
+*	Version: 3.0.0
 */
 (function($) {
 	var userAgent = navigator.userAgent.toLowerCase();
 	$.browser = {
-	 // version: (userAgent.match( /.+(?:rv|it|ra|ie|me)[\/: ]([d.]+)/ ) || [])[1], // Ne foncitonne pas pour la version
+	   version: (userAgent.match( /.+(rv|it|ra|ie|me)[\/: ]([\d.]+)/ ) || [])[2],
 	   chrome: /chrome/.test( userAgent ),
 	   safari: /webkit/.test( userAgent ) && !/chrome/.test( userAgent ),
 	   opera: /opera/.test( userAgent ),

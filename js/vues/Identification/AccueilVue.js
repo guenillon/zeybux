@@ -7,12 +7,13 @@
 	};	
 	
 	this.afficher = function() {
-		if($.browser.msie) {
-			var lIdentificationTemplate = new IdentificationTemplate();
+		var lIdentificationTemplate = new IdentificationTemplate();
+		if($.browser.msie && $.browser.version < 11) {
+			
 			$('noscript').replaceWith(lIdentificationTemplate.infoNavIncompatible);
 		} else {	
 			var that = this;
-
+			$("#contenu").prepend(lIdentificationTemplate.formConnexion);
 			$.getScript("./js/zeybux-configuration.php",function() {
 				that.init();
 				IdentificationVue();

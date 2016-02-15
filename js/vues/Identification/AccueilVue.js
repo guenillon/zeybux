@@ -13,7 +13,9 @@
 			$('noscript').replaceWith(lIdentificationTemplate.infoNavIncompatible);
 		} else {	
 			var that = this;
-			$("#contenu").prepend(lIdentificationTemplate.formConnexion);
+			if(!$.trim($("#contenu").html())) {
+				$("#contenu").prepend(lIdentificationTemplate.formConnexion);
+			}
 			$.getScript("./js/zeybux-configuration.php",function() {
 				that.init();
 				IdentificationVue();

@@ -205,8 +205,8 @@ class CaisseMarcheCommandeControleur
 				if(empty($lProduitsAchat)) {
 					foreach($lProduitsReservation as $lProduitReservation) {
 						if($lProduitReservation->getIdNomProduit() == $lProduitMarche->getIdNom() && $lProduitReservation->getUnite() == $lProduitMarche->getUnite()) {
-							$lQuantite = $lProduitReservation->getQuantite();
-							$lMontant = $lProduitReservation->getMontant();
+							$lQuantite += $lProduitReservation->getQuantite();
+							$lMontant += $lProduitReservation->getMontant();
 							$lIdDetailCommande = $lProduitReservation->getIdDetailCommande();
 						}
 					}

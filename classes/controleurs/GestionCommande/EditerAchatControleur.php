@@ -171,11 +171,13 @@ class EditerAchatControleur
 						$lModelesLot = ModeleLotManager::selectByIdNomProduit($lProduitAchat->getIdNomProduit()); // Récupère même les lots supprimés car il y a peut être eu un achat sur ce lot précédemment
 						$lLots = array();
 						foreach($lModelesLot as $lModeleLot) {
-							$lLot = new DetailMarcheVO();
-							$lLot->setId($lModeleLot->getId());
-							$lLot->setTaille($lModeleLot->getQuantite());
-							$lLot->setPrix($lModeleLot->getPrix());
-							$lLots[$lModeleLot->getId()] = $lLot;
+							if($lModeleLot->getUnite() == $lUnite) {
+								$lLot = new DetailMarcheVO();
+								$lLot->setId($lModeleLot->getId());
+								$lLot->setTaille($lModeleLot->getQuantite());
+								$lLot->setPrix($lModeleLot->getPrix());
+								$lLots[$lModeleLot->getId()] = $lLot;
+							}
 						}
 						$lLotsProduits[$lProduitAchat->getIdNomProduit().$lUnite] = array("nom" => $lProduitAchat->getNproNom(), "type" => "modele", "lots" => $lLots);
 					}
@@ -188,7 +190,7 @@ class EditerAchatControleur
 			$lBanqueService = new BanqueService();
 			$lTypePaiementService = new TypePaiementService();	
 					
-			$lResponse->setTypePaiement($lTypePaiementService->selectVisible()); // Type de paiment
+			$lResponse->setTypePaiement($lTypePaiementService->selectVisible()); // Type de paiement
 			$lResponse->setBanques($lBanqueService->getAllActif()); // Liste des banques
 			$lResponse->setIdRequete(uniqid());
 			

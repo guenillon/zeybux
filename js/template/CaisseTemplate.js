@@ -61,8 +61,9 @@
 					"</div>" +
 					"<table class=\"com-table\">" +
 						"<thead>" +
-							"<tr class=\"ui-widget ui-widget-header com-cursor-pointer achat-commande-ligne\" id-adherent=\"0\" >" +
-								"<th class=\"com-table-th com-underline-hover com-center\">Compte invité</th>" +
+							"<tr class=\"ui-widget ui-widget-header com-cursor-pointer\"  >" +
+								"<th class=\"com-table-th com-underline-hover com-center achat-commande-ligne\" id-adherent=\"0\">Compte invité</th>" +
+								"<th class=\"com-table-th com-underline-hover com-center achat-commande-ligne\" id-adherent=\"-1\">Compte Marché</th>" +
 							"</tr>" +
 						"</thead>" +
 					"</table>" +
@@ -134,8 +135,10 @@
 	
 	this.achatMarcheIdentiteAdherent = "{adhNumero} : {adhPrenom} {adhNom}";
 	this.achatMarcheIdentiteInvite = "Invité";	
+	this.achatMarcheIdentiteCompteMarche = "Compte Marché";	
 	this.achatMarcheEtatCompte = "{cptLabel} : <span id=\"solde\" class=\"{adhSoldeEtatClass}\">{adhSolde}</span> <span id=\"solde-sigle\" class=\"{adhSoldeEtatClass}\">{sigleMonetaire}</span>";
 	this.achatMarcheEtatCompteInvite = "Compte Invité";
+	this.achatMarcheEtatCompteMarche = "Compte Marché";
 	this.achatMarcheLabelRechargement = "Recharger";
 	this.achatMarcheLabelPaiement = "Paiement";
 	this.achatMarcheLabelTotal = "Total";

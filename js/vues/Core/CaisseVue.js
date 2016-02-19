@@ -35,8 +35,15 @@
 		
 		pParam.fonction = "infoAchat"; // Par défaut Adhérent sur Marché
 		
-		if(pParam.id_adherent && pParam.id_adherent == 0) { // compte invité
-			this.mIdCompte = -3;
+		if(pParam.id_adherent <= 0) {
+			switch(parseInt(pParam.id_adherent)) {
+				case 0: // compte invité
+					this.mIdCompte = -3;
+					break;
+				case -1: // compte marche
+					this.mIdCompte = -1;
+					break;
+			}
 		}
 		
 		this.mModule = pParam.module;
@@ -56,7 +63,7 @@
 							that.mTypePaiement = lResponse.typePaiement;	
 							that.mBanques = lResponse.banques;
 
-							if(pParam.id_adherent != 0) { // Si pas invité les informations de l'adhérent
+							if(pParam.id_adherent > 0) { // Si pas invité les informations de l'adhérent
 								that.mIdCompte = lResponse.adherent.adhIdCompte;
 								that.mAdherent = lResponse.adherent;
 								that.mSolde = parseFloat(lResponse.adherent.cptSolde);
@@ -175,7 +182,7 @@
 							if(lResponse.achats.produits &&  typeof lResponse.achats.produits !== 'undefined' && (lResponse.achats.produits.length == 0 || (lResponse.achats.produits[0] && lResponse.achats.produits[0].cproId == null)) && typeof lResponse.reservation !== 'undefined' && lResponse.reservation.length > 0) {
 								that.mSolde = (parseFloat(that.mSolde) - parseFloat(lResponse.adherent.total)).toFixed(2);
 								
-								if(pParam.id_adherent != 0) { // Si pas invité les informations de l'adhérent
+								if(pParam.id_adherent > 0) { // Si pas invité les informations de l'adhérent
 									lResponse.adherent.cptSolde = parseFloat(that.mSolde);
 								}
 								
@@ -258,7 +265,7 @@
 		pResponse.adherent.total = pResponse.adherent.total.nombreFormate(2,',',' ');
 		pResponse.adherent.totalAchat = pResponse.adherent.totalAchat.nombreFormate(2,',',' ');
 		pResponse.adherent.totalAchatSolidaire = pResponse.adherent.totalAchatSolidaire.nombreFormate(2,',',' ');
-		if(this.mParam.id_adherent != 0) { // Les informations de l'adhérent si ce n'est pas un compte invité		
+		if(this.mParam.id_adherent > 0) { // Les informations de l'adhérent si ce n'est pas un compte invité		
 			pResponse.adherent.colspan= '';
 			if(pResponse.nbAdhesionEnCours > 0) {
 				pResponse.adherent.adhesion = lCaisseTemplate.adhesionOK;
@@ -275,16 +282,30 @@
 			pResponse.adherent.identite = lCaisseTemplate.achatMarcheIdentiteAdherent.template(pResponse.adherent);
 			pResponse.adherent.etatCompte = lCaisseTemplate.achatMarcheEtatCompte.template(pResponse.adherent);
 			pResponse.adherent.labelRecharger = lCaisseTemplate.achatMarcheLabelRechargement;			
-		} else {			
-			pResponse.adherent.identite = lCaisseTemplate.achatMarcheIdentiteInvite;
-			pResponse.adherent.etatCompte = lCaisseTemplate.achatMarcheEtatCompteInvite;
-			pResponse.adherent.labelRecharger = lCaisseTemplate.achatMarcheLabelPaiement;
+		} else {
+			switch(this.mIdCompte) {
+				case -1:
+					pResponse.adherent.identite = lCaisseTemplate.achatMarcheIdentiteCompteMarche;
+					pResponse.adherent.etatCompte = lCaisseTemplate.achatMarcheEtatCompteMarche;
+					break;
+				case -3:
+					pResponse.adherent.identite = lCaisseTemplate.achatMarcheIdentiteInvite;
+					pResponse.adherent.etatCompte = lCaisseTemplate.achatMarcheEtatCompteInvite;
+					break;
+			}
 			
+			pResponse.adherent.labelRecharger = lCaisseTemplate.achatMarcheLabelPaiement;
 			pResponse.adherent.colspan= 'colspan="2"';
 			pResponse.adherent.adhesion = '';
+			
 		}
 		lData.infoAdherent = lCaisseTemplate.achatInfoAdherent.template(pResponse.adherent);
 		
+		
+		if(pResponse.marche.id) {
+			this.mParam.id_commande = pResponse.marche.id;
+		}
+				
 		var lHtml = '';
 		/*if(pParam.id_commande != -1) { // Formulaire Marché
 			lHtml = lCaisseTemplate.achatMarcheFormulaire.template(lData);
@@ -316,8 +337,16 @@
 		pData = this.affectRetour(pData);
 		pData = this.affectEnregistrer(pData);
 		pData = this.affectSupprimer(pData);
+		pData = this.affectCompteMarche(pData);
 		pData = gCommunVue.comNumeric(pData);
 		pData = gCommunVue.comHoverBtn(pData);
+		return pData;
+	};
+	
+	this.affectCompteMarche = function(pData) {
+		if(this.mIdCompte == -1) {
+			pData.find("#ligne-rechargement").hide();
+		}
 		return pData;
 	};
 	

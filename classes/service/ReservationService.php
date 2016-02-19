@@ -248,20 +248,22 @@ class ReservationService
 	public function delete($pIdReservation) {
 		if($this->reservationCompteAutorise($pIdReservation->getIdCompte(), $pIdReservation->getIdCommande())) {
 			$lReservationsActuelle = $this->get($pIdReservation);
-			$lOperations = $this->selectOperationReservation($pIdReservation);
-			$lOperation = $lOperations[0];
-			$lIdOperation = $lOperation->getId();
-			
-			// Suppression de l'opération
-			$lOperationService = new OperationService();
-			$lOperationService->delete($lIdOperation);
-			
-			$lStockService = new StockService();
-			$lDetailOperationService = new DetailOperationService();
-			foreach($lReservationsActuelle->getDetailReservation() as $lReservationActuelle) {
-				// Suppression du stock et du detail operation
-				$lStockService->delete($lReservationActuelle->getId()->getIdStock());
-				$lDetailOperationService->delete($lReservationActuelle->getId()->getIdDetailOperation());
+			if($lReservationsActuelle != false) { // Si la réservation existe
+				$lOperations = $this->selectOperationReservation($pIdReservation);
+				$lOperation = $lOperations[0];
+				$lIdOperation = $lOperation->getId();
+				
+				// Suppression de l'opération
+				$lOperationService = new OperationService();
+				$lOperationService->delete($lIdOperation);
+				
+				$lStockService = new StockService();
+				$lDetailOperationService = new DetailOperationService();
+				foreach($lReservationsActuelle->getDetailReservation() as $lReservationActuelle) {
+					// Suppression du stock et du detail operation
+					$lStockService->delete($lReservationActuelle->getId()->getIdStock());
+					$lDetailOperationService->delete($lReservationActuelle->getId()->getIdDetailOperation());
+				}
 			}
 		}
 	}

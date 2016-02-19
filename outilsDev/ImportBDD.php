@@ -62,6 +62,8 @@ if(isset($_GET['action'])) {
 	<a href="./ImportBDD.php">Recommencer</a><br/><br/>
 </div>
 <?php
+
+
 // Téléchargement du fichier sql
 if( isset($_FILES["zeybusql"]) ) {
 	if($_FILES["zeybusql"]["error"] == UPLOAD_ERR_OK) {
@@ -70,6 +72,7 @@ if( isset($_FILES["zeybusql"]) ) {
 		move_uploaded_file($tmp_name, CHEMIN_FICHIER_SQL . FICHIER_SQL);
 	}
 }
+
 
 if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["bdd"]) && $_POST["bdd"] != "" ) {
 	$lNomBdd = $_POST["bdd"];

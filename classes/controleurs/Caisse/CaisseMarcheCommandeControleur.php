@@ -109,7 +109,7 @@ class CaisseMarcheCommandeControleur
 		$lVr = MarcheValid::validGetInfoAchatMarche($pParam);
 		if($lVr->getValid()) {		
 			$lResponse = new InfoAchatCommandeResponse();
-			if($pParam["id_adherent"] != 0) { // Si ce n'est pas le compte invité
+			if($pParam["id_adherent"] > 0) { // Si ce n'est pas le compte invité
 				$lAdherent = AdherentViewManager::select($pParam["id_adherent"]);
 				$lResponse->setAdherent($lAdherent);
 			}
@@ -128,7 +128,7 @@ class CaisseMarcheCommandeControleur
 				$lResponse->setMarche($lMarche); // Les informations du marché 
 				
 							
-				if($pParam["id_adherent"] != 0) { // Si ce n'est pas le compte invité
+				if($pParam["id_adherent"] > 0) { // Si ce n'est pas le compte invité
 					
 					
 					$lReservationService = new ReservationService();
@@ -156,7 +156,7 @@ class CaisseMarcheCommandeControleur
 				}
 			}
 			
-			if($pParam["id_adherent"] != 0) { // Si ce n'est pas le compte invité
+			if($pParam["id_adherent"] > 0) { // Si ce n'est pas le compte invité
 				$lAdhesionService = new AdhesionService();
 				$lResponse->setNbAdhesionEnCours($lAdhesionService->getNbAdhesionEnCoursSurAdherent($pParam["id_adherent"]));
 			}
@@ -258,11 +258,13 @@ class CaisseMarcheCommandeControleur
 						$lModelesLot = ModeleLotManager::selectByIdNomProduit($lProduitAchat->getIdNomProduit()); // Récupère même les lots supprimés car il y a peut être eu un achat sur ce lot précédemment
 						$lLots = array();
 						foreach($lModelesLot as $lModeleLot) {
-							$lLot = new DetailMarcheVO();
-							$lLot->setId($lModeleLot->getId());
-							$lLot->setTaille($lModeleLot->getQuantite());
-							$lLot->setPrix($lModeleLot->getPrix());
-							$lLots[$lModeleLot->getId()] = $lLot;
+							if($lModeleLot->getUnite() == $lUnite) {
+								$lLot = new DetailMarcheVO();
+								$lLot->setId($lModeleLot->getId());
+								$lLot->setTaille($lModeleLot->getQuantite());
+								$lLot->setPrix($lModeleLot->getPrix());
+								$lLots[$lModeleLot->getId()] = $lLot;
+							}
 						}
 						$lLotsProduits[$lProduitAchat->getIdNomProduit().$lUnite] = array("nom" => $lProduitAchat->getNproNom(), "type" => "modele", "lots" => $lLots);
 					}

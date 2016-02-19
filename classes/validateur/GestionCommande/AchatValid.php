@@ -333,9 +333,8 @@ class AchatValid
 					$lVr->getIdMarche()->addErreur($lErreur);					
 				}
 			}
-			
 			// Si c'est un adhérent
-			if(!empty($pData['id_adherent']) && $pData['id_adherent'] != -3) {
+			if($pData['id_adherent'] > 0) {
 				$lAdherentService = new AdherentService();
 				$lAdherent = $lAdherentService->get($pData['id_adherent']);
 				if($lAdherent->getAdhId() != $pData['id_adherent']) {

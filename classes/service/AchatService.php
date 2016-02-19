@@ -64,7 +64,6 @@ class AchatService
 				
 			$lIdCompte = null;
 			$lIdMarche = null;
-			
 			if(!is_null($lOperationAchat) && !empty($lOperationAchat)) {
 				$lOperationAchatChampComp = $pAchat->getOperationAchat()->getChampComplementaire();
 				$lIdRequete = $lOperationAchatChampComp[15]->getValeur();
@@ -73,7 +72,6 @@ class AchatService
 				if(isset($lOperationAchatChampComp[1])) {
 					$lIdMarche = $lOperationAchatChampComp[1]->getValeur();
 				}
-				
 			}
 			if(!is_null($lOperationAchatSolidaire) && !empty($lOperationAchatSolidaire)) {
 				$lOperationAchatSolidaireChampComp = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
@@ -93,7 +91,11 @@ class AchatService
 					$lIdMarche = $lOperationRechargementChampComp[1]->getValeur();
 				}
 			}
-		
+			
+			if($lIdCompte == -1) { // Le cas de l'achat par le compte marché
+				$pAchat->setRechargement(new OperationDetailVO());
+			}
+					
 			$lReservationService = new ReservationService();
 			if($lReservationService->reservationCompteAutorise($lIdCompte, $lIdMarche)) {
 				if($lAchatValid->insert($pAchat)) {
@@ -397,6 +399,41 @@ class AchatService
 	private function update($pAchat) {
 		$lOperationService = new OperationService();
 		
+		
+		$lOperationAchat = $pAchat->getOperationAchat()->getMontant();
+		$lOperationAchatSolidaire = $pAchat->getOperationAchatSolidaire()->getMontant();
+		$lOperationRechargement = $pAchat->getRechargement()->getMontant();
+		
+		$lIdCompte = 0;
+		$lIdMarche = 0;
+		
+		if(!is_null($lOperationAchat) && !empty($lOperationAchat)) {
+			$lOperationAchatChampComp = $pAchat->getOperationAchat()->getChampComplementaire();
+			$lIdCompte = $pAchat->getOperationAchat()->getIdCompte();
+			if(isset($lOperationAchatChampComp[1])) {
+				$lIdMarche = $lOperationAchatChampComp[1]->getValeur();
+			}
+		}
+		if(!is_null($lOperationAchatSolidaire) && !empty($lOperationAchatSolidaire)) {
+			$lOperationAchatSolidaireChampComp = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
+			$lIdCompte = $pAchat->getOperationAchatSolidaire()->getIdCompte();
+			if(isset($lOperationAchatSolidaireChampComp[1])) {
+				$lIdMarche = $lOperationAchatSolidaireChampComp[1]->getValeur();
+			}
+		}
+		if(!is_null($lOperationRechargement) && !empty($lOperationRechargement)) {
+			$lOperationRechargementChampComp = $pAchat->getRechargement()->getChampComplementaire();
+			$lIdCompte = $pAchat->getRechargement()->getIdCompte();
+			if(isset($lOperationRechargementChampComp[1])) {
+				$lIdMarche = $lOperationRechargementChampComp[1]->getValeur();
+			}
+		}
+		
+		if($lIdMarche != 0) {
+			$lMarcheService = new MarcheService();
+			$lMarche = $lMarcheService->getInfoMarche($lIdMarche);
+		}
+
 		// Rechargement
 		$lIdRechargement = $pAchat->getRechargement()->getId();
 		$lCompteRechargement = $pAchat->getRechargement()->getIdCompte();
@@ -417,8 +454,7 @@ class AchatService
 		
 		//$lIdOperationAchat = 0;
 		//$lIdOperationAchatSolidaire = 0;
-		$lIdCompte = 0;
-		$lIdMarche = 0;
+		
 		$lLibelleOperation = '';
 		$lLibelleOperationSolidaire = '';
 		$lAchatActuel = NULL;
@@ -437,10 +473,6 @@ class AchatService
 			$ltestChampComplementaire = $pAchat->getOperationAchat()->getChampComplementaire();
 			$lIdOperationZeybu = $ltestChampComplementaire[8]->getValeur();
 			$lLibelleOperation = $pAchat->getOperationAchat()->getLibelle();
-			$lIdCompte = $pAchat->getOperationAchat()->getIdCompte();
-			if(isset($ltestChampComplementaire[1])) {
-				$lIdMarche = $ltestChampComplementaire[1]->getValeur();
-			}
 			if(!empty($lMontantAchat) && !is_null($lMontantAchat)) { // Maj de l'achat
 				$lMajAchat = true;
 				$lIdOperationAchat = $lOperationService->set($pAchat->getOperationAchat());
@@ -455,15 +487,12 @@ class AchatService
 				$lIdOperationAchat = NULL;
 			}
 		} else if(!empty($lTestCompteAchat) && !is_null($lTestCompteAchat)) { // Ajout Achat
-			$lIdCompte = $pAchat->getOperationAchat()->getIdCompte();
-			$ltestChampComplementaire = $pAchat->getOperationAchat()->getChampComplementaire();
-			if(isset($ltestChampComplementaire[1])) {
-				$lIdMarche = $ltestChampComplementaire[1]->getValeur();
-		
-				$lMarcheService = new MarcheService();
-				$lMarche = $lMarcheService->getInfoMarche($lIdMarche);
-		
+			if($lIdMarche != 0) {		
 				$lLibelleOperation = "Marché N°" . $lMarche->getNumero();
+				
+				$lChampComplementaire = $pAchat->getOperationAchat()->getChampComplementaire();
+				$lChampComplementaire[1] = new OperationChampComplementaireVO(null, 1, $lIdMarche);
+				$pAchat->getOperationAchat()->setChampComplementaire($lChampComplementaire);
 			} else {
 				$lLibelleOperation = "Achat du " . StringUtils::dateAujourdhuiFr();
 			}
@@ -485,6 +514,7 @@ class AchatService
 		// Achat Solidaire
 		$lIdOperationAchatSolidaire = $pAchat->getOperationAchatSolidaire()->getId();
 		$lTestCompteAchatSolidaire = $pAchat->getOperationAchatSolidaire()->getIdCompte();
+
 		$lMajAchatSolidaire = false;
 		if(!empty($lIdOperationAchatSolidaire) && !is_null($lIdOperationAchatSolidaire)) {
 			if(is_null($lAchatActuel)) {
@@ -496,10 +526,7 @@ class AchatService
 			$ltestChampComplementaire = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
 			$lIdOperationZeybuSolidaire = $ltestChampComplementaire[8]->getValeur();
 			$lLibelleOperationSolidaire = $pAchat->getOperationAchatSolidaire()->getLibelle();
-			$lIdCompte = $pAchat->getOperationAchatSolidaire()->getIdCompte();
-			if(isset($ltestChampComplementaire[1])) {
-				$lIdMarche = $ltestChampComplementaire[1]->getValeur();
-			}
+
 			if(!empty($lMontantAchatSolidaire) && !is_null($lMontantAchatSolidaire)) { // Maj de l'achat
 				$lMajAchatSolidaire = true;
 				$lIdOperationAchatSolidaire = $lOperationService->set($pAchat->getOperationAchatSolidaire());
@@ -514,16 +541,12 @@ class AchatService
 				$lIdOperationAchatSolidaire = NULL;
 			}
 		} else if(!empty($lTestCompteAchatSolidaire) && !is_null($lTestCompteAchatSolidaire)) {
-			$lIdCompte = $pAchat->getOperationAchatSolidaire()->getIdCompte();
-				
-			$ltestChampComplementaire = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
-			if(isset($ltestChampComplementaire[1])) {
-				if(!isset($lMarche)) { // Pour éviter de lancer 2 fois la requête
-					$lIdMarche = $ltestChampComplementaire[1]->getValeur();
-					$lMarcheService = new MarcheService();
-					$lMarche = $lMarcheService->getInfoMarche($lIdMarche);
-				}
+			if($lIdMarche != 0) {
 				$lLibelleOperationSolidaire = "Marché Solidaire N°" . $lMarche->getNumero();
+				
+				$lChampComplementaireSolidaire = $pAchat->getOperationAchatSolidaire()->getChampComplementaire();
+				$lChampComplementaireSolidaire[1] = new OperationChampComplementaireVO(null, 1, $lIdMarche);
+				$pAchat->getOperationAchatSolidaire()->setChampComplementaire($lChampComplementaireSolidaire);
 			} else {
 				$lLibelleOperationSolidaire = "Achat Solidaire du " . StringUtils::dateAujourdhuiFr();
 			}

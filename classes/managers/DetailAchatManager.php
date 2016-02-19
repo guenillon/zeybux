@@ -417,82 +417,20 @@ class DetailAchatManager
 				"operation_achat." . OperationManager::CHAMP_OPERATION_ID .
 				", operation_achat." . OperationManager::CHAMP_OPERATION_DATE .
 				"," . CommandeManager::CHAMP_COMMANDE_NUMERO .
-				"," . AdherentManager::CHAMP_ADHERENT_ID .
+				", 	CASE 
+						WHEN " . AdherentManager::CHAMP_ADHERENT_ID . " IS NULL THEN
+							CASE " . CompteManager::CHAMP_COMPTE_ID . "
+								WHEN -1 THEN -1
+								ELSE 0							
+							END
+						ELSE " . AdherentManager::CHAMP_ADHERENT_ID . "
+					END as " . AdherentManager::CHAMP_ADHERENT_ID .
 				"," . AdherentManager::CHAMP_ADHERENT_NOM .
 				"," . AdherentManager::CHAMP_ADHERENT_PRENOM .
 				"," . AdherentManager::CHAMP_ADHERENT_NUMERO .
 				"," . CompteManager::CHAMP_COMPTE_LABEL .
 				", operation_achat." . OperationManager::CHAMP_OPERATION_MONTANT);
-		
-			
-		
-		/*
-		 select 
-operation_achat.ope_id,
-operation_achat.ope_date,
-com_numero,
-adh_id,
-adh_nom,
-adh_prenom,
-adh_numero,
-cpt_label,
-operation_achat.ope_montant
 
- from
-(
-(select
-ope.ope_id, ope.ope_date, ope.ope_id_compte,
-ope.ope_montant + ope_solidaire.ope_montant as ope_montant
-from (
-select distinct dach_id_operation, dach_id_operation_solidaire from dach_detail_achat) as ligne_achat
-join ope_operation as ope on ope.ope_id = ligne_achat.dach_id_operation AND ligne_achat.dach_id_operation <> 0
-join ope_operation as ope_solidaire on ope_solidaire.ope_id = ligne_achat.dach_id_operation_solidaire AND ligne_achat.dach_id_operation_solidaire <> 0
-) union (
-select
-ope.ope_id, ope.ope_date, ope.ope_id_compte,
-ope.ope_montant as ope_montant
-from (
-select distinct dach_id_operation, dach_id_operation_solidaire from dach_detail_achat) as ligne_achat
-join ope_operation as ope on ope.ope_id = ligne_achat.dach_id_operation AND ligne_achat.dach_id_operation <> 0 
-AND ligne_achat.dach_id_operation_solidaire = 0
-) union (
-select
-ope_solidaire.ope_id, ope_solidaire.ope_date, ope_solidaire.ope_id_compte,
-ope_solidaire.ope_montant as ope_montant
-from (
-select distinct dach_id_operation, dach_id_operation_solidaire from dach_detail_achat) as ligne_achat
-join ope_operation as ope_solidaire on ope_solidaire.ope_id = ligne_achat.dach_id_operation_solidaire AND ligne_achat.dach_id_operation_solidaire <> 0
- AND ligne_achat.dach_id_operation = 0
-)
-) as operation_achat
-
- JOIN cpt_compte
-	ON cpt_id = operation_achat.ope_id_compte 
-LEFT JOIN adh_adherent
-	ON adh_id_compte =  cpt_id
-LEFT JOIN opecp_operation_champ_complementaire
-	ON opecp_ope_id = operation_achat.ope_id
-	AND opecp_chcp_id = 1
-LEFT JOIN com_commande
-	ON com_id = opecp_valeur 
-
-WHERE
-operation_achat.ope_date >= '2013-09-01' AND  operation_achat.ope_date <= '2013-09-30'
-AND com_numero = 41
-AND adh_id IS NULL 
-		  
-		 
-		 
-		 
-		 
-		 	DetailAchatManager::TABLE_DETAILACHAT . "
-				JOIN " . OperationManager::TABLE_OPERATION . "
-					ON (" . DetailAchatManager::CHAMP_DETAILACHAT_ID_OPERATION . " = " . OperationManager::CHAMP_OPERATION_ID . "
-						AND " . DetailAchatManager::CHAMP_DETAILACHAT_ID_OPERATION . " <> 0 )
-					OR (" . DetailAchatManager::CHAMP_DETAILACHAT_ID_OPERATION_SOLIDAIRE . " = " . OperationManager::CHAMP_OPERATION_ID . "
-						AND " . DetailAchatManager::CHAMP_DETAILACHAT_ID_OPERATION_SOLIDAIRE . " <> 0 )
-		 */
-	
 		// Préparation de la requète de recherche
 		$lRequete = DbUtils::prepareRequeteRecherche(
 				"(

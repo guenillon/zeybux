@@ -443,7 +443,7 @@ class MarcheValid
 				$lErreur->setMessage(MessagesErreurs::ERR_207_MSG);
 				$lVr->getLog()->addErreur($lErreur);	
 			}*/
-			if($pData['id_adherent'] != 0 && empty($pData['id_adherent'])) {
+			if($pData['id_adherent'] > 0 && empty($pData['id_adherent'])) {
 				$lVr->setValid(false);
 				$lVr->getLog()->setValid(false);
 				$lErreur = new VRerreur();
@@ -466,7 +466,7 @@ class MarcheValid
 				}
 			}
 			
-			if($pData["id_adherent"] != 0 ) { // Si ce n'est pas le compte invité
+			if($pData["id_adherent"] > 0 ) { // Si ce n'est pas le compte invité
 				// Test si l'adhérent existe
 				$lAdherent = AdherentViewManager::select($pData["id_adherent"]);
 				if($lAdherent->getAdhId() != $pData["id_adherent"]) {

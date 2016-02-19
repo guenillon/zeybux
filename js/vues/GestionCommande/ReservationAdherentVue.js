@@ -112,20 +112,17 @@
 		lData.minuteMarcheDebut = this.infoCommande.minuteMarcheDebut;
 		lData.heureMarcheFin = this.infoCommande.heureMarcheFin;
 		lData.minuteMarcheFin = this.infoCommande.minuteMarcheFin;
-		//lData.categories = [];
 		
-		var lIdCategorie = 0;
-		var lNomCategorie = '';
 		var lCategoriesTrie = [];
-		var lProduits = [];
-		
 		var lTotal = 0;
 		$.each(this.pdtCommande, function() {
 			var lInfoProduit = this;
 			if(that.reservation[this.id]) {
-				if(lIdCategorie == 0) {
-					lIdCategorie = this.idCategorie;
-					lNomCategorie = this.cproNom;
+				if(!lCategoriesTrie[this.idCategorie]) {
+					lCategoriesTrie[this.idCategorie] = {
+						nom:this.cproNom,
+						produits:[]
+					};			
 				}
 				
 				var lPdt = new Object;
@@ -144,39 +141,23 @@
 				
 				lPdt.stoQuantite = lPdt.stoQuantite.nombreFormate(2,',',' ');		
 				lPdt.prix = lPdt.prix.nombreFormate(2,',',' ');
-				
-				/*if(!lData.categories[this.idCategorie]) {
-					lData.categories[this.idCategorie] = {nom:this.cproNom,produits:[]};
-				}*/
-				
+								
 				lPdt.flagType = "";
 				if(lInfoProduit.type == 2) {
 					lPdt.flagType = lGestionCommandeTemplate.flagAbonnement;
 				}
 				
-				//lData.categories[this.idCategorie].produits.push(lPdt);
-				
-				if(lIdCategorie != this.idCategorie) {
-					lCategoriesTrie.push({
-							nom:lNomCategorie,
-							produits:lProduits
-						});			
-					lIdCategorie = this.idCategorie;
-					lNomCategorie = this.cproNom;
-					lProduits = [];
-				} 
-				lProduits.push(lPdt);
+				lCategoriesTrie[this.idCategorie].produits.push(lPdt);
 			}			
 		});
 		lData.total = parseFloat(lTotal).nombreFormate(2,',',' ');
 		
-		// Ajout de la dernière catégorie
-		lCategoriesTrie.push({
-			nom:lNomCategorie,
-			produits:lProduits
-		});	
-		
-		lData.categories = lCategoriesTrie;
+		$.each(lCategoriesTrie, function() {
+			if(this.produits) {
+				this.produits.sort(sortStringByNproNom);
+			}
+		});
+		lData.categories = lCategoriesTrie.sort(sortStringByNom);
 		
 		
 		$('#contenu').replaceWith(that.affect($(lTemplate.template(lData))));		

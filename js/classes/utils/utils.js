@@ -381,3 +381,10 @@ sortABC = function(a, b){
 	return a[0] > b[0] ? 1 : -1;
 };
 
+sortStringByNom = function(a, b){			
+	return a.nom > b.nom ? 1 : -1;
+};
+
+sortStringByNproNom = function(a, b){			
+	return a.nproNom > b.nproNom ? 1 : -1;
+};

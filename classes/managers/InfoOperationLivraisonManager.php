@@ -50,8 +50,8 @@ class InfoOperationLivraisonManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return InfoOperationLivraisonManager::remplirInfoOperationLivraison(
 				$pId,
 				$lLigne[InfoOperationLivraisonManager::CHAMP_INFOOPERATIONLIVRAISON_ID_OPE_ZEYBU],
@@ -81,8 +81,8 @@ class InfoOperationLivraisonManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeInfoOperationLivraison = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeInfoOperationLivraison,
 					InfoOperationLivraisonManager::remplirInfoOperationLivraison(
 					$lLigne[InfoOperationLivraisonManager::CHAMP_INFOOPERATIONLIVRAISON_ID],
@@ -126,9 +126,9 @@ class InfoOperationLivraisonManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeInfoOperationLivraison,
 						InfoOperationLivraisonManager::remplirInfoOperationLivraison(

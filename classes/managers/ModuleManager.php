@@ -55,8 +55,8 @@ class ModuleManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 		
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return ModuleManager::remplirModule($pId, 
 				$lLigne[ModuleManager::CHAMP_MOD_NOM], 
 				$lLigne[ModuleManager::CHAMP_MOD_LABEL], 
@@ -94,8 +94,8 @@ class ModuleManager
 		
 		$lListeModule = array();
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeModule,ModuleManager::remplirModule($lLigne[ModuleManager::CHAMP_MOD_ID], 
 				$lLigne[ModuleManager::CHAMP_MOD_NOM], 
 				$lLigne[ModuleManager::CHAMP_MOD_LABEL], 
@@ -187,9 +187,9 @@ class ModuleManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 	
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 	
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 	
 					array_push($lListeModule,
 						ModuleManager::remplirModule(

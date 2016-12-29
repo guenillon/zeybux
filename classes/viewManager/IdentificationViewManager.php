@@ -51,8 +51,8 @@ class IdentificationViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeIdentification = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeIdentification,
 					IdentificationViewManager::remplir(
 						$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
@@ -85,8 +85,8 @@ class IdentificationViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeIdentification = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeIdentification,
 					IdentificationViewManager::remplir(
 						$lLigne[AdherentManager::CHAMP_ADHERENT_ID],

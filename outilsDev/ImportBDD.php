@@ -3,7 +3,6 @@ define("FICHIER_SQL","zeybuStructure.sql.zip");
 define("CHEMIN_FICHIER_SQL","./");
 $lDossierBdd = CHEMIN_FICHIER_SQL . "/bdd/";
 include('../configuration/DB.php');
-$lConnexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
 
 if(isset($_GET['action'])) {
 	switch($_GET['action']) {
@@ -14,18 +13,17 @@ if(isset($_GET['action'])) {
 				$lNomFichier = $lDossierBdd . $_POST['table'];
 				$lUpdateSql = file_get_contents($lNomFichier);
 					
-				
-				mysql_select_db($lNomBdd, $lConnexion);
+				$lConnexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, $lNomBdd);
+				mysqli_set_charset($lConnexion, "utf8"); 
 				// Ajout du préfixe
 				$lRequetes = explode(";", $lUpdateSql);
 				$lNbErreur = 0;
 				$lNbRequetes = 0;
-				mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 				foreach( $lRequetes as $lReq ) {
 					$lReqTrim = trim($lReq);
 					if(!empty($lReqTrim)) {
 						$lNbRequetes++;
-						if(!mysql_query($lReq, $lConnexion)) {
+						if(!mysqli_query($lConnexion, $lReq)) {
 							$lNbErreur++;
 						} 
 					}
@@ -88,17 +86,17 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["bdd"]) && $_PO
 		$lNomFichier = $lDossierBdd . "0-structure.sql";
 		$lUpdateSql = file_get_contents($lNomFichier);
 
-		mysql_select_db($lNomBdd, $lConnexion);
+		$lConnexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, $lNomBdd);
+		mysqli_set_charset($lConnexion, "utf8");
 		// Ajout du préfixe
 		$lRequetes = explode(";", $lUpdateSql);
 		$lNbErreur = 0;
 		$lNbRequetes = 0;
-		mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 		foreach( $lRequetes as $lReq ) {
 			$lReqTrim = trim($lReq);
 			if(!empty($lReqTrim)) {
 				$lNbRequetes++;
-				if(!mysql_query($lReq, $lConnexion)) {
+				if(!mysqli_query($lConnexion, $lReq)) {
 					$lNbErreur++;
 				}
 			}
@@ -157,7 +155,8 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["bdd"]) && $_PO
 		echo "Erreur";
 	}
 } else {
-	$lListeBDD = mysql_query("SHOW DATABASES", $lConnexion);
+	$lConnexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
+	$lListeBDD = mysqli_query($lConnexion, "SHOW DATABASES");
 	?>
 	<form method="post" action="./ImportBDD.php" enctype="multipart/form-data">
 		<span>Le fichier Sql de la BDD : </span>
@@ -165,7 +164,7 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["bdd"]) && $_PO
 		<span>La BDD de destination : </span>
 		<select name="bdd">
 		<?php 
-			while($lTable = mysql_fetch_array($lListeBDD)) {
+			while($lTable = mysqli_fetch_array($lListeBDD)) {
 				echo "<option value=\"". $lTable[0] . "\">" . $lTable[0] . "</option>";
 			}
 		?>
@@ -181,5 +180,5 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["bdd"]) && $_PO
 <?php 
 }
 	
-mysql_close($lConnexion);
+mysqli_close($lConnexion);
 ?>

@@ -60,8 +60,8 @@ class AccesManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return AccesManager::remplirAcces(
 				$pId,
 				$lLigne[AccesManager::CHAMP_ACCES_ID_LOGIN],
@@ -101,8 +101,8 @@ class AccesManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeAcces = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAcces,
 					AccesManager::remplirAcces(
 					$lLigne[AccesManager::CHAMP_ACCES_ID],
@@ -156,9 +156,9 @@ class AccesManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeAcces,
 						AccesManager::remplirAcces(
@@ -227,7 +227,6 @@ class AccesManager
 				," . AccesManager::CHAMP_ACCES_IP . "
 				," . AccesManager::CHAMP_ACCES_NAV . "
 				," . AccesManager::CHAMP_ACCES_DATE_CREATION . "
-				," . AccesManager::CHAMP_ACCES_DATE_MODIFICATION . "
 				," . AccesManager::CHAMP_ACCES_AUTORISE . ")
 			VALUES ";
 
@@ -241,7 +240,6 @@ class AccesManager
 				,'" . StringUtils::securiser( $lVo->getIp() ) . "'
 				,'" . StringUtils::securiser( $lVo->getNav() ) . "'
 				,'" . StringUtils::securiser( $lVo->getDateCreation() ) . "'
-				,'" . StringUtils::securiser( $lVo->getDateModification() ) . "'
 				,'" . StringUtils::securiser( $lVo->getAutorise() ) . "')";
 
 				if($lNbVO == $lI) {
@@ -258,7 +256,6 @@ class AccesManager
 				,'" . StringUtils::securiser( $pVo->getIp() ) . "'
 				,'" . StringUtils::securiser( $pVo->getNav() ) . "'
 				,'" . StringUtils::securiser( $pVo->getDateCreation() ) . "'
-				,'" . StringUtils::securiser( $pVo->getDateModification() ) . "'
 				,'" . StringUtils::securiser( $pVo->getAutorise() ) . "');";
 		}
 

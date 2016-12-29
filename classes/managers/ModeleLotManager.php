@@ -56,8 +56,8 @@ class ModeleLotManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return ModeleLotManager::remplirModeleLot(
 				$pId,
 				$lLigne[ModeleLotManager::CHAMP_MODELELOT_ID_NOM_PRODUIT],
@@ -95,8 +95,8 @@ class ModeleLotManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeModeleLot = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lListeModeleLot[$lLigne[ModeleLotManager::CHAMP_MODELELOT_ID]] =
 					ModeleLotManager::remplirModeleLot(
 					$lLigne[ModeleLotManager::CHAMP_MODELELOT_ID],
@@ -135,8 +135,8 @@ class ModeleLotManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeModeleLot = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeModeleLot,
 					ModeleLotManager::remplirModeleLot(
 					$lLigne[ModeleLotManager::CHAMP_MODELELOT_ID],
@@ -201,9 +201,9 @@ class ModeleLotManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeModeleLot,
 						ModeleLotManager::remplirModeleLot(

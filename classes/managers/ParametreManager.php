@@ -74,8 +74,8 @@ class ParametreManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return ParametreManager::remplirParametre(
 				$pId,
 				$lLigne[ParametreManager::CHAMP_PARAMETRE_LABEL],
@@ -129,8 +129,8 @@ class ParametreManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeParametre = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeParametre,
 					ParametreManager::remplirParametre(
 					$lLigne[ParametreManager::CHAMP_PARAMETRE_ID],
@@ -198,9 +198,9 @@ class ParametreManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeParametre,
 						ParametreManager::remplirParametre(

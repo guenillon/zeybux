@@ -56,8 +56,8 @@ class TypePaiementChampComplementaireManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return TypePaiementChampComplementaireManager::remplirTypePaiementChampComplementaire(
 				$pId,
 				$lLigne[TypePaiementChampComplementaireManager::CHAMP_TYPEPAIEMENTCHAMPCOMPLEMENTAIRE_CHCP_ID],
@@ -93,8 +93,8 @@ class TypePaiementChampComplementaireManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeTypePaiementChampComplementaire = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeTypePaiementChampComplementaire,
 					TypePaiementChampComplementaireManager::remplirTypePaiementChampComplementaire(
 					$lLigne[TypePaiementChampComplementaireManager::CHAMP_TYPEPAIEMENTCHAMPCOMPLEMENTAIRE_TPP_ID],
@@ -144,9 +144,9 @@ class TypePaiementChampComplementaireManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeTypePaiementChampComplementaire,
 						TypePaiementChampComplementaireManager::remplirTypePaiementChampComplementaire(
@@ -213,8 +213,8 @@ class TypePaiementChampComplementaireManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeChamp = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 				array_push($lListeChamp,$lLigne[TypePaiementChampComplementaireManager::CHAMP_TYPEPAIEMENTCHAMPCOMPLEMENTAIRE_CHCP_ID]);
 			}
 		}

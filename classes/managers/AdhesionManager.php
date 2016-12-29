@@ -61,8 +61,8 @@ class AdhesionManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return AdhesionManager::remplirAdhesion(
 				$pId,
 				$lLigne[AdhesionManager::CHAMP_ADHESION_LABEL],
@@ -100,8 +100,8 @@ class AdhesionManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeAdhesion = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAdhesion,
 					AdhesionManager::remplirAdhesion(
 					$lLigne[AdhesionManager::CHAMP_ADHESION_ID],
@@ -165,8 +165,8 @@ class AdhesionManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 		
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lAdhesionDetail = new AdhesionDetailVO(
 				$lLigne[AdhesionManager::CHAMP_ADHESION_ID],
 				$lLigne[AdhesionManager::CHAMP_ADHESION_LABEL],
@@ -191,7 +191,7 @@ class AdhesionManager
 					$lLigne[PerimetreAdhesionManager::CHAMP_PERIMETREADHESION_DATE_MODIFICATION],
 					$lLigne[PerimetreAdhesionManager::CHAMP_PERIMETREADHESION_ETAT]
 				));
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lAdhesionDetail->addTypes(new TypeAdhesionDetailVO(
 					$lLigne[TypeAdhesionManager::CHAMP_TYPEADHESION_ID],
 					$lLigne[TypeAdhesionManager::CHAMP_TYPEADHESION_ID_ADHESION],
@@ -249,9 +249,9 @@ class AdhesionManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeAdhesion,
 						AdhesionManager::remplirAdhesion(

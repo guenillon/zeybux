@@ -32,13 +32,12 @@ class DbUtils
 		$mMysqlPass = MYSQL_PASS; // mot de passe
 		$mMysqlDbnom = MYSQL_DBNOM; // nom de la base de donnee
 		
-		$lDb = mysql_connect($mMysqlHost,$mMysqlLogin,$mMysqlPass)
-			or die(MessagesErreurs::ERR_BDD_CONNEXION . " : <br>".mysql_error());
+		$lDb = mysqli_connect($mMysqlHost,$mMysqlLogin,$mMysqlPass, $mMysqlDbnom)
+			or die(MessagesErreurs::ERR_BDD_CONNEXION . " : <br>".mysqli_error($lDb));
 		
-		mysql_select_db($mMysqlDbnom,$lDb)
-			or die(MessagesErreurs::ERR_BDD_SELECTION . " : <br>".mysql_error());
-
-		mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
+		mysqli_set_charset($lDb, "utf8"); // Permet d'initer une connexion en UTF-8 avec la BDD
+		
+		return $lDb;
 	}
 	
 	/**
@@ -46,22 +45,22 @@ class DbUtils
 	* @return nothing
 	* @desc Ferme la connexion à la BDD
 	*/	
-	public static function fermerConnexion() {
-		mysql_close()
-			or die(MessagesErreurs::ERR_BDD_FERMETURE . " : <br>".mysql_error());
+	public static function fermerConnexion($pDb) {
+		mysqli_close($pDb)
+			or die(MessagesErreurs::ERR_BDD_FERMETURE . " : <br>".mysqli_error($pDb));
 	}
 		
 	/**
 	* @name executerRequete ($requete)
 	* @param string 
-	* @return mysql_result
+	* @return mysqli_result
 	* @desc Exécute la requête passée en paramètre
 	*/	
 	public static function executerRequete($pRequete) {
-		DbUtils::creerConnexion();
-		$lResultat = mysql_query($pRequete) 
-			or die(MessagesErreurs::ERR_BDD_EXECUTION . " : <br>$pRequete<br>".mysql_error());
-		DbUtils::fermerConnexion();
+		$lDb = DbUtils::creerConnexion();
+		$lResultat = mysqli_query($lDb, $pRequete) 
+			or die(MessagesErreurs::ERR_BDD_EXECUTION . " : <br>$pRequete<br>".mysqli_error($lDb));
+		DbUtils::fermerConnexion($lDb);
 		return $lResultat;
 	}
 
@@ -72,17 +71,16 @@ class DbUtils
 	* @desc Exécute la requête d'insertion passée en paramètre et retourne l'identifiant généré par la BDD
 	*/	
 	public static function executerRequeteInsertRetourId($pRequete) {
-		DbUtils::creerConnexion();
-		mysql_query($pRequete) 
-			or die(MessagesErreurs::ERR_BDD_EXECUTION . " : <br>$pRequete<br>".mysql_error());
-		$lId = mysql_insert_id(); 
-		DbUtils::fermerConnexion();
+		$lDb = DbUtils::creerConnexion();
+		mysqli_query($lDb, $pRequete) 
+			or die(MessagesErreurs::ERR_BDD_EXECUTION . " : <br>$pRequete<br>".mysqli_error($lDb));
+		$lId = mysqli_insert_id(); 
+		DbUtils::fermerConnexion($lDb);
 		return $lId;
 	}
 	
 	/**
 	 * @name prepareRequeteSelect($pTable, $pChamps, $pFiltres, $pTris)
-	 * @todo methode à tester!!!
 	 * 
 	 * @param string nom de la table
 	 * @param array(string) champs à récupérer dans la table
@@ -139,7 +137,6 @@ class DbUtils
 	
 /**
 	 * @name prepareRequeteRecherche($pTable, $pChamps, $pFiltres, $pTris)
-	 * @todo methode à tester!!!
 	 * 
 	 * @param string nom de la table
 	 * @param array(string) champs à récupérer dans la table

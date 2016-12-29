@@ -62,8 +62,8 @@ class AdhesionAdherentManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return AdhesionAdherentManager::remplirAdhesionAdherent(
 				$pId,
 				$lLigne[AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID_ADHERENT],
@@ -103,8 +103,8 @@ class AdhesionAdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeAdhesionAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAdhesionAdherent,
 					AdhesionAdherentManager::remplirAdhesionAdherent(
 					$lLigne[AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID],
@@ -163,8 +163,8 @@ class AdhesionAdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAdherent,
 				new AdherentVO(
 					$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
@@ -215,7 +215,7 @@ class AdhesionAdherentManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 	
-		return mysql_num_rows($lSql) > 0;
+		return mysqli_num_rows($lSql) > 0;
 	}
 
 	/**
@@ -256,8 +256,8 @@ class AdhesionAdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeAdhesion = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAdhesion,
 				new ListeAdhesionVO(
 				$lLigne[AdhesionAdherentManager::CHAMP_ADHESIONADHERENT_ID],
@@ -303,7 +303,7 @@ class AdhesionAdherentManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 		
-		$lLigne = mysql_fetch_assoc($lSql);
+		$lLigne = mysqli_fetch_assoc($lSql);
 		return $lLigne['Nb'];
 	}
 	
@@ -343,9 +343,9 @@ class AdhesionAdherentManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeAdhesionAdherent,
 						AdhesionAdherentManager::remplirAdhesionAdherent(

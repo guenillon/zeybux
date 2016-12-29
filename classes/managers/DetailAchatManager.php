@@ -70,8 +70,8 @@ class DetailAchatManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return DetailAchatManager::remplirDetailAchat(
 				$pId,
 				$lLigne[DetailAchatManager::CHAMP_DETAILACHAT_ID_OPERATION_SOLIDAIRE],
@@ -109,8 +109,8 @@ class DetailAchatManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeDetailAchat = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailAchat,
 					DetailAchatManager::remplirDetailAchat(
 					$lLigne[DetailAchatManager::CHAMP_DETAILACHAT_ID_OPERATION],
@@ -162,9 +162,9 @@ class DetailAchatManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeDetailAchat,
 						DetailAchatManager::remplirDetailAchat(
@@ -265,8 +265,8 @@ class DetailAchatManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeDetailAchat = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailAchat,
 				new ProduitDetailAchatAfficheVO(
 				$lLigne[DetailAchatManager::CHAMP_DETAILACHAT_ID_NOM_PRODUIT],
@@ -380,8 +380,8 @@ class DetailAchatManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeAchat = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAchat,
 				new MesAchatsVO(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -504,8 +504,8 @@ class DetailAchatManager
 		if($lRequete !== false) {
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
-			if( mysql_num_rows($lSql) > 0 ) {
-				while ($lLigne = mysql_fetch_assoc($lSql)) {
+			if( mysqli_num_rows($lSql) > 0 ) {
+				while ($lLigne = mysqli_fetch_assoc($lSql)) {
 					array_push($lListeAchat,
 					new ListeAchatVO(
 					$lLigne[OperationManager::CHAMP_OPERATION_ID],

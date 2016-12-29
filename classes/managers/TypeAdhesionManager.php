@@ -60,8 +60,8 @@ class TypeAdhesionManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return TypeAdhesionManager::remplirTypeAdhesion(
 				$pId,
 				$lLigne[TypeAdhesionManager::CHAMP_TYPEADHESION_ID_ADHESION],
@@ -101,8 +101,8 @@ class TypeAdhesionManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeTypeAdhesion = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeTypeAdhesion,
 					TypeAdhesionManager::remplirTypeAdhesion(
 					$lLigne[TypeAdhesionManager::CHAMP_TYPEADHESION_ID],
@@ -156,9 +156,9 @@ class TypeAdhesionManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeTypeAdhesion,
 						TypeAdhesionManager::remplirTypeAdhesion(

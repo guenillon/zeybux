@@ -318,8 +318,8 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["auteur"]) && $
 				fwrite($fp,"\t\t\$lLogger->log(\"Execution de la requete : \" . \$lRequete,PEAR_LOG_DEBUG); // Maj des logs\n");
 				fwrite($fp,"\t\t\$lSql = Dbutils::executerRequete(\$lRequete);\n\n");
 			
-				fwrite($fp,"\t\tif( mysql_num_rows(\$lSql) > 0 ) {\n");
-				fwrite($fp,"\t\t\t\$lLigne = mysql_fetch_assoc(\$lSql);\n");
+				fwrite($fp,"\t\tif( mysqli_num_rows(\$lSql) > 0 ) {\n");
+				fwrite($fp,"\t\t\t\$lLigne = mysqli_fetch_assoc(\$lSql);\n");
 				fwrite($fp,"\t\t\treturn " . $lNomTable[1] . "Manager::remplir" . $lNomTable[1] . "(\n");
 				fwrite($fp,"\t\t\t\t\$pId");
 				
@@ -370,8 +370,8 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["auteur"]) && $
 				fwrite($fp,"\t\t\$lSql = Dbutils::executerRequete(\$lRequete);\n\n");	
 			
 				fwrite($fp,"\t\t\$lListe" . $lNomTable[1] . " = array();\n");
-				fwrite($fp,"\t\tif( mysql_num_rows(\$lSql) > 0 ) {\n");
-				fwrite($fp,"\t\t\twhile (\$lLigne = mysql_fetch_assoc(\$lSql)) {\n");
+				fwrite($fp,"\t\tif( mysqli_num_rows(\$lSql) > 0 ) {\n");
+				fwrite($fp,"\t\t\twhile (\$lLigne = mysqli_fetch_assoc(\$lSql)) {\n");
 				fwrite($fp,"\t\t\t\tarray_push(\$lListe" . $lNomTable[1] . ",\n");
 				
 				
@@ -435,9 +435,9 @@ if(file_exists(CHEMIN_FICHIER_SQL . FICHIER_SQL) && isset($_POST["auteur"]) && $
 				fwrite($fp,"\t\t\t\$lLogger->log(\"Execution de la requete : \" . \$lRequete,PEAR_LOG_DEBUG); // Maj des logs\n");
 				fwrite($fp,"\t\t\t\$lSql = Dbutils::executerRequete(\$lRequete);\n\n");
 			
-				fwrite($fp,"\t\t\tif( mysql_num_rows(\$lSql) > 0 ) {\n\n");
+				fwrite($fp,"\t\t\tif( mysqli_num_rows(\$lSql) > 0 ) {\n\n");
 		
-				fwrite($fp,"\t\t\t\twhile ( \$lLigne = mysql_fetch_assoc(\$lSql) ) {\n\n");
+				fwrite($fp,"\t\t\t\twhile ( \$lLigne = mysqli_fetch_assoc(\$lSql) ) {\n\n");
 		
 				fwrite($fp,"\t\t\t\t\tarray_push(\$lListe" . $lNomTable[1] . ",\n");								
 				fwrite($fp,"\t\t\t\t\t\t" . $lNomTable[1] . "Manager::remplir" . $lNomTable[1] . "(");

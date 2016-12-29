@@ -55,8 +55,8 @@ class TypePaiementManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return TypePaiementManager::remplirTypePaiement(
 				$pId,
 				$lLigne[TypePaiementManager::CHAMP_TYPEPAIEMENT_TYPE],
@@ -88,8 +88,8 @@ class TypePaiementManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeTypePaiement = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeTypePaiement,
 					TypePaiementManager::remplirTypePaiement(
 					$lLigne[TypePaiementManager::CHAMP_TYPEPAIEMENT_ID],
@@ -142,8 +142,8 @@ class TypePaiementManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeTypePaiement = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 
 			$lTppId = $lLigne[TypePaiementManager::CHAMP_TYPEPAIEMENT_ID];
 			
@@ -159,7 +159,7 @@ class TypePaiementManager
 					NULL));
 			}
 			
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				 if($lTppId != $lLigne[TypePaiementManager::CHAMP_TYPEPAIEMENT_ID]) {
 				 	$lListeTypePaiement[$lTppId] = $lTypePaiement;
 				 	$lTppId = $lLigne[TypePaiementManager::CHAMP_TYPEPAIEMENT_ID];
@@ -224,9 +224,9 @@ class TypePaiementManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeTypePaiement,
 						TypePaiementManager::remplirTypePaiement(

@@ -298,8 +298,8 @@ if(isset($_POST['nom']) && isset($_POST['nomBDD'])) {
 				fwrite($fp,"\t\t\$lSql = Dbutils::executerRequete(\$lRequete);\n\n");
 			
 				fwrite($fp,"\t\t\$lListe" . $lNom . " = array();\n");
-				fwrite($fp,"\t\tif( mysql_num_rows(\$lSql) > 0 ) {\n");
-				fwrite($fp,"\t\t\twhile (\$lLigne = mysql_fetch_assoc(\$lSql)) {\n");
+				fwrite($fp,"\t\tif( mysqli_num_rows(\$lSql) > 0 ) {\n");
+				fwrite($fp,"\t\t\twhile (\$lLigne = mysqli_fetch_assoc(\$lSql)) {\n");
 				fwrite($fp,"\t\t\t\tarray_push(\$lListe" . $lNom . ",\n");
 				
 				
@@ -352,8 +352,8 @@ if(isset($_POST['nom']) && isset($_POST['nomBDD'])) {
 				fwrite($fp,"\t\t\$lSql = Dbutils::executerRequete(\$lRequete);\n\n");	
 			
 				fwrite($fp,"\t\t\$lListe" . $lNom . " = array();\n");
-				fwrite($fp,"\t\tif( mysql_num_rows(\$lSql) > 0 ) {\n");
-				fwrite($fp,"\t\t\twhile (\$lLigne = mysql_fetch_assoc(\$lSql)) {\n");
+				fwrite($fp,"\t\tif( mysqli_num_rows(\$lSql) > 0 ) {\n");
+				fwrite($fp,"\t\t\twhile (\$lLigne = mysqli_fetch_assoc(\$lSql)) {\n");
 				fwrite($fp,"\t\t\t\tarray_push(\$lListe" . $lNom . ",\n");
 				
 				
@@ -415,9 +415,9 @@ if(isset($_POST['nom']) && isset($_POST['nomBDD'])) {
 				fwrite($fp,"\t\t\t\$lLogger->log(\"Execution de la requete : \" . \$lRequete,PEAR_LOG_DEBUG); // Maj des logs\n");
 				fwrite($fp,"\t\t\t\$lSql = Dbutils::executerRequete(\$lRequete);\n\n");
 			
-				fwrite($fp,"\t\t\tif( mysql_num_rows(\$lSql) > 0 ) {\n\n");
+				fwrite($fp,"\t\t\tif( mysqli_num_rows(\$lSql) > 0 ) {\n\n");
 		
-				fwrite($fp,"\t\t\t\twhile ( \$lLigne = mysql_fetch_assoc(\$lSql) ) {\n\n");
+				fwrite($fp,"\t\t\t\twhile ( \$lLigne = mysqli_fetch_assoc(\$lSql) ) {\n\n");
 		
 				fwrite($fp,"\t\t\t\t\tarray_push(\$lListe" . $lNom . ",\n");								
 				fwrite($fp,"\t\t\t\t\t\t" . $lNom . "ViewManager::remplir(");

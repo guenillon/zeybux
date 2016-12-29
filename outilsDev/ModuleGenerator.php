@@ -44,7 +44,7 @@ if( isset($_POST['nom']) && isset($_POST['label']) && $_POST['nom'] != "") {
 	// Traitement de la position du module
 	$lRequete = "SELECT * FROM `mod_module` ORDER BY `mod_ordre` DESC";
 	$lSql = Dbutils::executerRequete($lRequete);
-	$lLigne = mysql_fetch_assoc($lSql);
+	$lLigne = mysqli_fetch_assoc($lSql);
 	$lOrdre = $lLigne['mod_ordre'];
 	$lOrdre++;
 

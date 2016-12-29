@@ -238,26 +238,21 @@ color:#FFFFFF;
 			$mMysqlPass = $_POST["pass"]; // mot de passe
 			$mMysqlDbnom = $_POST["base"]; // nom de la base de donnee
 						
-			$lDb = @mysql_connect($mMysqlHost,$mMysqlLogin,$mMysqlPass);
+			$lDb = @mysqli_connect($mMysqlHost,$mMysqlLogin,$mMysqlPass, $mMysqlDbnom);
 			if(!$lDb) {		
 				$lAcces = false;
 			} else {
-				if (!@mysql_select_db($mMysqlDbnom,$lDb)) {
+				if (!@mysqli_set_charset($lDb, "utf8")) { // Permet d'initer une connexion en UTF-8 avec la BDD
 					$lAcces = false;
-				} else {
-					$lRs = @mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
-					if (!$lRs) {
-						$lAcces = false;
-				    }
-				}	
+			    }
 			}
 				
 			if(!$lAcces) { // Connexion KO
 				header('location:./install.php?page=2&rep=' . $_POST["rep"]);
 			}
 			
-			if(!@mysql_close($lDb)) {					
-				die(mysql_error());
+			if(!@mysqli_close($lDb)) {					
+				die(mysqli_error($lDb));
 			}
 				
 			
@@ -302,8 +297,8 @@ color:#FFFFFF;
 			fclose($fp);
 
 			// Installation de la BDD
-			$connexion = mysql_connect($_POST["server"], $_POST["login"], $_POST["pass"]);
-			mysql_select_db($_POST["base"], $connexion);
+			$connexion = mysqli_connect($_POST["server"], $_POST["login"], $_POST["pass"], $_POST["base"]);
+			
 			$lRequete = file_get_contents($_POST["rep"] . "/install.sql");
 			
 			// Ajout du préfixe
@@ -311,14 +306,14 @@ color:#FFFFFF;
 			
 			$lRequetes = explode(";\n", $lRequete);	
 			$lNbErreur = 0;
-			mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
+			mysqli_set_charset($connexion, "utf8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 			
 			foreach( $lRequetes as $lReq ) {
-				if(!mysql_query($lReq, $connexion)) {
+				if(!mysqli_query($connexion, $lReq)) {
 					$lNbErreur++;
 				}
 			}
-			mysql_close($connexion);	
+			mysqli_close($connexion);	
 			$p_prefixe = $_POST["prefixe"];
 			$p_path = $_POST["rep"];
 			
@@ -486,9 +481,8 @@ color:#FFFFFF;
 				} else {				
 					require_once($_POST["rep"] . '/configuration/DB.php');
 					
-					$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-					mysql_select_db(MYSQL_DBNOM, $connexion);
-				  	mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
+					$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+					mysqli_set_charset($connexion, "utf8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 					// Création de l'admin
 					$lRequete =
 					"INSERT INTO " . $_POST['prefixe'] . "ide_identification
@@ -504,8 +498,8 @@ color:#FFFFFF;
 						,'" . md5($_POST['admin-pass']) . "'
 						,'2'
 						,'1')";
-					mysql_query($lRequete, $connexion);					
-					mysql_close($connexion);
+					mysqli_query($connexion, $lRequete);					
+					mysqli_close($connexion);
 					
 					// Ajout du fichier de config des Mails
 					$fp = fopen($_POST["rep"] . '/configuration/Mail.php', 'w');

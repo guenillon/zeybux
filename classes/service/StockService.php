@@ -549,8 +549,8 @@ class StockService
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeStockProduitReservation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeStockProduitReservation,
 				$this->remplirStockProduitReservation(
 				$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
@@ -635,8 +635,8 @@ class StockService
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeStockProduitReservation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeStockProduitReservation,
 				$this->remplirStockProduitReservation(
 				$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],

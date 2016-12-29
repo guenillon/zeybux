@@ -596,8 +596,8 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			// Export de la base du dossier source
 			include($lDossierVersionSource. '/configuration/DB.php');
 			
-			$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-		    mysql_select_db(MYSQL_DBNOM, $connexion);
+			$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+			mysqli_set_charset($connexion, "utf8");
 		    
 		    $entete = "-- ----------------------\n";
 		    $entete .= "-- Zeybux base " . MYSQL_DBNOM . " au " . date("d-M-Y") . "\n";
@@ -605,16 +605,16 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 		    $creations = "";
 		    $insertions = "\n\n";
 		    $lListeTable = array();
-		    $listeTables = mysql_query("show tables", $connexion);
-		    while($table = mysql_fetch_array($listeTables))
+		    $listeTables = mysqli_query($connexion, "show tables");
+		    while($table = mysqli_fetch_array($listeTables))
 		    {
 		    	array_push($lListeTable,$table[0]);
 		        // La structure
 	            $creations .= "-- -----------------------------\n";
 	            $creations .= "-- creation de la table ".$table[0]."\n";
 	            $creations .= "-- -----------------------------\n";
-	            $listeCreationsTables = mysql_query("show create table ".$table[0], $connexion);
-	            while($creationTable = mysql_fetch_array($listeCreationsTables))
+	            $listeCreationsTables = mysqli_query($connexion, "show create table ".$table[0]);
+	            while($creationTable = mysqli_fetch_array($listeCreationsTables))
 	            {
 	              if(preg_match('/CREATE ALGORITHM=UNDEFINED/',$creationTable[1])) {
 	              		$creationTable[1] = preg_replace('/CREATE ALGORITHM=UNDEFINED DEFINER=`(.*)`@`(.*)` SQL SECURITY DEFINER VIEW/', "CREATE VIEW", $creationTable[1]);
@@ -629,7 +629,7 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 		        switch($table[0])
 		        {
 		        	case "cpt_compte":
-			            $donnees = mysql_query("SELECT * FROM ".$table[0]);
+			            $donnees = mysqli_query($connexion, "SELECT * FROM ".$table[0]);
 			            $insertions .= "-- -----------------------------\n";
 			            $insertions .= "-- insertions dans la table ".$table[0]."\n";
 			            $insertions .= "-- -----------------------------\n";
@@ -647,22 +647,20 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			        case "ban_banque":
 			        case "cop_compteur":
 			        case "par_parametre":
-			            $donnees = mysql_query("SELECT * FROM ".$table[0]);
+			            $donnees = mysqli_query($connexion, "SELECT * FROM ".$table[0]);
 			            $insertions .= "-- -----------------------------\n";
 			            $insertions .= "-- insertions dans la table ".$table[0]."\n";
 			            $insertions .= "-- -----------------------------\n";
-			            while($nuplet = mysql_fetch_array($donnees))
+			            while($nuplet = mysqli_fetch_array($donnees))
 			            {
 			                $insertions .= "INSERT INTO {PREFIXE}".$table[0]." VALUES(";
-			                for($i=0; $i < mysql_num_fields($donnees); $i++)
+			                for($i=0; $i < mysqli_num_fields($donnees); $i++)
 			                {
 			                  if($i != 0)
 			                     $insertions .=  ", ";
-			                  if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
-			                     $insertions .=  "'";
+			                  $insertions .=  "'";
 			                  $insertions .= addslashes($nuplet[$i]);
-			                  if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
-			                    $insertions .=  "'";
+			                  $insertions .=  "'";
 			                }
 			                $insertions .=  ");\n";
 			            }
@@ -670,7 +668,7 @@ if(isset($_POST['nom']) && isset($_POST['env']) && isset($_POST['source'])) {
 			         break;
 		        }
 		    }
-		    mysql_close($connexion);
+		    mysqli_close($connexion);
 		 
 		    // Gestion des préfixes de table
 		    foreach($lListeTable as $lTable) {

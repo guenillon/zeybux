@@ -61,8 +61,8 @@ class NomProduitManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return NomProduitManager::remplirNomProduit(
 				$pId,
 				$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_NUMERO],
@@ -100,8 +100,8 @@ class NomProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeNomProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeNomProduit,
 					NomProduitManager::remplirNomProduit(
 					$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_ID],
@@ -145,8 +145,8 @@ class NomProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeNomProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeNomProduit,
 					NomProduitManager::remplirNomProduit(
 					$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_ID],
@@ -198,9 +198,9 @@ class NomProduitManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeNomProduit,
 						NomProduitManager::remplirNomProduit(
@@ -278,8 +278,8 @@ class NomProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lUniteNomProduit = new UniteNomProduitVO();
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			
 			$lUniteNomProduit = new UniteNomProduitVO(
 					$lLigne[CategorieProduitManager::CHAMP_CATEGORIEPRODUIT_ID],
@@ -289,7 +289,7 @@ class NomProduitManager
 					$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_NOM],
 					array($lLigne[ModeleLotManager::CHAMP_MODELELOT_UNITE]));
 			
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lUniteNomProduit->addMLotUnite($lLigne[ModeleLotManager::CHAMP_MODELELOT_UNITE]);
 			}
 		}
@@ -423,8 +423,8 @@ class NomProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeNomProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeNomProduit,
 				NomProduitManager::remplirStockFerme(
 				$lLigne[NomProduitManager::CHAMP_NOMPRODUIT_ID],

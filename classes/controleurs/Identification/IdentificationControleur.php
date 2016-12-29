@@ -45,7 +45,7 @@ class IdentificationControleur
 				
 			// Sélection des adhérents ayant le login de l'identification
 			$lListeIdentification = IdentificationManager::selectByLogin($lLogin);
-	
+			
 			// Recherche de correspondance de login et mot de passe dans la base 
 			$lAutorisation = false;
 			$lModules = array();

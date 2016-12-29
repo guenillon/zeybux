@@ -63,8 +63,8 @@ class OperationRemiseChequeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeOperationRemiseCheque = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperationRemiseCheque,
 						OperationRemiseChequeManager::remplirOperationRemiseCheque(
 								$lLigne[OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_REMISE_CHEQUE],
@@ -101,8 +101,8 @@ class OperationRemiseChequeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeOperationRemiseCheque = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperationRemiseCheque,
 					OperationRemiseChequeManager::remplirOperationRemiseCheque(
 					$lLigne[OperationRemiseChequeManager::CHAMP_OPERATIONREMISECHEQUE_ID_REMISE_CHEQUE],
@@ -153,8 +153,8 @@ class OperationRemiseChequeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeOperationRemiseCheque = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperationRemiseCheque,
 						new OperationRemiseChequePresentationVO(
 								$lLigne[OperationManager::CHAMP_OPERATION_ID ],
@@ -224,8 +224,8 @@ class OperationRemiseChequeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeOperationRemiseCheque = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperationRemiseCheque,
 				new OperationRemiseChequePresentationVO(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID ],
@@ -282,8 +282,8 @@ class OperationRemiseChequeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeOperationRemiseCheque = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperationRemiseCheque,
 						new OperationRemiseChequeExportVO(
 								$lLigne[BanqueManager::CHAMP_BANQUE_NOM],
@@ -349,8 +349,8 @@ class OperationRemiseChequeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeOperationRemiseCheque = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperationRemiseCheque,
 				new OperationRemiseChequeExportVO(
 				$lLigne[BanqueManager::CHAMP_BANQUE_NOM],
@@ -384,7 +384,7 @@ class OperationRemiseChequeManager
 	
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
-		$lLigne = mysql_fetch_assoc($lSql);
+		$lLigne = mysqli_fetch_assoc($lSql);
 		return $lLigne["montant"];
 	}
 	
@@ -421,9 +421,9 @@ class OperationRemiseChequeManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeOperationRemiseCheque,
 						OperationRemiseChequeManager::remplirOperationRemiseCheque(

@@ -58,8 +58,8 @@ class InformationBancaireManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return InformationBancaireManager::remplirInformationBancaire(
 				$pId,
 				$lLigne[InformationBancaireManager::CHAMP_INFORMATIONBANCAIRE_ID_COMPTE],
@@ -97,8 +97,8 @@ class InformationBancaireManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeInformationBancaire = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeInformationBancaire,
 					InformationBancaireManager::remplirInformationBancaire(
 					$lLigne[InformationBancaireManager::CHAMP_INFORMATIONBANCAIRE_ID],
@@ -150,9 +150,9 @@ class InformationBancaireManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeInformationBancaire,
 						InformationBancaireManager::remplirInformationBancaire(

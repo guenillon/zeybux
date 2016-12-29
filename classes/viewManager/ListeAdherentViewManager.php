@@ -54,8 +54,8 @@ class ListeAdherentViewManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return ListeAdherentViewManager::remplir(
 				$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
 				$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO],
@@ -98,8 +98,8 @@ class ListeAdherentViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				if($pMasquer) {
 					array_push($lListeAdherent,
 						ListeAdherentViewManager::remplir(
@@ -165,9 +165,9 @@ class ListeAdherentViewManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 	
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 	
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 					array_push($lListeAdherent,
 						ListeAdherentViewManager::remplir(
 							$lLigne[AdherentManager::CHAMP_ADHERENT_ID],

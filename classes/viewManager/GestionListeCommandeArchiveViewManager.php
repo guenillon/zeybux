@@ -50,8 +50,8 @@ class GestionListeCommandeArchiveViewManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return GestionListeCommandeArchiveViewManager::remplir(
 				$pId,
 				$lLigne[CommandeManager::CHAMP_COMMANDE_NOM],
@@ -87,8 +87,8 @@ class GestionListeCommandeArchiveViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeGestionListeCommandeArchive = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeGestionListeCommandeArchive,
 					GestionListeCommandeArchiveViewManager::remplir(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -137,9 +137,9 @@ class GestionListeCommandeArchiveViewManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 	
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 	
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 	
 					array_push($lListeGestionListeCommandeArchive,
 						GestionListeCommandeArchiveViewManager::remplir(

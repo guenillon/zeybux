@@ -56,8 +56,8 @@ class DetailCommandeManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return DetailCommandeManager::remplirDetailCommande(
 				$pId,
 				$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID_PRODUIT],
@@ -91,8 +91,8 @@ class DetailCommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeDetailCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailCommande,
 					DetailCommandeManager::remplirDetailCommande(
 					$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID],
@@ -152,8 +152,8 @@ class DetailCommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeDetailCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lListeDetailCommande[$lLigne[ProduitManager::CHAMP_PRODUIT_ID_NOM_PRODUIT]] =
 				DetailCommandeManager::remplirDetailCommandeUniteMesure(
 				$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID],
@@ -196,8 +196,8 @@ class DetailCommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeDetailCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lListeDetailCommande[$lLigne[ProduitManager::CHAMP_PRODUIT_ID_NOM_PRODUIT]] =
 				DetailCommandeManager::remplirDetailCommandeUniteMesure(
 						$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID],
@@ -240,8 +240,8 @@ class DetailCommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeDetailCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lListeDetailCommande[$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID]] =
 				DetailCommandeManager::remplirDetailCommandeUniteMesure(
 						$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID],
@@ -290,9 +290,9 @@ class DetailCommandeManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeDetailCommande,
 						DetailCommandeManager::remplirDetailCommande(

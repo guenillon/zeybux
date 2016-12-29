@@ -80,8 +80,8 @@ class DetailMarcheViewManager
 		if($lRequete !== false) {
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
-			if( mysql_num_rows($lSql) > 0 ) {
-				while ($lLigne = mysql_fetch_assoc($lSql)) {
+			if( mysqli_num_rows($lSql) > 0 ) {
+				while ($lLigne = mysqli_fetch_assoc($lSql)) {
 					array_push($lListeDetailMarche,
 						DetailMarcheViewManager::remplir(
 						$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -170,8 +170,8 @@ class DetailMarcheViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeDetailMarche = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailMarche,
 					DetailMarcheViewManager::remplir(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -258,8 +258,8 @@ class DetailMarcheViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeDetailMarche = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailMarche,
 					DetailMarcheViewManager::remplir(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -348,8 +348,8 @@ class DetailMarcheViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeDetailMarche = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailMarche,
 					DetailMarcheViewManager::remplir(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -452,8 +452,8 @@ class DetailMarcheViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		 
 		$lListeDetailMarche = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lListeDetailMarche[$lLigne[DetailCommandeManager::CHAMP_DETAILCOMMANDE_ID]]=
 					DetailMarcheViewManager::remplir(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -569,9 +569,9 @@ class DetailMarcheViewManager
 		if($lRequete !== false) {
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 	
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 	
 					array_push($lListeDetailMarche,
 						DetailMarcheViewManager::remplir(

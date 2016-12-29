@@ -51,8 +51,8 @@ class GestionCommandeReservationProducteurViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeGestionCommandeReservationProducteur = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeGestionCommandeReservationProducteur,
 					GestionCommandeReservationProducteurViewManager::remplir(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
@@ -87,8 +87,8 @@ class GestionCommandeReservationProducteurViewManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeGestionCommandeReservationProducteur = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeGestionCommandeReservationProducteur,
 					GestionCommandeReservationProducteurViewManager::remplir(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
@@ -150,9 +150,9 @@ class GestionCommandeReservationProducteurViewManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeGestionCommandeReservationProducteur,
 						GestionCommandeReservationProducteurViewManager::remplir(

@@ -66,8 +66,8 @@ class HistoriqueStockManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return HistoriqueStockManager::remplirHistoriqueStock(
 				$pId,
 				$lLigne[HistoriqueStockManager::CHAMP_HISTORIQUESTOCK_STO_ID],
@@ -111,8 +111,8 @@ class HistoriqueStockManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeHistoriqueStock = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeHistoriqueStock,
 					HistoriqueStockManager::remplirHistoriqueStock(
 					$lLigne[HistoriqueStockManager::CHAMP_HISTORIQUESTOCK_ID],
@@ -167,8 +167,8 @@ class HistoriqueStockManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 		
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lDetailReservation = new DetailReservationVO();
 				$lDetailReservation->getId()->setIdStock($lLigne[HistoriqueStockManager::CHAMP_HISTORIQUESTOCK_STO_ID]);
 				$lDetailReservation->setIdDetailCommande($lLigne[HistoriqueStockManager::CHAMP_HISTORIQUESTOCK_ID_DETAIL_COMMANDE]);
@@ -218,9 +218,9 @@ class HistoriqueStockManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeHistoriqueStock,
 						HistoriqueStockManager::remplirHistoriqueStock(

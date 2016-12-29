@@ -52,8 +52,8 @@ class CaracteristiqueManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return CaracteristiqueManager::remplirCaracteristique(
 				$pId,
 				$lLigne[CaracteristiqueManager::CHAMP_CARACTERISTIQUE_NOM],
@@ -85,8 +85,8 @@ class CaracteristiqueManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeCaracteristique = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCaracteristique,
 					CaracteristiqueManager::remplirCaracteristique(
 					$lLigne[CaracteristiqueManager::CHAMP_CARACTERISTIQUE_ID],
@@ -132,9 +132,9 @@ class CaracteristiqueManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeCaracteristique,
 						CaracteristiqueManager::remplirCaracteristique(

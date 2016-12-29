@@ -38,10 +38,9 @@ class DbUtils
 		$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 		$lLogger->setMask(Log::MAX(LOG_LEVEL));
 		
-		$lDb = @mysql_connect($mMysqlHost,$mMysqlLogin,$mMysqlPass);
-		
+		$lDb = @mysqli_connect($mMysqlHost,$mMysqlLogin,$mMysqlPass, $mMysqlDbnom);
 		if(!$lDb) {		
-			$lLogger->log(MessagesErreurs::ERR_600_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
+			$lLogger->log(MessagesErreurs::ERR_600_MSG ,PEAR_LOG_DEBUG); // Maj des logs
 			
 			$lVr = new TemplateVR();
 			$lVr->setValid(false);
@@ -52,38 +51,22 @@ class DbUtils
 			$lVr->getLog()->addErreur($lErreur);
 			
 			die($lVr->exportToJson());
-		} else {
-			if (!@mysql_select_db($mMysqlDbnom,$lDb)) {
-				$lLogger->log(MessagesErreurs::ERR_601_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
+		} else {	
+			if (!@mysqli_set_charset($lDb, "utf8")) { // Permet d'initier une connexion en UTF-8 avec la BDD
+		    	$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysqli_error($lDb),PEAR_LOG_DEBUG); // Maj des logs
 				
 				$lVr = new TemplateVR();
 				$lVr->setValid(false);
 				$lVr->getLog()->setValid(false);
 				$lErreur = new VRerreur();
-				$lErreur->setCode(MessagesErreurs::ERR_601_CODE);
-				$lErreur->setMessage(MessagesErreurs::ERR_601_MSG);
+				$lErreur->setCode(MessagesErreurs::ERR_603_CODE);
+				$lErreur->setMessage(MessagesErreurs::ERR_603_MSG);
 				$lVr->getLog()->addErreur($lErreur);
 				
 				die($lVr->exportToJson());
-			} else {	
-				//$lRs = @mysql_query("SET NAMES UTF8"); // Permet d'initier une connexion en UTF-8 avec la BDD
-				$lRs = @mysql_set_charset("utf8",$lDb); // Permet d'initier une connexion en UTF-8 avec la BDD
-				if (!$lRs) {
-			    	$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
-				
-					$lVr = new TemplateVR();
-					$lVr->setValid(false);
-					$lVr->getLog()->setValid(false);
-					$lErreur = new VRerreur();
-					$lErreur->setCode(MessagesErreurs::ERR_603_CODE);
-					$lErreur->setMessage(MessagesErreurs::ERR_603_MSG);
-					$lVr->getLog()->addErreur($lErreur);
-					
-					die($lVr->exportToJson());
-			    } else {
-					return $lDb;
-    			}
-			}	
+		    } else {
+				return $lDb;
+    		}
 		}
 	}
 	
@@ -93,11 +76,11 @@ class DbUtils
 	* @desc Ferme la connexion à la BDD
 	*/	
 	public static function fermerConnexion($pDb) {
-		if(!@mysql_close($pDb)) {			
+		if(!@mysqli_close($pDb)) {			
 			// Initialisation du Logger
 			$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 			$lLogger->setMask(Log::MAX(LOG_LEVEL));
-			$lLogger->log(MessagesErreurs::ERR_602_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
+			$lLogger->log(MessagesErreurs::ERR_602_MSG . " : " . mysqli_error($pDb),PEAR_LOG_DEBUG); // Maj des logs
 		
 			$lVr = new TemplateVR();
 			$lVr->setValid(false);
@@ -109,24 +92,22 @@ class DbUtils
 			
 			die($lVr->exportToJson());
 		}
-			//or die(MessagesErreurs::ERR_BDD_FERMETURE . " : <br>".mysql_error());
 	}
 		
 	/**
 	* @name executerRequete ($requete)
 	* @param string 
-	* @return mysql_result
+	* @return mysqli_result
 	* @desc Exécute la requête passée en paramètre
 	*/	
 	public static function executerRequete($pRequete) {
 		$lDb = DbUtils::creerConnexion();
-		$lResultat = @mysql_query($pRequete);
-		//or die(MessagesErreurs::ERR_BDD_EXECUTION . " : <br>$pRequete<br>".mysql_error());
+		$lResultat = @mysqli_query($lDb, $pRequete);
 		if (!$lResultat) {			
 			// Initialisation du Logger
 			$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 			$lLogger->setMask(Log::MAX(LOG_LEVEL));
-	    	$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
+	    	$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysqli_error($lDb),PEAR_LOG_DEBUG); // Maj des logs
 		
 			$lVr = new TemplateVR();
 			$lVr->setValid(false);
@@ -146,7 +127,7 @@ class DbUtils
 	/**
 	 * @name executerRequetesMultiples($pRequetes)
 	 * @param array(string)
-	 * @return mysql_result
+	 * @return mysqli_result
 	 * @desc Exécute la requête passée en paramètre
 	 */
 	public static function executerRequetesMultiples($pRequetes) {
@@ -154,7 +135,7 @@ class DbUtils
 		$lContinuer = true;
 		foreach($pRequetes as $lRequete) {
 			if($lContinuer)  {
-				$lResultat = @mysql_query($lRequete);
+				$lResultat = @mysqli_query($lDb,$lRequete);
 			
 				if (!$lResultat) {
 					$lContinuer = false;
@@ -162,7 +143,7 @@ class DbUtils
 					// Initialisation du Logger
 					$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 					$lLogger->setMask(Log::MAX(LOG_LEVEL));
-					$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
+					$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysqli_error($lDb),PEAR_LOG_DEBUG); // Maj des logs
 			
 					$lVr = new TemplateVR();
 					$lVr->setValid(false);
@@ -188,12 +169,12 @@ class DbUtils
 	*/	
 	public static function executerRequeteInsertRetourId($pRequete) {
 		$lDb = DbUtils::creerConnexion();
-		$lResultat = @mysql_query($pRequete);
+		$lResultat = @mysqli_query($lDb, $pRequete);
 		if (!$lResultat) {			
 			// Initialisation du Logger
 			$lLogger = &Log::singleton('file', CHEMIN_FICHIER_LOGS);
 			$lLogger->setMask(Log::MAX(LOG_LEVEL));
-	    	$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysql_error(),PEAR_LOG_DEBUG); // Maj des logs
+	    	$lLogger->log(MessagesErreurs::ERR_603_MSG . " : " . mysqli_error($lDb),PEAR_LOG_DEBUG); // Maj des logs
 		
 			$lVr = new TemplateVR();
 			$lVr->setValid(false);
@@ -205,8 +186,7 @@ class DbUtils
 			
 			die($lVr->exportToJson());
 	    } else { 
-			//or die(MessagesErreurs::ERR_BDD_EXECUTION . " : <br>$pRequete<br>".mysql_error());
-			$lId = mysql_insert_id(); 
+			$lId = mysqli_insert_id($lDb); 
 			DbUtils::fermerConnexion($lDb);
 			return $lId;
 	    }
@@ -214,7 +194,6 @@ class DbUtils
 	
 	/**
 	 * @name prepareRequeteRecherche($pTable, $pChamps, $pTypeRecherche, $pTypeFiltre, $pCritereRecherche, $pTris)
-	 * @todo methode à tester!!!
 	 * 
 	 * 
 	 * @param string nom de la table

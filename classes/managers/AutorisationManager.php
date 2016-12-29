@@ -46,8 +46,8 @@ class AutorisationManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		
 		$lSql = Dbutils::executerRequete($lRequete);
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return AutorisationManager::remplirAutorisation($pId, $lLigne[AutorisationManager::CHAMP_AUT_ID_ADHERENT], $lLigne[AutorisationManager::CHAMP_AUT_ID_MODULE]);
 		} else {
 			return new AutorisationVO();
@@ -71,8 +71,8 @@ class AutorisationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeAutorisation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAutorisation,AutorisationManager::remplirAutorisation($lLigne[AutorisationManager::CHAMP_AUT_ID], $lLigne[AutorisationManager::CHAMP_AUT_ID_ADHERENT], $lLigne[AutorisationManager::CHAMP_AUT_ID_MODULE]));
 			}
 		} else {
@@ -127,8 +127,8 @@ class AutorisationManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 			
-			if( mysql_num_rows($lSql) > 0 ) {
-				while ($lLigne = mysql_fetch_assoc($lSql)) {
+			if( mysqli_num_rows($lSql) > 0 ) {
+				while ($lLigne = mysqli_fetch_assoc($lSql)) {
 					array_push($lListeAutorisation,
 						AutorisationManager::remplirAutorisation(
 						$lLigne[AutorisationManager::CHAMP_AUT_ID],

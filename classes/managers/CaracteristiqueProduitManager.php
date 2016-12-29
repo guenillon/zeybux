@@ -52,8 +52,8 @@ class CaracteristiqueProduitManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return CaracteristiqueProduitManager::remplirCaracteristiqueProduit(
 				$pId,
 				$lLigne[CaracteristiqueProduitManager::CHAMP_CARACTERISTIQUEPRODUIT_ID_NOM_PRODUIT],
@@ -85,8 +85,8 @@ class CaracteristiqueProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeCaracteristiqueProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCaracteristiqueProduit,
 					CaracteristiqueProduitManager::remplirCaracteristiqueProduit(
 					$lLigne[CaracteristiqueProduitManager::CHAMP_CARACTERISTIQUEPRODUIT_ID],
@@ -123,8 +123,8 @@ class CaracteristiqueProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeCaracteristiqueProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCaracteristiqueProduit,
 					CaracteristiqueProduitManager::remplirCaracteristiqueProduit(
 					$lLigne[CaracteristiqueProduitManager::CHAMP_CARACTERISTIQUEPRODUIT_ID],
@@ -170,9 +170,9 @@ class CaracteristiqueProduitManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeCaracteristiqueProduit,
 						CaracteristiqueProduitManager::remplirCaracteristiqueProduit(

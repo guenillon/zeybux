@@ -195,12 +195,12 @@ if(isset($_POST['nom']) && $_POST['nom'] != "" && isset($_POST['module']) && iss
 	if($_POST['label'] != "") {
 		$lRequete = "SELECT * FROM `mod_module` WHERE mod_nom = '" . $lNomModule ."'";
 		$lSql = Dbutils::executerRequete($lRequete);
-		$lModule = mysql_fetch_assoc($lSql);
+		$lModule = mysqli_fetch_assoc($lSql);
 		
 		if( $lModule["mod_id"] != "") {
 			$lRequete = "SELECT * FROM `vue_vues` WHERE `vue_id_module` = ".$lModule["mod_id"]." ORDER BY vue_ordre DESC";
 			$lSql = Dbutils::executerRequete($lRequete);
-			$lLigne = mysql_fetch_assoc($lSql);
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lOrdre = $lLigne["vue_ordre"];
 			$lOrdre++;
 			

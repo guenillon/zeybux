@@ -13,22 +13,22 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 				
 				// Sauvegarde de la base
 				// Etape 1 structure de la base
-				$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-				mysql_select_db(MYSQL_DBNOM, $connexion);
+				$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+				mysqli_set_charset($connexion, "utf8");
 				
 				$entete = "-- ----------------------\n";
 				$entete .= "-- Zeybux base " . MYSQL_DBNOM . " au ".date("d-M-Y")."\n";
 				$entete .= "-- ----------------------\n\n\n";
 				$creations = "";
 				$lListeTable = array();
-				$listeTables = mysql_query("show tables", $connexion);
-				while($table = mysql_fetch_array($listeTables)) {
+				$listeTables = mysqli_query($connexion, "show tables");
+				while($table = mysqli_fetch_array($listeTables)) {
 					// La structure
 					$creations .= "-- -----------------------------\n";
 					$creations .= "-- creation de la table ".$table[0]."\n";
 					$creations .= "-- -----------------------------\n";
-					$listeCreationsTables = mysql_query("show create table ".$table[0], $connexion);
-					while($creationTable = mysql_fetch_array($listeCreationsTables)) {
+					$listeCreationsTables = mysqli_query($connexion, "show create table ".$table[0]);
+					while($creationTable = mysqli_fetch_array($listeCreationsTables)) {
 						// Si c'est une table ajout à la liste pour sauvegarde des données
 						if(preg_match('/CREATE TABLE/',$creationTable[1])) {
 							array_push($lListeTable,$table[0]);
@@ -40,7 +40,7 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 						$creations .= $creationTable[1].";\n\n";
 					}
 				}
-				mysql_close($connexion);
+				mysqli_close($connexion);
 					
 				$lNomFichier = $lDossierDump . "structure.sql";
 				$fichierDump = fopen($lNomFichier, "w");
@@ -79,25 +79,24 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 				// Sauvegarde de la base
 				if(isset($_POST['table'])) {						
 					// Etape 2 Les données
-					$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-					mysql_select_db(MYSQL_DBNOM, $connexion);
+					$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+					mysqli_set_charset($connexion, "utf8");
+					
 					$table = $_POST['table'];
 					$insertions = "\n\n";
-					$donnees = mysql_query("SELECT * FROM ".$table);
+					$donnees = mysqli_query($connexion, "SELECT * FROM ".$table);
 					$insertions .= "-- -----------------------------\n";
 					$insertions .= "-- insertions dans la table ".$table."\n";
 					$insertions .= "-- -----------------------------\n";
-					while($nuplet = @mysql_fetch_array($donnees))
+					while($nuplet = @mysqli_fetch_array($donnees))
 					{
 						$insertions .= "INSERT INTO ".$table." VALUES(";
-						for($i=0; $i < mysql_num_fields($donnees); $i++)
+						for($i=0; $i < mysqli_num_fields($donnees); $i++)
 						{
 							if($i != 0)
 								$insertions .=  ", ";
-							//if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
 							$insertions .=  "'";
 							$insertions .= addslashes($nuplet[$i]);
-							//if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
 							$insertions .=  "'";
 						}
 						$insertions .=  ");\n";

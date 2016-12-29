@@ -58,8 +58,8 @@ class HistoriqueSuspensionAbonnementManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return HistoriqueSuspensionAbonnementManager::remplirHistoriqueSuspensionAbonnement(
 				$pId,
 				$lLigne[HistoriqueSuspensionAbonnementManager::CHAMP_HISTORIQUESUSPENSIONABONNEMENT_DATE_DEBUT_SUSPENSION],
@@ -97,8 +97,8 @@ class HistoriqueSuspensionAbonnementManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeHistoriqueSuspensionAbonnement = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeHistoriqueSuspensionAbonnement,
 					HistoriqueSuspensionAbonnementManager::remplirHistoriqueSuspensionAbonnement(
 					$lLigne[HistoriqueSuspensionAbonnementManager::CHAMP_HISTORIQUESUSPENSIONABONNEMENT_ID],
@@ -150,9 +150,9 @@ class HistoriqueSuspensionAbonnementManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeHistoriqueSuspensionAbonnement,
 						HistoriqueSuspensionAbonnementManager::remplirHistoriqueSuspensionAbonnement(

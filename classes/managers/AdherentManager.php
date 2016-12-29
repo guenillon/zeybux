@@ -100,8 +100,8 @@ class AdherentManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lAdherent = AdherentManager::remplirAdherent(
 				$pId,
 				$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO],
@@ -161,8 +161,8 @@ class AdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {	
-			while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+		if( mysqli_num_rows($lSql) > 0 ) {	
+			while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 	
 				$lAdherent = AdherentManager::remplirAdherent(
 					$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
@@ -262,8 +262,8 @@ class AdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeAchat = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {				
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {				
 				array_push($lListeAchat, new ListeAchatReservationVO(
 				$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
 				$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO],
@@ -394,8 +394,8 @@ class AdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {				
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {				
 				array_push($lListeAdherent, new ListeAdherentAdhesionVO(
 				$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
 				$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO],
@@ -442,8 +442,8 @@ class AdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lNbAdherent = 0;
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lNbAdherent = $lLigne['NB_ADHESION'];
 		}
 		return $lNbAdherent;
@@ -479,8 +479,8 @@ class AdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lNbAdherent = 0;
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lNbAdherent = $lLigne['NB_ADHESION'];
 		}
 		return $lNbAdherent;
@@ -530,9 +530,9 @@ class AdherentManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 	
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 		
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 		
 					array_push($lListeAdherent,AdherentManager::remplirAdherent(
 						$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
@@ -810,8 +810,8 @@ class AdherentManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeAdherent, new ListeAchatEtReservationExportVO(
 				$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
 				$lLigne["b_" . StockManager::CHAMP_STOCK_ID],

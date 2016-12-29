@@ -68,8 +68,8 @@ class FermeManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return FermeManager::remplirFerme(
 				$pId,
 				$lLigne[FermeManager::CHAMP_FERME_NUMERO],
@@ -115,8 +115,8 @@ class FermeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeFerme = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeFerme,
 					FermeManager::remplirFerme(
 					$lLigne[FermeManager::CHAMP_FERME_ID],
@@ -168,8 +168,8 @@ class FermeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeFerme = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeFerme,
 					FermeManager::remplirFerme(
 					$lLigne[FermeManager::CHAMP_FERME_ID],
@@ -215,8 +215,8 @@ class FermeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeFerme = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeFerme, new ListeFermeVO(
 				$lLigne[FermeManager::CHAMP_FERME_ID],
 				$lLigne[FermeManager::CHAMP_FERME_NUMERO],
@@ -269,9 +269,9 @@ class FermeManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeFerme,
 						FermeManager::remplirFerme(

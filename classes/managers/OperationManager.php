@@ -82,8 +82,8 @@ class OperationManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return OperationManager::remplirOperation(
 				$pId,
 				$lLigne[OperationManager::CHAMP_OPERATION_ID_COMPTE],
@@ -156,9 +156,9 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lOperationDetailVO = new OperationDetailVO();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 			
-			$lLigne = mysql_fetch_assoc($lSql);
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lOperationDetailVO = OperationManager::remplirOperationDetailEntete(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID],
 				$lLigne[OperationManager::CHAMP_OPERATION_ID_COMPTE],
@@ -190,7 +190,7 @@ class OperationManager
 						$lLigne[OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_OPE_ID],
 						$lLigne[OperationChampComplementaireManager::CHAMP_OPERATIONCHAMPCOMPLEMENTAIRE_VALEUR]);
 				
-				while ($lLigne = mysql_fetch_assoc($lSql)) {
+				while ($lLigne = mysqli_fetch_assoc($lSql)) {
 					$lChampComplementaire[$lLigne[ChampComplementaireManager::CHAMP_CHAMPCOMPLEMENTAIRE_ID]] = OperationManager::remplirOperationDetail(
 						$lLigne[TypePaiementChampComplementaireManager::CHAMP_TYPEPAIEMENTCHAMPCOMPLEMENTAIRE_TPP_ID],
 						$lLigne[TypePaiementChampComplementaireManager::CHAMP_TYPEPAIEMENTCHAMPCOMPLEMENTAIRE_CHCP_ID],
@@ -306,8 +306,8 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeOperation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperation,
 					OperationManager::remplirOperation(
 					$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -355,8 +355,8 @@ class OperationManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 	
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return OperationManager::remplirOperation(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID],
 				$lLigne[OperationManager::CHAMP_OPERATION_ID_COMPTE],
@@ -408,8 +408,8 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeOperation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperation,
 					OperationManager::remplirOperationAvenir(
 					$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -575,11 +575,11 @@ class OperationManager
 		if($lRequete !== false) {
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 				$lId = 0;
 				$lChampComplementaire = array();
 				
-				while ($lLigne = mysql_fetch_assoc($lSql)) {
+				while ($lLigne = mysqli_fetch_assoc($lSql)) {
 					if($lId != $lLigne[OperationManager::CHAMP_OPERATION_ID]) {
 						if($lId != 0) {
 							$lOperationDetailVO->setChampComplementaire($lChampComplementaire);
@@ -807,9 +807,9 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeCompteZeybuOperation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 			
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCompteZeybuOperation,
 				 new CompteZeybuOperationVO(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -945,9 +945,9 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeCompteZeybuOperation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 				
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCompteZeybuOperation,
 					 new CompteZeybuOperationVO(
 					 		$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -1034,9 +1034,9 @@ class OperationManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeOperation,
 						OperationManager::remplirOperation(
@@ -1126,8 +1126,8 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeCompteListeVirement = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCompteListeVirement,
 				OperationManager::remplirListeVirementCompte(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -1213,11 +1213,11 @@ class OperationManager
 		
 		$lListeOperationAttente = array();
 		$lChampComplementaire = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 			
 			$lOpeId = NULL;
 			
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				 if($lOpeId != $lLigne[OperationManager::CHAMP_OPERATION_ID]) {
 				 	if(!is_null($lOpeId)) {
 				 		$lOperationAttente->setOpeTypePaiementChampComplementaire($lChampComplementaire);
@@ -1369,11 +1369,11 @@ class OperationManager
 	
 		$lListeOperationAttente = array();
 		$lChampComplementaire = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 				
 			$lOpeId = NULL;
 				
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				if($lOpeId != $lLigne[OperationManager::CHAMP_OPERATION_ID]) {
 					if(!is_null($lOpeId)) {
 						$lOperationAttente->setOpeTypePaiementChampComplementaire($lChampComplementaire);
@@ -1472,11 +1472,11 @@ class OperationManager
 	
 		$lListeOperationAttente = array();
 		$lChampComplementaire = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 				
 			$lOpeId = NULL;
 				
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				if($lOpeId != $lLigne[OperationManager::CHAMP_OPERATION_ID]) {
 					if(!is_null($lOpeId)) {
 						$lOperationAttente->setOpeTypePaiementChampComplementaire($lChampComplementaire);
@@ -1568,12 +1568,12 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeOperationAttente = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 				
 			$lOpeId = NULL;
 			$lChampComplementaire = array();
 				
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				if($lOpeId != $lLigne[OperationManager::CHAMP_OPERATION_ID]) {
 					if(!is_null($lOpeId)) {
 						$lOperationAttente->setOpeTypePaiementChampComplementaire($lChampComplementaire);
@@ -1709,8 +1709,8 @@ class OperationManager
 		if($lRequete !== false) {
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
-			if( mysql_num_rows($lSql) > 0 ) {	
-				while ($lLigne = mysql_fetch_assoc($lSql)) {
+			if( mysqli_num_rows($lSql) > 0 ) {	
+				while ($lLigne = mysqli_fetch_assoc($lSql)) {
 					array_push($lListeFacture,
 					new ListeFactureVO(
 					$lLigne[OperationManager::CHAMP_OPERATION_ID],
@@ -1792,8 +1792,8 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeDetailFacture = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeDetailFacture,
 				new ProduitDetailFactureAfficheVO(
 				$lLigne[ProduitManager::CHAMP_PRODUIT_ID_NOM_PRODUIT],
@@ -1859,11 +1859,11 @@ class OperationManager
 		
 		$lListeOperationAttente = array();
 		$lChampComplementaire = array();
-		if( mysql_num_rows($lSql) > 0 ) {
+		if( mysqli_num_rows($lSql) > 0 ) {
 			
 			$lOpeId = NULL;
 			
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				 if($lOpeId != $lLigne[OperationManager::CHAMP_OPERATION_ID]) {
 				 	if(!is_null($lOpeId)) {
 				 		$lOperationAttente->setOpeTypePaiementChampComplementaire($lChampComplementaire);
@@ -2066,8 +2066,8 @@ class OperationManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lListeOperation = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeOperation,
 				OperationManager::remplirOperation(
 				$lLigne[OperationManager::CHAMP_OPERATION_ID],

@@ -78,8 +78,8 @@ class ProduitManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return ProduitManager::remplirProduit(
 				$pId,
 				$lLigne[ProduitManager::CHAMP_PRODUIT_ID_COMMANDE],
@@ -123,8 +123,8 @@ class ProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeProduit,
 					ProduitManager::remplirProduit(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
@@ -176,8 +176,8 @@ class ProduitManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 		$lListeProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeProduit,
 					ProduitManager::remplirProduit(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
@@ -228,8 +228,8 @@ class ProduitManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 		$lListeProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeProduit,
 					ProduitManager::remplirProduit(
 					$lLigne[ProduitManager::CHAMP_PRODUIT_ID],
@@ -287,9 +287,9 @@ class ProduitManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeProduit,
 						ProduitManager::remplirProduit(
@@ -482,8 +482,8 @@ class ProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeInfoCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeInfoCommande,
 						new InfoCommandeVO(
 						$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -634,8 +634,8 @@ class ProduitManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeProduit = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeProduit,
 				ProduitManager::remplirDetailProduit(
 				$lLigne[ProduitManager::CHAMP_PRODUIT_ID],

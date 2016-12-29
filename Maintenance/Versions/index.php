@@ -34,22 +34,22 @@ if(isset($_GET["action"])) {
 		
 			// Sauvegarde de la base
 			// Etape 1 structure de la base
-			$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-			mysql_select_db(MYSQL_DBNOM, $connexion);
+			$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM, $connexion);
+			mysqli_set_charset($connexion, "utf8");
 				
 			$entete = "-- ----------------------\n";
 			$entete .= "-- Zeybux base " . MYSQL_DBNOM . " au ".date("d-M-Y")."\n";
 			$entete .= "-- ----------------------\n\n\n";
 			$creations = "";
 			$lListeTable = array();
-			$listeTables = mysql_query("show tables", $connexion);
-			while($table = mysql_fetch_array($listeTables)) {
+			$listeTables = mysqli_query($connexion, "show tables");
+			while($table = mysqli_fetch_array($listeTables)) {
 				// La structure
 				$creations .= "-- -----------------------------\n";
 				$creations .= "-- creation de la table ".$table[0]."\n";
 				$creations .= "-- -----------------------------\n";
-				$listeCreationsTables = mysql_query("show create table ".$table[0], $connexion);
-				while($creationTable = mysql_fetch_array($listeCreationsTables)) {
+				$listeCreationsTables = mysqli_query($connexion, "show create table ".$table[0]);
+				while($creationTable = mysqli_fetch_array($listeCreationsTables)) {
 					// Si c'est une table ajout à la liste pour sauvegarde des données
 					if(preg_match('/CREATE TABLE/',$creationTable[1])) {
 						array_push($lListeTable,$table[0]);
@@ -61,7 +61,7 @@ if(isset($_GET["action"])) {
 					$creations .= $creationTable[1].";\n\n";
 				}
 			}
-			mysql_close($connexion);
+			mysqli_close($connexion);
 			
 			$lNomFichier = $lDossierDump . "structure.sql";
 			$fichierDump = fopen($lNomFichier, "w");
@@ -99,26 +99,25 @@ if(isset($_GET["action"])) {
 					$lDossierDump = $lDossier . "/dump/";
 					
 					// Etape 2 Les données
-					$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-					mysql_select_db(MYSQL_DBNOM, $connexion);
+					$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+					mysqli_set_charset($connexion, "utf8");
+					
 					$table = $_POST['table'];
 					$insertions = "\n\n";
-					$donnees = mysql_query("SELECT * FROM ".$table);
+					$donnees = mysqli_query($connexion, "SELECT * FROM ".$table);
 					$insertions .= "-- -----------------------------\n";
 					$insertions .= "-- insertions dans la table ".$table."\n";
 					$insertions .= "-- -----------------------------\n";
-					while($nuplet = @mysql_fetch_array($donnees))
+					while($nuplet = @mysqli_fetch_array($donnees))
 					{
 						$insertions .= "INSERT INTO ".$table." VALUES(";
-						for($i=0; $i < mysql_num_fields($donnees); $i++)
+						for($i=0; $i < mysqli_num_fields($donnees); $i++)
 						{
 							if($i != 0)
 								$insertions .=  ", ";
-							//if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
-								$insertions .=  "'";
+							$insertions .=  "'";
 							$insertions .= addslashes($nuplet[$i]);
-							//if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
-								$insertions .=  "'";
+							$insertions .=  "'";
 						}
 						$insertions .=  ");\n";
 					}
@@ -395,49 +394,17 @@ if(isset($_GET["action"])) {
 				parcourirDossierExtract(FILE_DUMP . "/" . $_POST["dir"],DOSSIER_SITE);
 				
 				// Suppression de la base
-				$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-				mysql_select_db(MYSQL_DBNOM, $connexion);
-				$listeTables = mysql_query("show tables", $connexion);
-			    while($table = mysql_fetch_array($listeTables)) {			    			    	
-				    mysql_query("DROP TABLE " . $table[0], $connexion);
-				    mysql_query("DROP VIEW " . $table[0], $connexion);
+				$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+				mysqli_set_charset($connexion, "utf8");
+				
+				$listeTables = mysqli_query($connexion, "show tables");
+			    while($table = mysqli_fetch_array($listeTables)) {			    			    	
+				    mysqli_query($connexion, "DROP TABLE " . $table[0]);
+				    mysqli_query($connexion, "DROP VIEW " . $table[0]);
 			    }
-				mysql_close($connexion);
+				mysqli_close($connexion);
 
-   				// Mise en place de la base de la version => Trop long : à réaliser par PhpMyAdmin
-			/*	$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-				mysql_select_db(MYSQL_DBNOM, $connexion);
-				$lRequete = file_get_contents(FILE_DUMP . "/" . $_POST["dir"] . "/dump.sql");
-				// Ajout du préfixe
-				$lRequete=str_replace('{PREFIXE}', MYSQL_DB_PREFIXE, $lRequete);
-				$lRequetes = explode(";\n", $lRequete);	
-				$lNbErreur = 0;
-				$lNbRequetes = 0;
-				mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
-				$f = fopen(LOG_EXTRACT . date('Y-m-d_H:i:s') . "_updateSql.log", "w");
-				foreach( $lRequetes as $lReq ) {
-					if(!empty($lReq)) {
-						$lNbRequetes++;
-						if(!mysql_query($lReq, $connexion)) {
-							$lNbErreur++;
-							fwrite($f, mysql_errno($connexion) . ": " . mysql_error($connexion) . "\n" . $lReq . "\n\n");
-						} else {
-							fwrite($f," OK : " . $lReq . "\n\n");
-						}
-					}
-				}
-				fclose($f);
-				mysql_close($connexion); */
-
-				// Ouvre les accès
-	//			copy(DOSSIER_CONFIGURATION . "/Maintenance_ouvert.php" , DOSSIER_SITE_CONFIGURATION . "/Maintenance.php");
-				
-			/*	$lVersion = $_GET["dir"];
-				?>
-						<br/><br/>La version : <?php echo $lVersion[6] . $lVersion[7] ."-". $lVersion[4] . $lVersion[5] . "-" . $lVersion[0] . $lVersion[1] . $lVersion[2] . $lVersion[3] . " " . $lVersion[8] . $lVersion[9] .":". $lVersion[10] . $lVersion[11] .":". $lVersion[12]. $lVersion[13];?> est active. 
-				</div>
-				<?php */
-				
+   							
 				$lListeTable = array();
 				
 				$lDossier = FILE_DUMP . "/" . $_POST["dir"];
@@ -450,29 +417,29 @@ if(isset($_GET["action"])) {
 					$lNomFichier = $lDossierDump . "0-structure.sql";
 					$lUpdateSql = file_get_contents($lNomFichier);
 					
-					$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-					mysql_select_db(MYSQL_DBNOM, $connexion);
+					$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+					mysqli_set_charset($connexion, "utf8");
+					
 					// Ajout du préfixe
 					$lRequetes = explode(";", $lUpdateSql);
 					$lNbErreur = 0;
 					$lNbRequetes = 0;
-					mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 					$lNomFichierLog = LOG_EXTRACT . date('Y-m-d_H:i:s') . "_updateSql.log";
 					$f = fopen($lNomFichierLog, "w");
 					foreach( $lRequetes as $lReq ) {
 						$lReqTrim = trim($lReq);
 						if(!empty($lReqTrim)) {
 							$lNbRequetes++;
-							if(!mysql_query($lReq, $connexion)) {
+							if(!mysqli_query($connexion, $lReq)) {
 								$lNbErreur++;
-								fwrite($f, mysql_errno($connexion) . ": " . mysql_error($connexion) . "\n" . $lReq . "\n\n");
+								fwrite($f, mysqli_errno($connexion) . ": " . mysqli_error($connexion) . "\n" . $lReq . "\n\n");
 							} else {
 								fwrite($f," OK : " . $lReq . "\n\n");
 							}
 						}
 					}
 					fclose($f);
-					mysql_close($connexion);
+					mysqli_close($connexion);
 					
 					unlink($lNomFichier);
 					
@@ -501,29 +468,29 @@ if(isset($_GET["action"])) {
 				$lNomFichier = $lDossierDump . $_POST['table'];
 				$lUpdateSql = file_get_contents($lNomFichier);
 					
-				$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-				mysql_select_db(MYSQL_DBNOM, $connexion);
+				$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+				mysqli_set_charset($connexion, "utf8");
+				
 				// Ajout du préfixe
 				$lRequetes = explode(";", $lUpdateSql);
 				$lNbErreur = 0;
 				$lNbRequetes = 0;
-				mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 				$lNomFichierLog = LOG_EXTRACT . date('Y-m-d_H:i:s') . "_updateSql.log";
 				$f = fopen($lNomFichierLog, "w");
 				foreach( $lRequetes as $lReq ) {
 					$lReqTrim = trim($lReq);
 					if(!empty($lReqTrim)) {
 						$lNbRequetes++;
-						if(!mysql_query($lReq, $connexion)) {
+						if(!mysqli_query($connexion, $lReq)) {
 							$lNbErreur++;
-							fwrite($f, mysql_errno($connexion) . ": " . mysql_error($connexion) . "\n" . $lReq . "\n\n");
+							fwrite($f, mysqli_errno($connexion) . ": " . mysqli_error($connexion) . "\n" . $lReq . "\n\n");
 						} else {
 							fwrite($f," OK : " . $lReq . "\n\n");
 						}
 					}
 				}
 				fclose($f);
-				mysql_close($connexion);
+				mysqli_close($connexion);
 					
 				unlink($lNomFichier);
 				

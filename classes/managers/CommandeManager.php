@@ -73,8 +73,8 @@ class CommandeManager
 		$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 		$lSql = Dbutils::executerRequete($lRequete);
 
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			return CommandeManager::remplirCommande(
 				$pId,
 				$lLigne[CommandeManager::CHAMP_COMMANDE_NUMERO],
@@ -118,8 +118,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCommande,
 					CommandeManager::remplirCommande(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -204,9 +204,9 @@ class CommandeManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 	
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 	
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 	
 					array_push($lListeReservation,
 					CommandeManager::remplirReservation(
@@ -308,8 +308,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCommande,
 					CommandeManager::remplirCommande(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -409,8 +409,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 
 		$lListeCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				array_push($lListeCommande,
 					CommandeManager::remplirCommande(
 					$lLigne[CommandeManager::CHAMP_COMMANDE_ID],
@@ -460,8 +460,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 		
 		$lDetailCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lDetailCommande[$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT ]] = $lLigne;
 			}
 		}
@@ -495,8 +495,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lNb = 0;
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lNb = $lLigne['nb'];
 		}
 		return $lNb;
@@ -565,8 +565,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lNb = 0;
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lNb = $lLigne['nb'];
 		}
 		return $lNb;
@@ -635,8 +635,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lNb = 0;
-		if( mysql_num_rows($lSql) > 0 ) {
-			$lLigne = mysql_fetch_assoc($lSql);
+		if( mysqli_num_rows($lSql) > 0 ) {
+			$lLigne = mysqli_fetch_assoc($lSql);
 			$lNb = $lLigne['nb'];
 		}
 		return $lNb;
@@ -672,8 +672,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lDetailCommande = array();
-		if( mysql_num_rows($lSql) > 0 ) {
-			while ($lLigne = mysql_fetch_assoc($lSql)) {
+		if( mysqli_num_rows($lSql) > 0 ) {
+			while ($lLigne = mysqli_fetch_assoc($lSql)) {
 				$lDetailCommande[$lLigne[OperationManager::CHAMP_OPERATION_TYPE_PAIEMENT ]] = $lLigne;
 			}
 		}
@@ -728,8 +728,8 @@ class CommandeManager
 		$lSql = Dbutils::executerRequete($lRequete);
 	
 		$lListeAdherent = array();
-		if( mysql_num_rows($lSql) > 0 ) {	
-			while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+		if( mysqli_num_rows($lSql) > 0 ) {	
+			while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 				array_push($lListeAdherent, CommandeManager::remplirAdherent(
 					$lLigne[AdherentManager::CHAMP_ADHERENT_ID],
 					$lLigne[AdherentManager::CHAMP_ADHERENT_NUMERO],
@@ -801,9 +801,9 @@ class CommandeManager
 			$lLogger->log("Execution de la requete : " . $lRequete,PEAR_LOG_DEBUG); // Maj des logs
 			$lSql = Dbutils::executerRequete($lRequete);
 
-			if( mysql_num_rows($lSql) > 0 ) {
+			if( mysqli_num_rows($lSql) > 0 ) {
 
-				while ( $lLigne = mysql_fetch_assoc($lSql) ) {
+				while ( $lLigne = mysqli_fetch_assoc($lSql) ) {
 
 					array_push($lListeCommande,
 						CommandeManager::remplirCommande(

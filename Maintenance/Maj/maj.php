@@ -86,22 +86,22 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 				
 				// Sauvegarde de la base
 				// Etape 1 structure de la base
-				$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-				mysql_select_db(MYSQL_DBNOM, $connexion);
+				$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+				mysqli_set_charset($connexion, "utf8");
 			
 				$entete = "-- ----------------------\n";
 				$entete .= "-- Zeybux base " . MYSQL_DBNOM . " au ".date("d-M-Y")."\n";
 				$entete .= "-- ----------------------\n\n\n";
 				$creations = "";
 				$lListeTable = array();
-				$listeTables = mysql_query("show tables", $connexion);
-				while($table = mysql_fetch_array($listeTables)) {					
+				$listeTables = mysqli_query($connexion, "show tables");
+				while($table = mysqli_fetch_array($listeTables)) {					
 					// La structure
 					$creations .= "-- -----------------------------\n";
 					$creations .= "-- creation de la table ".$table[0]."\n";
 					$creations .= "-- -----------------------------\n";
-					$listeCreationsTables = mysql_query("show create table ".$table[0], $connexion);
-					while($creationTable = mysql_fetch_array($listeCreationsTables))
+					$listeCreationsTables = mysqli_query($connexion, "show create table ".$table[0]);
+					while($creationTable = mysqli_fetch_array($listeCreationsTables))
 					{
 						// Si c'est une table ajout à la liste pour sauvegarde des données	
 						if(preg_match('/CREATE TABLE/',$creationTable[1])) {
@@ -115,7 +115,7 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 					}
 				}
 							
-				mysql_close($connexion);
+				mysqli_close($connexion);
 				$lNomFichier = $lDossierDump . "structure.sql";
 				$fichierDump = fopen($lNomFichier, "w");
 				fwrite($fichierDump, utf8_encode($entete));
@@ -152,26 +152,25 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 					$lDossierDump = $lDossier . "/dump/";
 					
 					// Etape 2 Les données		
-					$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-					mysql_select_db(MYSQL_DBNOM, $connexion);
+					$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+					mysqli_set_charset($connexion, "utf8");
+					
 					$table = $_POST['table'];
 					$insertions = "\n\n";
-					$donnees = mysql_query("SELECT * FROM ".$table);
+					$donnees = mysqli_query($connexion, "SELECT * FROM ".$table);
 					$insertions .= "-- -----------------------------\n";
 					$insertions .= "-- insertions dans la table ".$table."\n";
 					$insertions .= "-- -----------------------------\n";
-					while($nuplet = @mysql_fetch_array($donnees))
+					while($nuplet = @mysqli_fetch_array($donnees))
 					{
 						$insertions .= "INSERT INTO ".$table." VALUES(";
-						for($i=0; $i < mysql_num_fields($donnees); $i++)
+						for($i=0; $i < mysqli_num_fields($donnees); $i++)
 						{
 							if($i != 0)
 								$insertions .=  ", ";
-							//if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
-								$insertions .=  "'";
+							$insertions .=  "'";
 							$insertions .= addslashes($nuplet[$i]);
-							//if(mysql_field_type($donnees, $i) == "string" || mysql_field_type($donnees, $i) == "blob")
-								$insertions .=  "'";
+							$insertions .=  "'";
 						}
 						$insertions .=  ");\n";
 					}
@@ -389,30 +388,29 @@ if(isset($_SESSION['cx']) && $_SESSION['cx'] == 1) {
 				$d->close();
 					
 				
-				$connexion = mysql_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS);
-				mysql_select_db(MYSQL_DBNOM, $connexion);
+				$connexion = mysqli_connect(MYSQL_HOST, MYSQL_LOGIN, MYSQL_PASS, MYSQL_DBNOM);
+				mysqli_set_charset($connexion, "utf8");
 				// Ajout du préfixe
 				$lUpdateSql=str_replace('{PREFIXE}', MYSQL_DB_PREFIXE, $lUpdateSql);
 				$lRequetes = explode(";", $lUpdateSql);
 				$lNbErreur = 0;
 				$lNbRequetes = 0;
-				mysql_query("SET NAMES UTF8"); // Permet d'initer une connexion en UTF-8 avec la BDD
 				$lNomFichierLog = LOG_EXTRACT . date('Y-m-d_H:i:s') . "_updateSql.log";
 				$f = fopen($lNomFichierLog, "w");
 				foreach( $lRequetes as $lReq ) {
 					$lReqTrim = trim($lReq);
 					if(!empty($lReqTrim)) {
 						$lNbRequetes++;
-						if(!mysql_query($lReq, $connexion)) {
+						if(!mysqli_query($connexion, $lReq)) {
 							$lNbErreur++;
-							fwrite($f, mysql_errno($connexion) . ": " . mysql_error($connexion) . "\n" . $lReq . "\n\n");
+							fwrite($f, mysqli_errno($connexion) . ": " . mysqli_error($connexion) . "\n" . $lReq . "\n\n");
 						} else {
 							fwrite($f," OK : " . $lReq . "\n\n");
 						}
 					}
 				}
 				fclose($f);
-				mysql_close($connexion);
+				mysqli_close($connexion);
 								
 				// vider le dossier d'extraction
 				viderDossier(DOSSIER_EXTRACT,1);
